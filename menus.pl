@@ -1,3 +1,6 @@
+:-ensure_loaded('utils.pl').
+:-ensure_loaded('board.pl').
+
 start:-
     printMainMenu,
     getMainMenuOption.
@@ -16,11 +19,16 @@ printMainMenu:-
 
 getMainMenuOption:-
     getChar(Input),(
-        Input = '1' -> gameMenu, start;
-        Input = '2' -> helpMenu, mainMenu;
+        Input = '1' -> gameMenu;
+        Input = '2' -> helpMenu;
         Input = '3';
 
         nl, write('Invalid input!'), nl,
         start
     ).
 
+gameMenu:-
+	createBoard(Board, 6),
+	write('Created Board'),nl,
+	printBoard(Board),nl,
+	write('Done!').
