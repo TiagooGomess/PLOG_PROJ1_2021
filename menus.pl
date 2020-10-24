@@ -29,8 +29,10 @@ getMainMenuOption:-
 
 gameMenu:-
 	createBoard(Board, 6, [2,2,1,2,0,2,1,2,0,2,2,1,0,2,1,0,2,2,2,0,1,0,2,0,2,1,2,1,2,0,2,1,2,0,2,1]),
-	write('Created Board'),nl,
-	printBoard(Board),nl,
+	write('Created Board'), nl,
+	write('---------------------------------------'),nl,
+	printBoard(Board,[6,5,4,3,2,1]), nl,
+	write('---------------------------------------'),nl,
 	write('Done!').
 	
 helpMenu:-

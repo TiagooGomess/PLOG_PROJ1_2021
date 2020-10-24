@@ -26,16 +26,22 @@ createLine(N, L1, [[X]|T]):-
 	createLine(N1, Remaining, T).
 	
 % imprime o tabuleiro
-printBoard([]).
-printBoard([H|T]):-
+printBoard([[]],[]):-
+	write('  |---|---|---|---|---|---|'),nl,
+    write('    A   B   C   D   E   F ').
+printBoard([H|T],[Row|RowT]):-
+	write('  |---|---|---|---|---|---|'),nl,
+	write(Row),
+	write(' '),
 	printLine(H),
+	write('|'),
 	nl,
-	printBoard(T).
+	printBoard(T,RowT).
 	
 % imprime a Head de cada lista da linha
 printLine([]).
 printLine([[H|_]|T]):-
 	write('|'),
-	write(H),
-	write('|'),
+	translate(H, Piece),
+	write(Piece),
 	printLine(T).

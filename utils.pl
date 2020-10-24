@@ -22,3 +22,8 @@ flatten2([L|Ls], FlatL) :-
     flatten2(Ls, NewLs),
     append(NewL, NewLs, FlatL).
 flatten2(L, [L]).
+
+translate(0, ' W '). % white pyramid
+translate(1, ' B '). % black pyramid
+translate(2, ' G '). % green pyramid
+translate(3, ' -  '). % no piece
