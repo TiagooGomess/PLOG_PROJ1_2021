@@ -1,3 +1,6 @@
+:- use_module(library(aggregate)).
+:- use_module(library(lists)).
+
 getChar(Input):-
 	get_char(Input),
 	write(Input),
@@ -26,4 +29,8 @@ flatten2(L, [L]).
 translate(0, ' W '). % white pyramid
 translate(1, ' B '). % black pyramid
 translate(2, ' G '). % green pyramid
-translate(3, ' -  '). % no piece
+translate(3, ' - '). % no piece
+
+% counts the Count occorences of X in List
+occurrences_of(List, X, Count):-
+    aggregate_all(count, member(X, List), Count).

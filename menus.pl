@@ -32,6 +32,9 @@ gameMenu:-
 	write('Created Board'), nl,
 	write('---------------------------------------'),nl,
 	printBoard(Board,[6,5,4,3,2,1]), nl,
+	% a linha de baixo serve para testar o caso em que há linhas vazias e stacks com mais do que 1 de altura
+	% comentar a createBoard a printBoard de cima para testar
+	%printBoard([[[3],[3],[1,2,2,2],[0],[3],[3]],[[0],[1],[2],[0],[1],[2]],[[0],[1],[2],[0],[1],[2]],[[0],[1],[2],[0],[1],[2]],[[0],[1],[2],[0],[1],[2]],[[0],[1],[2],[0],[1],[2]]],[6,5,4,3,2,1]), nl,
 	write('---------------------------------------'),nl,
 	write('Done!').
 	

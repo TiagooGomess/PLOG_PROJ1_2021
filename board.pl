@@ -27,10 +27,10 @@ createLine(N, L1, [[X]|T]):-
 	
 % imprime o tabuleiro
 printBoard([[]],[]):-
-	write('  |---|---|---|---|---|---|'),nl,
-    write('    A   B   C   D   E   F ').
+	write('  |-----|-----|-----|-----|-----|-----|'),nl,
+    write('     A     B     C     D     E     F ').
 printBoard([H|T],[Row|RowT]):-
-	write('  |---|---|---|---|---|---|'),nl,
+	write('  |-----|-----|-----|-----|-----|-----|'),nl,
 	write(Row),
 	write(' '),
 	printLine(H),
@@ -40,8 +40,11 @@ printBoard([H|T],[Row|RowT]):-
 	
 % imprime a Head de cada lista da linha
 printLine([]).
-printLine([[H|_]|T]):-
+printLine([[H|_T]|T]):-
 	write('|'),
+	occurrences_of([H|_T],2,NumGreen),
 	translate(H, Piece),
 	write(Piece),
+	write(NumGreen),
+	write(' '),
 	printLine(T).
