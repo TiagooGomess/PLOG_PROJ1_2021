@@ -19,7 +19,7 @@ printMainMenu:-
 
 getMainMenuOption:-
     getChar(Input),(
-        Input = '1' -> gameMenu, start; % entra em gameMenu e volta para start.
+        Input = '1' -> gameMenu;
         Input = '2' -> helpMenu, start; % entra em helpMenu e volta para start.
         Input = '3';
 
