@@ -13,8 +13,8 @@ createLine(Line, Size, Pieces):-
 	Size > 0,
 	Size1 is Size - 1,
 	random_select(PieceNum,Pieces, R),
-	printLine(R), 
-	nl,
+	%printLine(R), 
+	%nl,
 	Line = [PieceNum | T],
 	createLine(T, Size1, R).
 	
