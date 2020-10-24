@@ -1,20 +1,22 @@
 :- use_module(library(random)).
 
-createBoard([[]], 0).
-createBoard(Board, Size):-
+createBoard([[]], 0, _).
+createBoard(Board, Size, Pieces):-
 	Size > 0,
 	Size1 is Size - 1,
-	createLine(Line, 6),
+	createLine(Line, 6, Pieces),
 	Board = [Line | T],
-	createBoard(T, Size1).
+	createBoard(T, Size1, Pieces).
 	
-createLine([], 0).
-createLine(Line, Size):-
+createLine([], 0, _).
+createLine(Line, Size, Pieces):-
 	Size > 0,
 	Size1 is Size - 1,
-	random(0,3,PieceNum), % PieceNum is a random number (0, 1 or 2)
+	random_select(PieceNum,Pieces, R),
+	printLine(R), 
+	nl,
 	Line = [PieceNum | T],
-	createLine(T, Size1).
+	createLine(T, Size1, R).
 	
 printBoard([]).
 printBoard([H|T]):-
@@ -28,4 +30,3 @@ printLine([H|T]):-
 	write(H),
 	write('|'),
 	printLine(T).
-	
