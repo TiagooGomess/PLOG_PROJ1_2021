@@ -1,20 +1,25 @@
 :- use_module(library(random)).
+:- use_module(library(lists)).
 
-createBoard([[]], 0).
-createBoard(Board, Size):-
+:-ensure_loaded('utils.pl').
+
+createBoard([[]], 0, _).
+createBoard(Board, Size, Pieces):-
 	Size > 0,
 	Size1 is Size - 1,
-	createLine(Line, 6),
+	createLine(6, Pieces, Line),
+	remove_elements(Pieces, Line, RemainingPieces),
 	Board = [Line | T],
-	createBoard(T, Size1).
+	createBoard(T, Size1, RemainingPieces).
 	
-createLine([], 0).
-createLine(Line, Size):-
-	Size > 0,
-	Size1 is Size - 1,
-	random(0,3,PieceNum), % PieceNum is a random number (0, 1 or 2)
-	Line = [PieceNum | T],
-	createLine(T, Size1).
+% copia N elementos de L1 (lista com todas as peças restantes) para L2 ([X|T]) de forma aleatória
+createLine(0, _, []).
+createLine(N, L1, [X|T]):-
+	N > 0,
+	N1 is N - 1,
+	random_member(X, L1),
+	select(X, L1, Remaining),
+	createLine(N1, Remaining, T).
 	
 printBoard([]).
 printBoard([H|T]):-
@@ -28,4 +33,3 @@ printLine([H|T]):-
 	write(H),
 	write('|'),
 	printLine(T).
-	
