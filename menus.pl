@@ -4,8 +4,6 @@
 start:-
     printMainMenu,
     getMainMenuOption.
-	
-boardSize:-6.
 
 printMainMenu:-
 	write('=================================='), nl,
