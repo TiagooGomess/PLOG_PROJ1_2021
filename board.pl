@@ -26,7 +26,7 @@ createLine(N, L1, [[X]|T]):-
 	createLine(N1, Remaining, T).
 	
 % imprime o tabuleiro
-printBoard([[]],[]):-
+printBoard(_,[]):-
 	write('  |-----|-----|-----|-----|-----|-----|'),nl,
     write('     A     B     C     D     E     F ').
 printBoard([H|T],[Row|RowT]):-
@@ -48,4 +48,3 @@ printLine([[H|_T]|T]):-
 	write(NumGreen),
 	write(' '),
 	printLine(T).
-	
