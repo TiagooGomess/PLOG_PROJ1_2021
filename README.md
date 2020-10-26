@@ -73,8 +73,8 @@ We print a board on screen with letters and numbers to indicate position, and in
 
 **Intermediate State:**
 
-![Initial State](https://github.com/tiagoogomess/PLOG_PROJ1_2021/blob/main/images/intermediate_board.png?raw=true)
+![Intermediate State](https://github.com/tiagoogomess/PLOG_PROJ1_2021/blob/main/images/intermediate_board.png?raw=true)
 
 **Final State:**
 
-![Initial State](https://github.com/tiagoogomess/PLOG_PROJ1_2021/blob/main/images/final_board.png?raw=true)
+![Final State](https://github.com/tiagoogomess/PLOG_PROJ1_2021/blob/main/images/final_board.png?raw=true)
