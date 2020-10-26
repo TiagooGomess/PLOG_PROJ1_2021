@@ -48,3 +48,4 @@ printLine([[H|_T]|T]):-
 	write(NumGreen),
 	write(' '),
 	printLine(T).
+	

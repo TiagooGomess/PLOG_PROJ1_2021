@@ -1,28 +1,67 @@
-# PLOG_PROJ1_2021
+# Greener
 
-First Project of PLOG (MIEIC 3rd year / 1st semester)
+This is a Prolog implementation of the game [Greener](https://nestorgames.com/#green_detail), a capturing game for 2 players, where both must capture the same colour.
+This implementation is made by the group Greener_5 that consists of
 
-## Regras do Jogo
+- João Renato da Costa Pinto (up201705547)
+- Tiago Gonçalves Gomes (up201705547)
 
-![Rules](https://github.com/TiagooGomess/PLOG_PROJ1_2021/blob/main/rules.jpg)
+## Game Rules
 
-### Feito
+**Definitions:**
 
-* Menu inicial
-* How to Play
-* Criar tabuleiro com números random (0, 1 ou 2, que simbolizam as pirâmides branca, preta e verde, respetivamente); neste momento, o número de vezes que as peças aparecem no tabuleiro está correto
-* Fazer print do tabuleiro (funciona para qualquer matriz n x n)
-* ~~Neste momento, o nosso tabuleiro é formado por uma matriz bidimensional 6 x 6 (6 listas de 6 elementos)~~; no entanto, temos que fazer com que seja representado por uma lista de listas de listas: dentro de cada célula da matriz que temos atualmente, teremos que criar uma lista, que representa uma stack de pirâmides; no início, dentro de cada célula da matriz 6 x 6, teremos que ter uma matriz com uma lista com apenas um elemento (0, 1 ou 2); posteriormente, quando forem adicionadas peças a uma stack de pirâmides, adicionamos a representação dessa peça à lista (que ficará na cabeça da lista)
-* Com esta alteração da representação do tabuleiro, teremos também que mudar a nossa função printBoard: ~~neste momento, imprime cada célula da matriz 6 x 6~~; no entanto, quando tivermos uma matriz 6 x 6 em que cada célula seja representada por uma lista, não poderemos imprimir a lista toda, pelo que devemos imprimir apenas a cabeça da lista, que representa o jogador que no momento controla a stack (caso a cabeça da lista seja um 0 ou 1)
-* Também seria importante que o jogador conseguisse saber quantas pirâmides verdes tem cada stack, para saber se a stack lhe trará mais ou menos pontos, mas acho que não seria muito fácil imprimir isso dentro do tabuleiro de jogo; ~~uma opção seria dar a opção ao jogador para saber qual a composição de cada stack (número de peças verdes, brancas e pretas), sendo perguntado o número da linha e da coluna da stack que quer obter essa informação;~~ **o número de peças verdes em cada stack aparece em frente à 'cor' da stack** 
+- A stack is either  one pyramid or several pyramids stacked on top of each other.
+- A stack is controlled by the colour of the topmost pyramid. So a ‘Black’ stack is a stack of any height with a black pyramid on top, and so on...
+- The game is made for 2 players (Black and White players)
+- The board size is 6x6
+- There are 9 Black Pyramids, 9 White and 18 Green
+- Randomly place all the pyramids in the board (1 per cell)
+- Each player has an allocated colour (Black or White), while green is neutral
+- Black always starts and players alternate turns during the game until both players pass in succession
+- On your turn you **must** make one capture if possible, otherwise you **pass** the turn
+- Stacks capture other stacks that are on the same row or column and with no other stacks in between them, stacks cannot be split
+- You can capture stacks of any colour (even your own)
+- The game ends when both players pass in succession and wins the player with the most green pyramids captured (being part of stacks they control)
+- In case of a tie, the player with the highest stack wins, if the tie persists, play again
 
-### A fazer antes da primeira entrega
+[**Rule Book**](https://nestorgames.com/rulebooks/GREENGREENERGREENEST_EN.pdf)
 
-* Fazer função que retorna o número da pirâmide de uma célula do tabuleira, dada a linha e coluna
-* Mudar o nome das funções de acordo com o que está no enunciado
-* Implementar o estado do jogo
-  - Jogador atual
-  - Número de pontos de cada jogador
-  - Determinar quando o jogo termina 
-* Fazer o README para a primeira entrega
+## Game Implementation
 
+### Game State Representation
+
+The board is represented by a list of lists of lists, where the latest is the representation of a stack of pieces. Each piece colour has and associated number(0 for white, 1 for black and 2 for green). The player turn is also represented by a number, similar to the pieces, 0 for white and 1 for black.
+ Since the pieces are always in the board there is no more information to be kept.
+ Examples of game states in Prolog :
+
+- Initial State
+
+
+	[	[[2],[0],[2],[1],[0],[2]],
+		[[0],[0],[2],[1],[2],[0]],
+		[[1],[1],[2],[1],[2],[2]],
+		[[1],[2],[2],[2],[0],[2]],
+		[[1],[0],[2],[1],[2],[2]],
+		[[1],[0],[2],[2],[0],[2]]	] , 1
+
+- Intermediate State
+
+[	[[1,1,0],[],[],[2],[0],[2]],
+		[[0],[0],[2],[1],[2],[0]],
+		[[1],[1],[2],[1],[2],[2]],
+		[[1,2,2,2],[],[],[],[0],[2]],
+		[[2],[0],[2],[1],[2],[2]],
+		[[1],[0],[2],[2],[0],[2]]	] , 0
+        
+- Final State
+
+[	[[1,1,0,2,0,2],[],[],[],[],[]],
+		[[],[],[],[1,2,0,0,2,0],[],[]],
+		[[],[1,1,2,1,2,2],[],[],[],[]],
+		[,[],[], [1,2,2,2,2,0,2],[],[],[]],
+		[[],[],[],[],[],[1,2,2,2,0]],
+		[[],[],[],[],[0,2,2,2,0,1],[]]	] , 0
+        
+### Game State Visualization
+
+We print a board on screen with letters and numbers to indicate position, and in each cell we represent the color of the head of the list (piece on top of the stack) and next to it a number that represents the score associated with the stack ( number of green pieces in the stack) ( Não sei se eles querem descrição exata das funções ou só isto)
