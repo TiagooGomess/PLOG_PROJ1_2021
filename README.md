@@ -67,3 +67,14 @@ The board is represented by a list of lists of lists, where the latest is the re
 
 We print a board on screen with letters and numbers to indicate position, and in each cell we represent the color of the head of the list (piece on top of the stack) and next to it a number that represents the score associated with the stack ( number of green pieces in the stack)
 
+**Initial State:**
+
+![Initial State](https://github.com/tiagoogomess/PLOG_PROJ1_2021/blob/main/images/initial_board.png?raw=true)
+
+**Intermediate State:**
+
+![Initial State](https://github.com/tiagoogomess/PLOG_PROJ1_2021/blob/main/images/intermediate_board.png?raw=true)
+
+**Final State:**
+
+![Initial State](https://github.com/tiagoogomess/PLOG_PROJ1_2021/blob/main/images/final_board.png?raw=true)
