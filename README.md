@@ -69,12 +69,12 @@ We print a board on screen with letters and numbers to indicate position, and in
 
 **Initial State:**
 
-![Initial State](https://github.com/tiagoogomess/PLOG_PROJ1_2021/blob/main/images/initial_board.png?raw=true)
+![Initial State](https://raw.githubusercontent.com/tiagoogomess/PLOG_PROJ1_2021/main/images/initial_board.png?token=AL7CLJILSQQRLHWAXYIAESS7UARXM)
 
 **Intermediate State:**
 
-![Intermediate State](https://github.com/tiagoogomess/PLOG_PROJ1_2021/blob/main/images/intermediate_board.png?raw=true)
+![Intermediate State](https://raw.githubusercontent.com/tiagoogomess/PLOG_PROJ1_2021/main/images/intermediate_board.png?token=AL7CLJMVQER2NQHDLKLXPOC7UARYC)
 
 **Final State:**
 
-![Final State](https://github.com/tiagoogomess/PLOG_PROJ1_2021/blob/main/images/final_board.png?raw=true)
+![Final State](https://raw.githubusercontent.com/tiagoogomess/PLOG_PROJ1_2021/main/images/final_board.png?token=AL7CLJN2XSLCS2G6ZID5F3C7UARYW)
