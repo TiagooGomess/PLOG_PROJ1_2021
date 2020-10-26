@@ -31,7 +31,7 @@ This implementation is made by the group Greener_5 that consists of
 
 ### Game State Representation
 
-The board is represented by a list of lists of lists, where the latest is the representation of a stack of pieces. Each piece colour has and associated number(0 for white, 1 for black and 2 for green). The player turn is also represented by a number, similar to the pieces, 0 for white and 1 for black.
+The board is represented by a list of lists of lists, where the latest is the representation of a stack of pieces. Each piece colour has and associated number(0 for white, 1 for black and 2 for green; 3 for no piece in the cell). The player turn is also represented by a number, similar to the pieces, 0 for white and 1 for black.
  Since the pieces are always in the board there is no more information to be kept.
  Examples of game states in Prolog :
 
@@ -50,22 +50,22 @@ The board is represented by a list of lists of lists, where the latest is the re
 	[	[[1,1,0],[],[],[2],[0],[2]],</br>
 		[[0],[0],[2],[1],[2],[0]],</br>
 		[[1],[1],[2],[1],[2],[2]],</br>
-		[[1,2,2,2],[],[],[],[0],[2]],</br>
+		[[1,2,2,2],[3],[3],[3],[0],[2]],</br>
 		[[2],[0],[2],[1],[2],[2]],</br>
 		[[1],[0],[2],[2],[0],[2]]	] , 0
         
 - Final State
 
-	[	[[1,1,0,2,0,2],[],[],[],[],[]],</br>
-		[[],[],[],[1,2,0,0,2,0],[],[]],</br>
-		[[],[1,1,2,1,2,2],[],[],[],[]],</br>
-		[[],[], [1,2,2,2,2,0,2],[],[],[]],</br>
-		[[],[],[],[],[],[1,2,2,2,0]],</br>
-		[[],[],[],[],[0,2,2,2,0,1],[]]	] , 0
+	[	[[1,1,0,2,0,2],[3],[3],[3],[3],[3]],</br>
+		[[3],[3],[3],[1,2,0,0,2,0],[3],[3]],</br>
+		[[3],[1,1,2,1,2,2],[3],[3],[3],[3]],</br>
+		[[3],[3], [1,2,2,2,2,0,2],[3],[3],[3]],</br>
+		[[3],[3],[3],[3],[3],[1,2,2,2,0]],</br>
+		[[3],[3],[3],[3],[0,2,2,2,0,1],[3]]	] , 0
         
 ### Game State Visualization
 
-We print a board on screen with letters and numbers to indicate position, and in each cell we represent the color of the head of the list (piece on top of the stack) and next to it a number that represents the score associated with the stack ( number of green pieces in the stack)
+We print a board on screen with letters and numbers to indicate position, and in each cell we represent the color of the head of the list (piece on top of the stack ['W','B','G'], or no piece ['-']) and next to it a number that represents the score associated with the stack ( number of green pieces in the stack)
 
 **Initial State:**
 
