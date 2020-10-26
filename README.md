@@ -69,7 +69,7 @@ We print a board on screen with letters and numbers to indicate position, and in
 
 **Initial State:**
 
-![Initial State](https://raw.githubusercontent.com/TiagooGomess/PLOG_PROJ1_2021/main/images/initial_board.png?token=AL7CLJOEN66IUZG6WIAALTS7UBYPI)
+![Initial State](https://raw.githubusercontent.com/TiagooGomess/PLOG_PROJ1_2021/main/images/initial_board.png?token=AL7CLJM6EPVJKQSRVOB3LUK7UBY4O)
 
 **Intermediate State:**
 
