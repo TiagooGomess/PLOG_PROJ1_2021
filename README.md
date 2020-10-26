@@ -47,7 +47,7 @@ The board is represented by a list of lists of lists, where the latest is the re
 
 - Intermediate State
 
-	[	[[1,1,0],[],[],[2],[0],[2]],</br>
+	[	[[1,1,0],[3],[3],[2],[0],[2]],</br>
 		[[0],[0],[2],[1],[2],[0]],</br>
 		[[1],[1],[2],[1],[2],[2]],</br>
 		[[1,2,2,2],[3],[3],[3],[0],[2]],</br>
