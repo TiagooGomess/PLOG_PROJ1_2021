@@ -1,14 +1,14 @@
 :-ensure_loaded('utils.pl').
 :-ensure_loaded('board.pl').
+:-ensure_loaded('game.pl').
 
-start:-
+play:-
     printMainMenu,
     getMainMenuOption.
 
 printMainMenu:-
-	write('=================================='), nl,
-	write('=       :::: Greener ::::        ='), nl,
-	write('=================================='), nl,
+	clearScreen,
+	printHeader,
 	write('=                                ='), nl,
 	write('=   1. Play                      ='), nl,
 	write('=   2. How to play               ='), nl,
@@ -20,29 +20,42 @@ printMainMenu:-
 getMainMenuOption:-
     getChar(Input),(
         Input = '1' -> gameMenu;
-        Input = '2' -> helpMenu, start; % entra em helpMenu e volta para start.
+        Input = '2' -> helpMenu, play; % entra em helpMenu e volta para play.
         Input = '3';
 
         nl, write('Invalid input!'), nl,
+		pressEnterToContinue,nl,
         start
     ).
 
+initial(GameState):-
+	createBoard(GameState, 6, [2,2,1,2,0,2,1,2,0,2,2,1,0,2,1,0,2,2,2,0,1,0,2,0,2,1,2,1,2,0,2,1,2,0,2,1]).
+
+display_game(GameState, Player):-
+	printBoard(GameState,[6,5,4,3,2,1]),
+	printPlayer(Player).
+
+
 gameMenu:-
-	%createBoard(Board, 6, [2,2,1,2,0,2,1,2,0,2,2,1,0,2,1,0,2,2,2,0,1,0,2,0,2,1,2,1,2,0,2,1,2,0,2,1]),
-	write('Created Board'), nl,
-	write('---------------------------------------'),nl,
-	%printBoard(Board,[6,5,4,3,2,1]), nl,
-	% a linha de baixo serve para testar o caso em que há linhas vazias e stacks com mais do que 1 de altura
-	% comentar a createBoard a printBoard de cima para testar
+	clearScreen,
+	printHeader,nl,nl,nl,
+	initial(GameState),
+	display_game(GameState, 1). % Black player (1) starts
+	%--------------------------------------------------------------------------------------------------------
+
+	% as linhas de baixo servem para testar o caso em que há linhas vazias e stacks com mais do que 1 de altura
+	% comentar a initial e a display_game de cima para testar
+	
 	%printBoard([[[3],[3],[1,2,2,2],[0],[3],[3]],[[0],[1],[2],[0],[1],[2]],[[0],[1],[2],[0],[1],[2]],[[0],[1],[2],[0],[1],[2]],[[0],[1],[2],[0],[1],[2]],[[0],[1],[2],[0],[1],[2]]],[6,5,4,3,2,1]), nl,
-	L = [ [[1,1,0,2,0,2],[3],[3],[3],[3],[3]], [[3],[3],[3],[1,2,0,0,2,0],[3],[3]], [[3],[1,1,2,1,2,2],[3],[3],[3],[3]], [[3],[3], [1,2,2,2,2,0,2],[3],[3],[3]], [[3],[3],[3],[3],[3],[1,2,2,2,0]], [[3],[3],[3],[3],[0,2,2,2,0,1],[3]] ],
-	printBoard(L, [6,5,4,3,2,1]),nl,
-	%write('  |-----|-----|-----|-----|-----|-----|'),nl,
-    %write('     A     B     C     D     E     F '),
-	write('---------------------------------------'),nl,
-	write('Done!').
+	
+	%L = [ [[1,1,0,2,0,2],[3],[3],[3],[3],[3]], [[3],[3],[3],[1,2,0,0,2,0],[3],[3]], [[3],[1,1,2,1,2,2],[3],[3],[3],[3]], [[3],[3], [1,2,2,2,2,0,2],[3],[3],[3]], [[3],[3],[3],[3],[3],[1,2,2,2,0]], [[3],[3],[3],[3],[0,2,2,2,0,1],[3]] ],
+	%printBoard(L, [6,5,4,3,2,1]),nl,
+
+	%--------------------------------------------------------------------------------------------------------
+
 	
 helpMenu:-
+	clearScreen,
 	write('==============================================================='), nl,
 	write('=     :::: How To Play ::::                                   ='), nl,
 	write('==============================================================='), nl,
@@ -80,5 +93,6 @@ helpMenu:-
 	write('=   each time you do so, you are not capturing green ones!'), nl,
 	write('=   -> Try to find the perfect balance between the two.'), nl,
 	write('=   '), nl,
-	write('==============================================================='), nl.
+	write('==============================================================='), nl,
+	pressEnterToContinue, nl.
 		
