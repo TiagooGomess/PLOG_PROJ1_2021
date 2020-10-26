@@ -44,7 +44,19 @@ printLine([[H|_T]|T]):-
 	write('|'),
 	occurrences_of([H|_T],2,NumGreen),
 	translate(H, Piece),
+	writeInCell(Piece, NumGreen),
+	printLine(T).
+
+writeNumGreen(0):-
+	write(' ').
+writeNumGreen(Num):-
+	write(Num).
+
+writeInCell(Piece, 0):-
+	write(' '),
+	write(Piece),
+	write(' ').
+writeInCell(Piece, NumGreen):-
 	write(Piece),
 	write(NumGreen),
-	write(' '),
-	printLine(T).
+	write(' ').
