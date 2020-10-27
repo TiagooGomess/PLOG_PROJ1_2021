@@ -69,17 +69,12 @@ We print a board on screen with letters and numbers to indicate position, and in
 
 #### Initial State:
 
-![Initial State](https://raw.githubusercontent.com/TiagooGomess/PLOG_PROJ1_2021/main/images/initial_board.png?token=AL7CLJM6EPVJKQSRVOB3LUK7UBY4O)</br>
-- Black player's turn</br>
-
+![Initial State](https://raw.githubusercontent.com/TiagooGomess/PLOG_PROJ1_2021/main/images/initial_board.png?token=AL7CLJM6EPVJKQSRVOB3LUK7UBY4O)
 
 #### Intermediate State:
 
-![Intermediate State](https://raw.githubusercontent.com/TiagooGomess/PLOG_PROJ1_2021/main/images/intermediate_board.png?token=AL7CLJKGV7BOO6LZQRF6MJK7UBYQW)</br>
-- White player's turn</br>
-
+![Intermediate State](https://raw.githubusercontent.com/TiagooGomess/PLOG_PROJ1_2021/main/images/intermediate_board.png?token=AL7CLJKGV7BOO6LZQRF6MJK7UBYQW)
 
 #### Final State:
 
-![Final State](https://raw.githubusercontent.com/TiagooGomess/PLOG_PROJ1_2021/main/images/final_board.png?token=AL7CLJKBKD6AWUL2YSC5UYS7UBYSI)</br>
-- Black player won!
+![Final State](https://raw.githubusercontent.com/TiagooGomess/PLOG_PROJ1_2021/main/images/final_board.png?token=AL7CLJKBKD6AWUL2YSC5UYS7UBYSI)
