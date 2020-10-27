@@ -67,14 +67,19 @@ The board is represented by a list of lists of lists, where the latest is the re
 
 We print a board on screen with letters and numbers to indicate position, and in each cell we represent the color of the head of the list (piece on top of the stack ['W','B','G'], or no piece ['-']) and next to it a number that represents the score associated with the stack ( number of green pieces in the stack)
 
-**Initial State:**
+#### Initial State:
 
-![Initial State](https://raw.githubusercontent.com/TiagooGomess/PLOG_PROJ1_2021/main/images/initial_board.png?token=AL7CLJM6EPVJKQSRVOB3LUK7UBY4O)
+![Initial State](https://raw.githubusercontent.com/TiagooGomess/PLOG_PROJ1_2021/main/images/initial_board.png?token=AL7CLJM6EPVJKQSRVOB3LUK7UBY4O)</br>
+- Black player's turn</br>
 
-**Intermediate State:**
 
-![Intermediate State](https://raw.githubusercontent.com/TiagooGomess/PLOG_PROJ1_2021/main/images/intermediate_board.png?token=AL7CLJKGV7BOO6LZQRF6MJK7UBYQW)
+#### Intermediate State:
 
-**Final State:**
+![Intermediate State](https://raw.githubusercontent.com/TiagooGomess/PLOG_PROJ1_2021/main/images/intermediate_board.png?token=AL7CLJKGV7BOO6LZQRF6MJK7UBYQW)</br>
+- White player's turn</br>
 
-![Final State](https://raw.githubusercontent.com/TiagooGomess/PLOG_PROJ1_2021/main/images/final_board.png?token=AL7CLJKBKD6AWUL2YSC5UYS7UBYSI)
+
+#### Final State:
+
+![Final State](https://raw.githubusercontent.com/TiagooGomess/PLOG_PROJ1_2021/main/images/final_board.png?token=AL7CLJKBKD6AWUL2YSC5UYS7UBYSI)</br>
+- Black player won!
