@@ -77,4 +77,4 @@ We print a board on screen with letters and numbers to indicate position, and in
 
 #### Final State:
 
-![Final State](https://raw.githubusercontent.com/TiagooGomess/PLOG_PROJ1_2021/main/images/final_board.png?token=AL7CLJKBKD6AWUL2YSC5UYS7UBYSI)
+![Final State](https://raw.githubusercontent.com/TiagooGomess/PLOG_PROJ1_2021/main/images/final_board.png?token=AL7CLJJAGW2OCIX5OXRTYPK7UFNEU)
