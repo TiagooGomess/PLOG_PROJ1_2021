@@ -31,8 +31,8 @@ getMainMenuOption:-
 gameMenu:-
 	clearScreen,
 	printHeader,nl,nl,nl,
-	initial(GameState),
-	display_game(GameState, 1). % Black player (1) starts
+	%initial(GameState),
+	%display_game(GameState, 1). % Black player (1) starts
 	%--------------------------------------------------------------------------------------------------------
 
 	% as linhas de baixo servem para testar o caso em que há linhas vazias e stacks com mais do que 1 de altura
@@ -43,9 +43,9 @@ gameMenu:-
 	%display_game(L,0).
 	
 	%% final state:
-	%L = [ [[1,1,0,2,0,2],[3],[3],[3],[3],[3]], [[3],[3],[3],[1,2,0,0,2,0],[3],[3]], [[3],[1,1,2,1,2,2],[3],[3],[3],[3]], [[3],[3], [1,2,2,2,2,0,2],[3],[3],[3]], [[3],[3],[3],[3],[3],[1,2,2,2,0]], [[3],[3],[3],[3],[0,2,2,2,0,1],[3]] ],
-	%printBoard(L, [6,5,4,3,2,1]),nl,nl,
-	%write('The Black playe won!'),nl,nl,nl.
+	L = [ [[1,1,0,2,0,2],[3],[3],[3],[3],[3]], [[3],[3],[3],[1,2,0,0,2,0],[3],[3]], [[3],[1,1,2,1,2,2],[3],[3],[3],[3]], [[3],[3], [1,2,2,2,2,0,2],[3],[3],[3]], [[3],[3],[3],[3],[3],[1,2,2,2,0]], [[3],[3],[3],[3],[0,2,2,2,0,1],[3]] ],
+	printBoard(L, [6,5,4,3,2,1]),nl,nl,
+	write('The Black player won!'),nl,nl,nl.
 
 	%--------------------------------------------------------------------------------------------------------
 
