@@ -25,7 +25,7 @@ createLine(N, L1, [[X]|T]):-
 	select(X, L1, Remaining),
 	createLine(N1, Remaining, T).
 	
-% imprime o tabuleiro
+% imprime o tabuleiro, incluindo os números das linhas e colunas
 printBoard(_,[]):-
 	write('  |-----|-----|-----|-----|-----|-----|'),nl,
     write('     A     B     C     D     E     F ').
@@ -38,7 +38,7 @@ printBoard([H|T],[Row|RowT]):-
 	nl,
 	printBoard(T,RowT).
 	
-% imprime a Head de cada lista da linha
+% imprime a Head de cada lista da linha e o número de pirâmides verdes, em cada célula (caso existam)
 printLine([]).
 printLine([[H|_T]|T]):-
 	write('|'),
@@ -47,11 +47,13 @@ printLine([[H|_T]|T]):-
 	writeInCell(Piece, NumGreen),
 	printLine(T).
 
+% Escreve o número de pirâmides verdes de uma stack, caso existam
 writeNumGreen(0):-
 	write(' ').
 writeNumGreen(Num):-
 	write(Num).
 
+% escreve a informação na célula do tabuleiro
 writeInCell(Piece, 0):-
 	write(' '),
 	write(Piece),
