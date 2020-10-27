@@ -19,7 +19,6 @@ printHeader:-
 	write('=       :::: Greener ::::        ='), nl,
 	write('=================================='), nl.
 	
-
 % Faz a diferença de L1 e L2 e mete em L; L1 é uma lista normal, L2 uma lista de listas,
 % em que cada lista interior só tem um elemento (ex.: L2 = [[0],[1],[2]),
 % L é uma lista normal
@@ -39,6 +38,7 @@ flatten2([L|Ls], FlatL) :-
     append(NewL, NewLs, FlatL).
 flatten2(L, [L]).
 
+% Mapeamento da representação interna das pirâmides para a visualização do tabuleiro
 translate(0, ' W '). % white pyramid
 translate(1, ' B '). % black pyramid
 translate(2, ' G '). % green pyramid
@@ -47,3 +47,6 @@ translate(3, ' - '). % no piece
 % counts the Count occorences of X in List
 occurrences_of(List, X, Count):-
     aggregate_all(count, member(X, List), Count).
+
+% número das linhas a ser usado no display do tabuleiro
+row_numbers([6,5,4,3,2,1]).

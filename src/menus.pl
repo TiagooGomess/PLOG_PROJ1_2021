@@ -28,14 +28,6 @@ getMainMenuOption:-
         start
     ).
 
-initial(GameState):-
-	createBoard(GameState, 6, [2,2,1,2,0,2,1,2,0,2,2,1,0,2,1,0,2,2,2,0,1,0,2,0,2,1,2,1,2,0,2,1,2,0,2,1]).
-
-display_game(GameState, Player):-
-	printBoard(GameState,[6,5,4,3,2,1]),
-	printPlayer(Player).
-
-
 gameMenu:-
 	clearScreen,
 	printHeader,nl,nl,nl,
