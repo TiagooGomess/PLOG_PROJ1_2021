@@ -16,10 +16,11 @@ First Project of PLOG (MIEIC 3rd year / 1st semester)
 * Implementar o estado do jogo
   -Tabuleiro atual
   -Jogador atual
+* Fazer função que retorna o número da pirâmide de uma célula do tabuleiro, dada a linha e coluna
 
 ### A fazer antes da primeira entrega
 
-* Fazer função que retorna o número da pirâmide de uma célula do tabuleiro, dada a linha e coluna
+* Perguntar ao jogador para onde quer mover a peça e verificar se o movimento é válido
 * Estado do jogo
   -Número de pontos de cada jogador
   -Determinar quando o jogo termina
