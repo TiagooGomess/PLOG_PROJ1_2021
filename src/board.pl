@@ -62,3 +62,21 @@ writeInCell(Piece, NumGreen):-
 	write(Piece),
 	write(NumGreen),
 	write(' ').
+
+% dá-nos o número da peça que está no topo da stack, dada uma linha e uma coluna
+getPieceByRowAndColumn(Board, Row, Column, Piece):-
+    nth0(Row,Board,RowList),
+    nth0(Column,RowList,[Piece|_]).
+
+askForPiecePos(Row, Column):-
+	repeat,
+	nl,nl,
+	write('Choose wich piece to move.'),nl,nl,
+	write('Column: '),
+	getChar(Input1),
+	translate_column(Input1, Column),
+	write('Row: '),
+	getInt(Input2),
+	Input2 =< 6,
+	Input2 >= 1,
+	translate_row(Input2, Row).

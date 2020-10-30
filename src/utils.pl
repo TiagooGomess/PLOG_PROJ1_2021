@@ -6,6 +6,12 @@ getChar(Input):-
 	get_char(Input),nl,
 	get_char(_).
 
+% converte de char para inteiro
+getInt(Input):-
+    get_code(Aux),
+    get_code(_),
+	Input is Aux - 48.
+
 % https://stackoverflow.com/questions/16908764/clearing-screen-in-swipl-prolog-in-windows#:~:text=Plain%20clear%20screen%3A,%5Ce%5B2J').
 clearScreen:-write('\e[2J').
 
@@ -50,3 +56,26 @@ occurrences_of(List, X, Count):-
 
 % número das linhas a ser usado no display do tabuleiro
 row_numbers([6,5,4,3,2,1]).
+
+% translates the letters of the columns that are visible to the players to the real indexes
+translate_column('A', 0).
+translate_column('B', 1).
+translate_column('C', 2).
+translate_column('D', 3).
+translate_column('E', 4).
+translate_column('F', 5).
+translate_column('a', 0).
+translate_column('b', 1).
+translate_column('c', 2).
+translate_column('d', 3).
+translate_column('e', 4).
+translate_column('f', 5).
+
+% translates the numbers of the rows that are visible to the players to the real indexes
+translate_row(6, 0).
+translate_row(5, 1).
+translate_row(4, 2).
+translate_row(3, 3).
+translate_row(2, 4).
+translate_row(1, 5).
+
