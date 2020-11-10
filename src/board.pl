@@ -68,10 +68,11 @@ getPieceByRowAndColumn(Board, Row, Column, Piece):-
     nth0(Row,Board,RowList),
     nth0(Column,RowList,[Piece|_]).
 
-askForPiecePos(Row, Column):-
+% pergunta ao jogador qual a posição da peça que quer mover
+askForPiecePos(Row, Column, Question):-
 	repeat,
 	nl,nl,
-	write('Choose wich piece to move.'),nl,nl,
+	write(Question),nl,nl,
 	write('Column: '),
 	getChar(Input1),
 	translate_column(Input1, Column),
@@ -80,3 +81,26 @@ askForPiecePos(Row, Column):-
 	Input2 =< 6,
 	Input2 >= 1,
 	translate_row(Input2, Row).
+
+% pergunta ao jogador a peça que quer mover e para que posição
+askMove(Board, RowStart, ColumnStart, RowEnd, ColumnEnd):-
+	askForPiecePos(RowStart, ColumnStart, 'Which stack do you want to move?'),nl,nl,
+	askForPiecePos(RowEnd, ColumnEnd, 'For which position do you want to move it?'),nl,nl,
+	getPieceByRowAndColumn(Board, RowStart, ColumnStart, Piece),
+	translate(Piece, PieceChar),
+	translate_row(RowStartVisible, RowStart),
+	translate_column(ColumnStartVisible, ColumnStart),
+	translate_row(RowEndVisible, RowEnd),
+	translate_column(ColumnEndVisible, ColumnEnd),nl,nl,
+	write('You are moving piece'),
+	write(PieceChar),
+	write('from ('),
+	write(ColumnStartVisible),
+	write(','),
+	write(RowStartVisible),
+	write(')'),
+	write(' to ('),
+	write(ColumnEndVisible),
+	write(','),
+	write(RowEndVisible),
+	write(')').

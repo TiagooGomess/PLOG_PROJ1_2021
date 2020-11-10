@@ -34,12 +34,15 @@ gameMenu:-
 	initial(GameState),
 	display_game(GameState, 1), % Black player (1) starts
 
+	askMove(GameState, RowStart, ColumnStart, RowEnd, ColumnEnd).
+
+	/*
 	askForPiecePos(Row,Column),nl,
 	getPieceByRowAndColumn(GameState, Row, Column, PieceN),nl,nl,
 	translate(PieceN, Piece),
 	write('The piece you chose was'),
 	write(Piece),nl,nl.
-
+	*/
 	%--------------------------------------------------------------------------------------------------------
 
 	% as linhas de baixo servem para testar o caso em que há linhas vazias e stacks com mais do que 1 de altura
