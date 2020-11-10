@@ -84,7 +84,7 @@ askForPiecePos(Row, Column, Question):-
 
 % pergunta ao jogador a peça que quer mover e para que posição
 askMove(Board, RowStart, ColumnStart, RowEnd, ColumnEnd):-
-	askForPiecePos(RowStart, ColumnStart, 'Which stack do you want to move?'),nl,nl,
+	askForPiecePos(RowStart, ColumnStart, 'Which stack do you want to move to?'),nl,nl,
 	askForPiecePos(RowEnd, ColumnEnd, 'For which position do you want to move it?'),nl,nl,
 	getPieceByRowAndColumn(Board, RowStart, ColumnStart, Piece),
 	translate(Piece, PieceChar),
