@@ -1,10 +1,7 @@
 :-ensure_loaded('utils.pl').
 :-ensure_loaded('board.pl').
 :-ensure_loaded('game.pl').
-
-play:-
-    printMainMenu,
-    getMainMenuOption.
+:-ensure_loaded('play.pl').
 
 printMainMenu:-
 	clearScreen,
