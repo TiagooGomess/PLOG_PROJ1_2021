@@ -74,7 +74,7 @@ getStackByRowAndColumn(Board, Row, Column, Stack):-
     nth0(Column,RowList,Stack).
 
 % pergunta ao jogador qual a posição da peça que quer mover
-askForPiecePos(Board, Player, Row, Column, Question):-
+askForPiecePos(Row, Column, Question):-
 	repeat,
 	nl,nl,
 	write(Question),nl,nl,
@@ -85,16 +85,26 @@ askForPiecePos(Board, Player, Row, Column, Question):-
 	getInt(Input2),
 	Input2 =< 6,
 	Input2 >= 1,
-	translate_row(Input2, Row),
+	translate_row(Input2, Row).
+	
+askForPiecePosFrom(Board, Player, Row, Column):-
+	repeat,
+	askForPiecePos(Row, Column, 'Which stack do you want to move to?'),
 	getPieceByRowAndColumn(Board, Row, Column, Piece),
 	Piece = Player. % verifica se a stack que o jogador quer mover lhe pertence
 
+askForPiecePosTo(Board, Player, RowFrom, ColumnFrom, RowTo, ColumnTo):-
+	repeat,
+	askForPiecePos(RowTo, ColumnTo, 'For which position do you want to move it?'),
+	checkOrthogonality(RowFrom, ColumnFrom, RowTo, ColumnTo). % verifica se o movimento é feito ortogonalmente
+	% verificar se o movimento é válido aqui
+
 % pergunta ao jogador que peça quer mover e para que posição
 askMove(Board, Player, RowStart, ColumnStart, RowEnd, ColumnEnd):-
-	nl,write('======================================'),nl,
-	askForPiecePos(Board, Player, RowStart, ColumnStart, 'Which stack do you want to move to?'),nl,
-	askForPiecePos(Board, _, RowEnd, ColumnEnd, 'For which position do you want to move it?'),
-	nl,nl,write('======================================'),nl,nl.
+	nl,write('========================================'),nl,
+	askForPiecePosFrom(Board, Player, RowStart, ColumnStart),nl,
+	askForPiecePosTo(Board, _, RowStart, ColumnStart, RowEnd, ColumnEnd),
+	nl,nl,write('========================================'),nl,nl.
 
 % move a stack da posição (ColumnStart,RowStart) para (ColumnEnd,RowEnd)
 makeMove(Board, NewBoad, RowStart, ColumnStart, RowEnd, ColumnEnd):-
@@ -127,7 +137,7 @@ search_column([BoardColumn|RemainingBoardColumns], Column, Stack, [BoardColumn|R
 	search_column(RemainingBoardColumns, Column1, Stack, RemainingNewBoardColumns).
 
 
-% este precicado é similar ao append_stack, mas em vez de adicionar uma stack ao conteúdo de uma célula,
+% este predicado é similar ao append_stack, mas em vez de adicionar uma stack ao conteúdo de uma célula,
 % substitui o conteúdo de uma célula pela nossa representação de célula vazia ([3]).
 clear_cell([BoardRow|RemainingBoardRows], 0, Column, [NewBoardRow|RemainingBoardRows]):-
 	search_column_to_clear(BoardRow, Column, NewBoardRow).

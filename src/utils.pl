@@ -81,3 +81,8 @@ translate_row(4, 2).
 translate_row(3, 3).
 translate_row(2, 4).
 translate_row(1, 5).
+
+% verifica se o movimento é feito ortogonalmente
+checkOrthogonality(RowFrom, ColumnFrom, RowTo, ColumnTo):-
+    RowFrom = RowTo;
+    ColumnFrom = ColumnTo.
