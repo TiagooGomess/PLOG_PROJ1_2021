@@ -92,24 +92,6 @@ askMove(Board, RowStart, ColumnStart, RowEnd, ColumnEnd, Piece):-
 	askForPiecePos(RowStart, ColumnStart, 'Which stack do you want to move to?'),nl,nl,
 	askForPiecePos(RowEnd, ColumnEnd, 'For which position do you want to move it?'),nl,nl,
 	getPieceByRowAndColumn(Board, RowStart, ColumnStart, Piece).
-	/*
-	translate(Piece, PieceChar),
-	translate_row(RowStartVisible, RowStart),
-	translate_column(ColumnStartVisible, ColumnStart),
-	translate_row(RowEndVisible, RowEnd),
-	translate_column(ColumnEndVisible, ColumnEnd),nl,nl,
-	write('You are moving piece'),
-	write(PieceChar),
-	write('from ('),
-	write(ColumnStartVisible),
-	write(','),
-	write(RowStartVisible),
-	write(')'),
-	write(' to ('),
-	write(ColumnEndVisible),
-	write(','),
-	write(RowEndVisible),
-	write(')').*/
 
 % move a stack da posição (ColumnStart,RowStart) para (ColumnEnd,RowEnd)
 % Piece holds the piece on the top of the stack that was moved
