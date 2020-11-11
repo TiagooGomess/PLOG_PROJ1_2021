@@ -87,17 +87,17 @@ askForPiecePos(Row, Column, Question):-
 	Input2 >= 1,
 	translate_row(Input2, Row).
 
-% pergunta ao jogador a peça que quer mover e para que posição
-askMove(Board, RowStart, ColumnStart, RowEnd, ColumnEnd, Piece):-
-	askForPiecePos(RowStart, ColumnStart, 'Which stack do you want to move to?'),nl,nl,
-	askForPiecePos(RowEnd, ColumnEnd, 'For which position do you want to move it?'),nl,nl,
-	getPieceByRowAndColumn(Board, RowStart, ColumnStart, Piece).
+% pergunta ao jogador que peça quer mover e para que posição
+askMove(RowStart, ColumnStart, RowEnd, ColumnEnd):-
+	nl,write('======================================'),nl,
+	askForPiecePos(RowStart, ColumnStart, 'Which stack do you want to move to?'),nl,
+	askForPiecePos(RowEnd, ColumnEnd, 'For which position do you want to move it?'),
+	nl,nl,write('======================================'),nl,nl.
 
 % move a stack da posição (ColumnStart,RowStart) para (ColumnEnd,RowEnd)
-% Piece holds the piece on the top of the stack that was moved
-makeMove(Board, NewBoad, RowStart, ColumnStart, RowEnd, ColumnEnd, Piece):-
+makeMove(Board, NewBoad, RowStart, ColumnStart, RowEnd, ColumnEnd):-
 	getStackByRowAndColumn(Board, RowStart, ColumnStart, StackStart), % todo limpar o conteudo desta célula
-	getStackByRowAndColumn(Board, RowEnd, ColumnEnd, StackEnd),
+	
 
 	append_stack(Board, RowEnd, ColumnEnd, StackStart, NewBoad0),
 	clear_cell(NewBoad0, RowStart, ColumnStart, NewBoad).

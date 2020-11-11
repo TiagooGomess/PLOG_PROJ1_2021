@@ -38,7 +38,7 @@ next_player(1, 0).
 
 game_loop(GameState, Player):-
     display_game(GameState, Player),
-    askMove(GameState, RowStart, ColumnStart, RowEnd, ColumnEnd, Piece),
-    makeMove(GameState, NewBoard, RowStart, ColumnStart, RowEnd, ColumnEnd, Piece),
+    askMove(RowStart, ColumnStart, RowEnd, ColumnEnd),
+    makeMove(GameState, NewBoard, RowStart, ColumnStart, RowEnd, ColumnEnd),
     next_player(Player, NextPlayer),
     game_loop(NewBoard, NextPlayer).
