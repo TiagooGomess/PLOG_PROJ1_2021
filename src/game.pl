@@ -31,3 +31,14 @@ display_game(GameState, Player):-
     row_numbers(Rows), % Rows é uma lista com o número das linhas a ser usada no display do tabuleiro
 	printBoard(GameState, Rows),
 	printPlayer(Player).
+
+% determina quem é o próximo jogador
+next_player(0, 1).
+next_player(1, 0).
+
+game_loop(GameState, Player):-
+    display_game(GameState, Player),
+    askMove(GameState, RowStart, ColumnStart, RowEnd, ColumnEnd, Piece),
+    makeMove(GameState, NewBoard, RowStart, ColumnStart, RowEnd, ColumnEnd, Piece),
+    next_player(Player, NextPlayer),
+    game_loop(NewBoard, NextPlayer).

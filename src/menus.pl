@@ -32,18 +32,20 @@ gameMenu:-
 	clearScreen,
 	printHeader,nl,nl,nl,
 	initial(GameState),
+	game_loop(GameState, 1).
+	/*
 	nl,
 	write(GameState),
 	nl,
 	display_game(GameState, 1), % Black player (1) starts
 
-
+	
 	askMove(GameState, RowStart, ColumnStart, RowEnd, ColumnEnd, Piece),
 	makeMove(GameState, NewBoard, RowStart, ColumnStart, RowEnd, ColumnEnd, Piece),
 	nl,
 	write(NewBoard),
 	nl,
-	display_game(NewBoard, 1).
+	display_game(NewBoard, 1).*/
 
 	/*
 	askForPiecePos(Row,Column),nl,
