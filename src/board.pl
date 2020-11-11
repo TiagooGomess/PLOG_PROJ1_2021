@@ -93,17 +93,35 @@ askForPiecePosFrom(Board, Player, Row, Column):-
 	getPieceByRowAndColumn(Board, Row, Column, Piece),
 	Piece = Player. % verifica se a stack que o jogador quer mover lhe pertence
 
-askForPiecePosTo(Board, Player, RowFrom, ColumnFrom, RowTo, ColumnTo):-
+askForPiecePosTo(Board, RowFrom, ColumnFrom, RowTo, ColumnTo):-
 	repeat,
 	askForPiecePos(RowTo, ColumnTo, 'For which position do you want to move it?'),
-	checkOrthogonality(RowFrom, ColumnFrom, RowTo, ColumnTo). % verifica se o movimento é feito ortogonalmente
-	% verificar se o movimento é válido aqui
+	checkOrthogonality(RowFrom, ColumnFrom, RowTo, ColumnTo), % verifica se o movimento é feito ortogonalmente
+	checkStacksBetween(Board, RowFrom, ColumnFrom, RowTo, ColumnTo). % verifica se existem stacks entre a posição inicial e final
+
+% verifica se existem stacks entre a posição inicial e final;
+% neste ponto de execução, há garantia que a posição inicial e final são ortogonais.
+% caso em que as stacks estão na mesma linha
+checkStacksBetween(Board, Row, ColumnFrom, Row, ColumnTo):-
+	ColumnFrom \= ColumnTo, % a stack não pode ficar na mesma posição
+	nth0(Row,Board,RowList), % RowList contém a linha onde as stacks se encontram
+	(
+		ColumnFrom < ColumnTo
+		-> checkIfEmpty(RowList, ColumnFrom, ColumnTo);
+		checkIfEmpty(RowList, ColumnTo, ColumnFrom)
+	).
+
+% caso em que as stacks estão na mesma coluna
+checkStacksBetween(Board, RowFrom, Column, RowTo, Column):-
+	RowFrom \= RowTo. % a stack não pode ficar na mesma posição
+	% TODO
+
 
 % pergunta ao jogador que peça quer mover e para que posição
 askMove(Board, Player, RowStart, ColumnStart, RowEnd, ColumnEnd):-
 	nl,write('========================================'),nl,
 	askForPiecePosFrom(Board, Player, RowStart, ColumnStart),nl,
-	askForPiecePosTo(Board, _, RowStart, ColumnStart, RowEnd, ColumnEnd),
+	askForPiecePosTo(Board, RowStart, ColumnStart, RowEnd, ColumnEnd),
 	nl,nl,write('========================================'),nl,nl.
 
 % move a stack da posição (ColumnStart,RowStart) para (ColumnEnd,RowEnd)
@@ -123,7 +141,7 @@ append_stack([BoardRow|RemainingBoardRows], 0, Column, Stack, [NewBoardRow|Remai
 
 append_stack([BoardRow|RemainingBoardRows], Row, Column, Stack, [BoardRow|RemainingNewBoardRows]):-
 	Row > 0,
-	Row1 is Row-1,
+	Row1 is Row - 1,
 	append_stack(RemainingBoardRows, Row1, Column, Stack, RemainingNewBoardRows).
 
 % predicado usado em append_stack/5
@@ -133,7 +151,7 @@ search_column([BoardColumn|RemainingBoardColumns], 0, Stack, [NewBoardColumn|Rem
 
 search_column([BoardColumn|RemainingBoardColumns], Column, Stack, [BoardColumn|RemainingNewBoardColumns]):-
 	Column > 0,
-	Column1 is Column-1,
+	Column1 is Column - 1,
 	search_column(RemainingBoardColumns, Column1, Stack, RemainingNewBoardColumns).
 
 
@@ -144,13 +162,13 @@ clear_cell([BoardRow|RemainingBoardRows], 0, Column, [NewBoardRow|RemainingBoard
 
 clear_cell([BoardRow|RemainingBoardRows], Row, Column, [BoardRow|RemainingNewBoardRows]):-
 	Row > 0,
-	Row1 is Row-1,
+	Row1 is Row - 1,
 	clear_cell(RemainingBoardRows, Row1, Column, RemainingNewBoardRows).
 
 search_column_to_clear([_|RemainingBoardColumns], 0, [[3]|RemainingBoardColumns]).
 
 search_column_to_clear([BoardColumn|RemainingBoardColumns], Column, [BoardColumn|RemainingNewBoardColumns]):-
 	Column > 0,
-	Column1 is Column-1,
+	Column1 is Column - 1,
 	search_column_to_clear(RemainingBoardColumns, Column1, RemainingNewBoardColumns).
 
