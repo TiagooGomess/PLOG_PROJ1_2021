@@ -17,12 +17,12 @@ printMainMenu:-
 getMainMenuOption:-
     getChar(Input),(
         Input = '1' -> gameMenu;
-        Input = '2' -> helpMenu, play; % entra em helpMenu e volta para play.
+        Input = '2' -> howToPlay, play; % entra em howToPlay e volta para play.
         Input = '3';
 
-        nl, write('Invalid input!'), nl,
+		nl, write('Invalid input!'), nl,
 		pressEnterToContinue,nl,
-        start
+        play
     ).
 
 gameMenu:-
@@ -31,7 +31,7 @@ gameMenu:-
 	initial(GameState),
 	game_loop(GameState, 1).
 	
-helpMenu:-
+howToPlay:-
 	clearScreen,
 	write('==============================================================='), nl,
 	write('=     :::: How To Play ::::                                   ='), nl,
