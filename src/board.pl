@@ -99,7 +99,8 @@ makeMove(Board, NewBoad, RowStart, ColumnStart, RowEnd, ColumnEnd, Piece):-
 	getStackByRowAndColumn(Board, RowStart, ColumnStart, StackStart), % todo limpar o conteudo desta célula
 	getStackByRowAndColumn(Board, RowEnd, ColumnEnd, StackEnd),
 
-	append_stack(Board, RowEnd, ColumnEnd, StackStart, NewBoad).
+	append_stack(Board, RowEnd, ColumnEnd, StackStart, NewBoad0),
+	clear_cell(NewBoad0, RowStart, ColumnStart, NewBoad).
 
 
 % adiciona Stack no topo da stack que está na posição (Row, Column)
@@ -123,3 +124,21 @@ search_column([BoardColumn|RemainingBoardColumns], Column, Stack, [BoardColumn|R
 	Column > 0,
 	Column1 is Column-1,
 	search_column(RemainingBoardColumns, Column1, Stack, RemainingNewBoardColumns).
+
+
+% este precicado é similar ao append_stack, mas em vez de adicionar uma stack ao conteúdo de uma célula,
+% substitui o conteúdo de uma célula pela nossa representação de célula vazia ([3]).
+clear_cell([BoardRow|RemainingBoardRows], 0, Column, [NewBoardRow|RemainingBoardRows]):-
+	search_column_to_clear(BoardRow, Column, NewBoardRow).
+
+clear_cell([BoardRow|RemainingBoardRows], Row, Column, [BoardRow|RemainingNewBoardRows]):-
+	Row > 0,
+	Row1 is Row-1,
+	clear_cell(RemainingBoardRows, Row1, Column, RemainingNewBoardRows).
+
+search_column_to_clear([_|RemainingBoardColumns], 0, [[3]|RemainingBoardColumns]).
+
+search_column_to_clear([BoardColumn|RemainingBoardColumns], Column, [BoardColumn|RemainingNewBoardColumns]):-
+	Column > 0,
+	Column1 is Column-1,
+	search_column_to_clear(RemainingBoardColumns, Column1, RemainingNewBoardColumns).
