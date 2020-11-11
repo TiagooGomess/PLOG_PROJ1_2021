@@ -68,6 +68,11 @@ getPieceByRowAndColumn(Board, Row, Column, Piece):-
     nth0(Row,Board,RowList),
     nth0(Column,RowList,[Piece|_]).
 
+% dá-nos a stack de peças que está na posição (Column, Row)
+getStackByRowAndColumn(Board, Row, Column, Stack):-
+    nth0(Row,Board,RowList),
+    nth0(Column,RowList,Stack).
+
 % pergunta ao jogador qual a posição da peça que quer mover
 askForPiecePos(Row, Column, Question):-
 	repeat,
@@ -83,10 +88,11 @@ askForPiecePos(Row, Column, Question):-
 	translate_row(Input2, Row).
 
 % pergunta ao jogador a peça que quer mover e para que posição
-askMove(Board, RowStart, ColumnStart, RowEnd, ColumnEnd):-
+askMove(Board, RowStart, ColumnStart, RowEnd, ColumnEnd, Piece):-
 	askForPiecePos(RowStart, ColumnStart, 'Which stack do you want to move to?'),nl,nl,
 	askForPiecePos(RowEnd, ColumnEnd, 'For which position do you want to move it?'),nl,nl,
-	getPieceByRowAndColumn(Board, RowStart, ColumnStart, Piece),
+	getPieceByRowAndColumn(Board, RowStart, ColumnStart, Piece).
+	/*
 	translate(Piece, PieceChar),
 	translate_row(RowStartVisible, RowStart),
 	translate_column(ColumnStartVisible, ColumnStart),
@@ -103,4 +109,35 @@ askMove(Board, RowStart, ColumnStart, RowEnd, ColumnEnd):-
 	write(ColumnEndVisible),
 	write(','),
 	write(RowEndVisible),
-	write(')').
+	write(')').*/
+
+% move a stack da posição (ColumnStart,RowStart) para (ColumnEnd,RowEnd)
+% Piece holds the piece on the top of the stack that was moved
+makeMove(Board, NewBoad, RowStart, ColumnStart, RowEnd, ColumnEnd, Piece):-
+	getStackByRowAndColumn(Board, RowStart, ColumnStart, StackStart), % todo limpar o conteudo desta célula
+	getStackByRowAndColumn(Board, RowEnd, ColumnEnd, StackEnd),
+
+	append_stack(Board, RowEnd, ColumnEnd, StackStart, NewBoad).
+
+
+% adiciona Stack no topo da stack que está na posição (Row, Column)
+% e muda o estado do tabuleiro de acordo com esse movimento;
+% começa por procurar a linha desejada, e quando a encontrar, chama o predicado 
+% search_column/4 de forma a adicionar Stack ao conteúdo da célula desejada
+append_stack([BoardRow|RemainingBoardRows], 0, Column, Stack, [NewBoardRow|RemainingBoardRows]):-
+	search_column(BoardRow, Column, Stack, NewBoardRow).
+
+append_stack([BoardRow|RemainingBoardRows], Row, Column, Stack, [BoardRow|RemainingNewBoardRows]):-
+	Row > 0,
+	Row1 is Row-1,
+	append_stack(RemainingBoardRows, Row1, Column, Stack, RemainingNewBoardRows).
+
+% predicado usado em append_stack/5
+% procura por uma coluna numa linha do tabuleiro, de forma a adionar Stack ao conteúdo da célula desejada
+search_column([BoardColumn|RemainingBoardColumns], 0, Stack, [NewBoardColumn|RemainingBoardColumns]):-
+	append(Stack, BoardColumn, NewBoardColumn).
+
+search_column([BoardColumn|RemainingBoardColumns], Column, Stack, [BoardColumn|RemainingNewBoardColumns]):-
+	Column > 0,
+	Column1 is Column-1,
+	search_column(RemainingBoardColumns, Column1, Stack, RemainingNewBoardColumns).

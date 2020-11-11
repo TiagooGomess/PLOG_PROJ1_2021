@@ -23,7 +23,8 @@ initialPieces([2,2,1,2,0,2,1,2,0,2,2,1,0,2,1,0,2,2,2,0,1,0,2,0,2,1,2,1,2,0,2,1,2
 % as peças são dispostas no tabuleiro de forma aleatória.
 initial(GameState):-
     initialPieces(Pieces),
-	createBoard(GameState, 6, Pieces).
+    createBoard(GameState0, 6, Pieces),
+    exclude(empty, GameState0, GameState). % excluir eventuais listas vazias que possam surgir na criação do tabuleiro
 
 % Mostra o tabuleiro de jogo e o jogador atual.
 display_game(GameState, Player):-

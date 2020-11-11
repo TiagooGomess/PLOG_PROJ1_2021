@@ -44,6 +44,9 @@ flatten2([L|Ls], FlatL) :-
     append(NewL, NewLs, FlatL).
 flatten2(L, [L]).
 
+% lista vazia
+empty([]).
+
 % Mapeamento da representação interna das pirâmides para a visualização do tabuleiro
 translate(0, ' W '). % white pyramid
 translate(1, ' B '). % black pyramid
