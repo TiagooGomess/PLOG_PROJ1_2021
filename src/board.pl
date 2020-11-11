@@ -73,8 +73,8 @@ getStackByRowAndColumn(Board, Row, Column, Stack):-
     nth0(Row,Board,RowList),
     nth0(Column,RowList,Stack).
 
-% pergunta ao jogador qual a posição da peça que quer mover
-askForPiecePos(Row, Column, Question):-
+% pergunta ao jogador uma posição do tabuleiro
+askForPosition(Row, Column, Question):-
 	repeat,
 	nl,nl,
 	write(Question),nl,nl,
@@ -87,15 +87,17 @@ askForPiecePos(Row, Column, Question):-
 	Input2 >= 1,
 	translate_row(Input2, Row).
 	
+% pergunta ao jogador qual a posição da peça que quer mover e verifica se é válida
 askForPiecePosFrom(Board, Player, Row, Column):-
 	repeat,
-	askForPiecePos(Row, Column, 'Which stack do you want to move to?'),
+	askForPosition(Row, Column, 'Which stack do you want to move to?'),
 	getPieceByRowAndColumn(Board, Row, Column, Piece),
 	Piece = Player. % verifica se a stack que o jogador quer mover lhe pertence
 
+% pergunta ao jogador qual a posição para onde quer mover a peça e verifica se é válida
 askForPiecePosTo(Board, RowFrom, ColumnFrom, RowTo, ColumnTo):-
 	repeat,
-	askForPiecePos(RowTo, ColumnTo, 'For which position do you want to move it?'),
+	askForPosition(RowTo, ColumnTo, 'For which position do you want to move it?'),
 	checkOrthogonality(RowFrom, ColumnFrom, RowTo, ColumnTo), % verifica se o movimento é feito ortogonalmente
 	checkStacksBetween(Board, RowFrom, ColumnFrom, RowTo, ColumnTo). % verifica se existem stacks entre a posição inicial e final
 
@@ -110,14 +112,24 @@ checkStacksBetween(Board, Row, ColumnFrom, Row, ColumnTo):-
 		-> checkIfEmpty(RowList, ColumnFrom, ColumnTo);
 		checkIfEmpty(RowList, ColumnTo, ColumnFrom)
 	).
-
 % caso em que as stacks estão na mesma coluna
 checkStacksBetween(Board, RowFrom, Column, RowTo, Column):-
-	RowFrom \= RowTo. % a stack não pode ficar na mesma posição
-	% TODO
+	RowFrom \= RowTo, % a stack não pode ficar na mesma posição
+	getColumnN(Board, Column, ColumnList), % ColumnList contém a coluna onde as stacks se encontram
+	(
+		RowFrom < RowTo
+		-> checkIfEmpty(ColumnList, RowFrom, RowTo);
+		checkIfEmpty(ColumnList, RowTo, RowFrom)
+	).
 
+% dá-nos a ColumnList na posição de index ColumnList de Board
+getColumnN([],_,[]).
+getColumnN([BoardHeader|BoardRemaining], Column, [ColumnListHeader|ColumnListRemaining]):-
+	nth0(Column, BoardHeader, ColumnListHeader),
+	getColumnN(BoardRemaining, Column, ColumnListRemaining).
 
-% pergunta ao jogador que peça quer mover e para que posição
+% pergunta ao jogador que peça quer mover e para que posição;
+% pergunta sempre até ao jogador inserir posições iniciais e finais válidas
 askMove(Board, Player, RowStart, ColumnStart, RowEnd, ColumnEnd):-
 	nl,write('========================================'),nl,
 	askForPiecePosFrom(Board, Player, RowStart, ColumnStart),nl,
@@ -127,7 +139,6 @@ askMove(Board, Player, RowStart, ColumnStart, RowEnd, ColumnEnd):-
 % move a stack da posição (ColumnStart,RowStart) para (ColumnEnd,RowEnd)
 makeMove(Board, NewBoad, RowStart, ColumnStart, RowEnd, ColumnEnd):-
 	getStackByRowAndColumn(Board, RowStart, ColumnStart, StackStart),
-	
 	append_stack(Board, RowEnd, ColumnEnd, StackStart, NewBoad0),
 	clear_cell(NewBoad0, RowStart, ColumnStart, NewBoad).
 
@@ -138,7 +149,6 @@ makeMove(Board, NewBoad, RowStart, ColumnStart, RowEnd, ColumnEnd):-
 % search_column/4 de forma a adicionar Stack ao conteúdo da célula desejada
 append_stack([BoardRow|RemainingBoardRows], 0, Column, Stack, [NewBoardRow|RemainingBoardRows]):-
 	search_column(BoardRow, Column, Stack, NewBoardRow).
-
 append_stack([BoardRow|RemainingBoardRows], Row, Column, Stack, [BoardRow|RemainingNewBoardRows]):-
 	Row > 0,
 	Row1 is Row - 1,
@@ -148,7 +158,6 @@ append_stack([BoardRow|RemainingBoardRows], Row, Column, Stack, [BoardRow|Remain
 % procura por uma coluna numa linha do tabuleiro, de forma a adionar Stack ao conteúdo da célula desejada
 search_column([BoardColumn|RemainingBoardColumns], 0, Stack, [NewBoardColumn|RemainingBoardColumns]):-
 	append(Stack, BoardColumn, NewBoardColumn).
-
 search_column([BoardColumn|RemainingBoardColumns], Column, Stack, [BoardColumn|RemainingNewBoardColumns]):-
 	Column > 0,
 	Column1 is Column - 1,
@@ -159,14 +168,12 @@ search_column([BoardColumn|RemainingBoardColumns], Column, Stack, [BoardColumn|R
 % substitui o conteúdo de uma célula pela nossa representação de célula vazia ([3]).
 clear_cell([BoardRow|RemainingBoardRows], 0, Column, [NewBoardRow|RemainingBoardRows]):-
 	search_column_to_clear(BoardRow, Column, NewBoardRow).
-
 clear_cell([BoardRow|RemainingBoardRows], Row, Column, [BoardRow|RemainingNewBoardRows]):-
 	Row > 0,
 	Row1 is Row - 1,
 	clear_cell(RemainingBoardRows, Row1, Column, RemainingNewBoardRows).
 
 search_column_to_clear([_|RemainingBoardColumns], 0, [[3]|RemainingBoardColumns]).
-
 search_column_to_clear([BoardColumn|RemainingBoardColumns], Column, [BoardColumn|RemainingNewBoardColumns]):-
 	Column > 0,
 	Column1 is Column - 1,

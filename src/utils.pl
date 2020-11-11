@@ -94,10 +94,8 @@ checkIfEmpty(List, PosFrom, PosTo):-
     sub_list(List, PosFrom1, Count, SubList), % sub-lista que queremos verificar se está vazia (só com [3])
     Len is Count - 1,
     checkIfEmpty(SubList, Len).
-
 % se chegarmos a este ponto de execução, em que a lista foi toda processada, estão a lista só tem elementos [3]
 checkIfEmpty(_, 0).
-
 % percorre a lista e só continua a execução se o elemento da lista é [3]
 checkIfEmpty([[H|_]|T], Len):-
     Len > 0,
