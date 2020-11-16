@@ -185,5 +185,24 @@ search_column_to_clear([BoardColumn|RemainingBoardColumns], Column, [BoardColumn
 	search_column_to_clear(RemainingBoardColumns, Column1, RemainingNewBoardColumns).
 
 % conta o número de stacks pertencentes a um dado jogador.
-countPlayerStacks(Board,Player,NumStacks).
+countPlayerStacks(Board, Player, NumStacks):-
+	countPlayerStacks(Board, Player, NumStacks, 0, 6).
+countPlayerStacks(_, _, NumStacks, NumStacks, 0).
+countPlayerStacks(Board, Player, N, NumStacks, Row):-
+	Row > 0,
+	Row1 is Row - 1,
+	nth0(Row1, Board, RowList),
+	countRowStacks(Player, RowList, Counter),
+	NumStacks1 is NumStacks + Counter,
+	countPlayerStacks(Board, Player, N, NumStacks1, Row1).
 
+% conta o número de stacks pertencentes a um dado jogador, numa linha.
+countRowStacks(Player, RowList, Counter):-
+	countRowStacks(Player, RowList, Counter, 0).
+countRowStacks(_, [], Counter, Counter).
+countRowStacks(Player, [[H|_]|T], C, Counter):-
+	(
+		H = Player -> Counter1 is Counter + 1;
+		Counter1 is Counter
+	),
+	countRowStacks(Player, T, C, Counter1).

@@ -15,7 +15,8 @@ printMainMenu:-
 	write('Choose an option:'), nl.
 
 getMainMenuOption:-
-    getChar(Input),(
+    getChar(Input),
+	(
         Input = '1' -> gameMenu;
         Input = '2' -> howToPlay, play; % entra em howToPlay e volta para play.
         Input = '3';
