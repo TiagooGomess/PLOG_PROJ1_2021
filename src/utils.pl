@@ -1,5 +1,11 @@
 :- use_module(library(aggregate)).
 :- use_module(library(lists)).
+:- use_module(library(random)).
+:- use_module(library(system), [now/1]).
+
+init_random_state:-
+    now(X),
+    setrand(X).
 
 % se não tivessemos o get_char(_), não conseguíamos obter o próximo input
 getChar(Input):-
