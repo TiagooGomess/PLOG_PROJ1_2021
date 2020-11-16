@@ -82,5 +82,5 @@ We print a board on screen with letters and numbers to indicate position, and in
 
 ## How to run the game
 
-1. In SICStus Prolog, consult the file 'menus.pl' (File -> Consult... -> menus.pl)
+1. In SICStus Prolog, consult the file 'play.pl' (File -> Consult... -> play.pl; or in the sicstus terminal: `[play].`)
 2. Enter the command `play.`
