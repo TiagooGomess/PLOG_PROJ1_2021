@@ -24,8 +24,8 @@ initialPieces([2,2,1,2,0,2,1,2,0,2,2,1,0,2,1,0,2,2,2,0,1,0,2,0,2,1,2,1,2,0,2,1,2
 initial(GameState):-
     init_random_state, % muda a seed do random, para termos tabuleiros diferentes de cada vez que iniciamos o jogo
     initialPieces(Pieces),
-    %GameState0 = [ [[1,1,0,2,0,2,2,2,2,2,2,2,2,2,2,2],[3],[3],[3],[3],[3]], [[3],[3],[3],[1,2,0,0,2,0],[3],[3]], [[3],[1,1,2,1,2,2],[3],[3],[3],[3]], [[3],[3], [1,2,2,2,2,0,2],[3],[3],[3]], [[3],[3],[3],[3],[3],[1,2,2,2,0]], [[3],[3],[3],[3],[0,2,2,2,0,1],[3]] ],
-    createBoard(GameState, 6, Pieces).
+    GameState = [ [[1,1,0,2,0,2,2,2,2,2,2,2,2,2,2,2],[3],[3],[3],[3],[3]], [[3],[3],[3],[1,2,0,0,2,0],[3],[3]], [[3],[1,1,2,1,2,2],[3],[3],[3],[3]], [[3],[3], [0,2,2,2,2,0,2],[3],[3],[3]], [[3],[3],[3],[3],[3],[1,2,2,2,0]], [[3],[3],[3],[3],[1,2,2,2,0,1],[3]] ].
+    %createBoard(GameState, 6, Pieces).
  
 % Mostra o tabuleiro de jogo e o jogador atual.
 display_game(GameState, Player):-
@@ -38,8 +38,14 @@ next_player(0, 1).
 next_player(1, 0).
 
 game_loop(GameState, Player):-
-    display_game(GameState, Player),
-    askMove(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd),
-    makeMove(GameState, NewBoard, RowStart, ColumnStart, RowEnd, ColumnEnd),
-    next_player(Player, NextPlayer),
-    game_loop(NewBoard, NextPlayer).
+    checkEnd(GameState, Player) -> (
+        display_game(GameState, Player),
+        write('Game Over!'),! );
+    (   
+        display_game(GameState, Player),
+        askMove(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd),
+        makeMove(GameState, NewBoard, RowStart, ColumnStart, RowEnd, ColumnEnd),
+        next_player(Player, NextPlayer),
+        game_loop(NewBoard, NextPlayer)
+    ).
+    

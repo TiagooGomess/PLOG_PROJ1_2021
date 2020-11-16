@@ -206,3 +206,15 @@ countRowStacks(Player, [[H|_]|T], C, Counter):-
 		Counter1 is Counter
 	),
 	countRowStacks(Player, T, C, Counter1).
+
+% verifica se o jogo terminou
+% TODO
+checkEnd(Board, Player):- 
+	(
+		countPlayerStacks(Board, 0, NumStacks),
+		NumStacks = 0
+	);
+	(
+		countPlayerStacks(Board, 1, NumStacks),
+		NumStacks = 0
+	).
