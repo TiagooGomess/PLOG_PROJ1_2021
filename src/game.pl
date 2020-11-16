@@ -23,9 +23,10 @@ initialPieces([2,2,1,2,0,2,1,2,0,2,2,1,0,2,1,0,2,2,2,0,1,0,2,0,2,1,2,1,2,0,2,1,2
 % as peças são dispostas no tabuleiro de forma aleatória.
 initial(GameState):-
     initialPieces(Pieces),
-    createBoard(GameState0, 6, Pieces),
-    exclude(empty, GameState0, GameState). % excluir eventuais listas vazias que possam surgir na criação do tabuleiro
-
+    %GameState0 = [ [[1,1,0,2,0,2,2,2,2,2,2,2,2,2,2,2],[3],[3],[3],[3],[3]], [[3],[3],[3],[1,2,0,0,2,0],[3],[3]], [[3],[1,1,2,1,2,2],[3],[3],[3],[3]], [[3],[3], [1,2,2,2,2,0,2],[3],[3],[3]], [[3],[3],[3],[3],[3],[1,2,2,2,0]], [[3],[3],[3],[3],[0,2,2,2,0,1],[3]] ],
+    createBoard(GameState, 6, Pieces),
+    nl,write(GameState),nl.
+ 
 % Mostra o tabuleiro de jogo e o jogador atual.
 display_game(GameState, Player):-
     row_numbers(Rows), % Rows é uma lista com o número das linhas a ser usada no display do tabuleiro

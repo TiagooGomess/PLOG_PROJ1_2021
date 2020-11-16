@@ -5,14 +5,16 @@
 
 % cria um tabuleiro, no formato lista de listas de listas, em que as listas mais interiores
 % são formadas por apenas um elemento, já que no início as stacks têm todas uma altura de 1
-createBoard([[]], 0, _).
 createBoard(Board, Size, Pieces):-
+	createBoard(Board, [], Size, Pieces).
+createBoard(Board, Board, 0, []).
+createBoard(B, Board, Size, Pieces):-
 	Size > 0,
 	Size1 is Size - 1,
 	createLine(6, Pieces, Line),
-	remove_elements(Pieces, Line, RemainingPieces),
-	Board = [Line | T],
-	createBoard(T, Size1, RemainingPieces).
+	flatten2(Line,Line1), % se Line = [[0],[1],[2]], então Line1 = [0,1,2]
+	remove_elements(Pieces, Line1, RemainingPieces),
+	createBoard(B, [Line|Board], Size1, RemainingPieces).
 	
 % copia N elementos de L1 (lista com todas as peças restantes) para [[X]|T] de forma aleatória
 % [[X]|T] é uma lista de listas; esta função cria uma linha em que cada célula da linha possui
@@ -47,21 +49,20 @@ printLine([[H|_T]|T]):-
 	writeInCell(Piece, NumGreen),
 	printLine(T).
 
-% Escreve o número de pirâmides verdes de uma stack, caso existam
-writeNumGreen(0):-
-	write(' ').
-writeNumGreen(Num):-
-	write(Num).
-
 % escreve a informação na célula do tabuleiro
 writeInCell(Piece, 0):-
 	write(' '),
 	write(Piece),
 	write(' ').
 writeInCell(Piece, NumGreen):-
+	NumGreen < 10, % caso em que o número de peças verdes só ocupa 1 caracter
 	write(Piece),
 	write(NumGreen),
-	write(' ').
+	write(' '),!.
+writeInCell(Piece, NumGreen):-
+	NumGreen > 9, % caso em que o número de peças verdes ocupa 2 caracteres
+	write(Piece),
+	write(NumGreen).
 
 % dá-nos o número da peça que está no topo da stack, dada uma linha e uma coluna
 getPieceByRowAndColumn(Board, Row, Column, Piece):-
@@ -99,7 +100,13 @@ askForPiecePosTo(Board, RowFrom, ColumnFrom, RowTo, ColumnTo):-
 	repeat,
 	askForPosition(RowTo, ColumnTo, 'For which position do you want to move it?'),
 	checkOrthogonality(RowFrom, ColumnFrom, RowTo, ColumnTo), % verifica se o movimento é feito ortogonalmente
-	checkStacksBetween(Board, RowFrom, ColumnFrom, RowTo, ColumnTo). % verifica se existem stacks entre a posição inicial e final
+	checkStacksBetween(Board, RowFrom, ColumnFrom, RowTo, ColumnTo), % verifica se existem stacks entre a posição inicial e final
+	\+ checkEmptyCell(Board, RowTo, ColumnTo). % verifica se a posição final tem alguma peça para ser capturada
+
+% verifica se a posição (Row, Column) está vazia
+checkEmptyCell(Board, Row, Column):-
+	getPieceByRowAndColumn(Board, Row, Column, Piece),
+	Piece = 3.
 
 % verifica se existem stacks entre a posição inicial e final;
 % neste ponto de execução, há garantia que a posição inicial e final são ortogonais.
@@ -142,7 +149,6 @@ makeMove(Board, NewBoad, RowStart, ColumnStart, RowEnd, ColumnEnd):-
 	append_stack(Board, RowEnd, ColumnEnd, StackStart, NewBoad0),
 	clear_cell(NewBoad0, RowStart, ColumnStart, NewBoad).
 
-
 % adiciona Stack no topo da stack que está na posição (Row, Column)
 % e muda o estado do tabuleiro de acordo com esse movimento;
 % começa por procurar a linha desejada, e quando a encontrar, chama o predicado 
@@ -163,7 +169,6 @@ search_column([BoardColumn|RemainingBoardColumns], Column, Stack, [BoardColumn|R
 	Column1 is Column - 1,
 	search_column(RemainingBoardColumns, Column1, Stack, RemainingNewBoardColumns).
 
-
 % este predicado é similar ao append_stack, mas em vez de adicionar uma stack ao conteúdo de uma célula,
 % substitui o conteúdo de uma célula pela nossa representação de célula vazia ([3]).
 clear_cell([BoardRow|RemainingBoardRows], 0, Column, [NewBoardRow|RemainingBoardRows]):-
@@ -178,4 +183,7 @@ search_column_to_clear([BoardColumn|RemainingBoardColumns], Column, [BoardColumn
 	Column > 0,
 	Column1 is Column - 1,
 	search_column_to_clear(RemainingBoardColumns, Column1, RemainingNewBoardColumns).
+
+% conta o número de stacks pertencentes a um dado jogador.
+countPlayerStacks(Board,Player,NumStacks).
 

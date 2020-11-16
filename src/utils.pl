@@ -25,14 +25,18 @@ printHeader:-
 	write('=       :::: Greener ::::        ='), nl,
 	write('=================================='), nl.
 	
-% Faz a diferença de L1 e L2 e mete em L; L1 é uma lista normal, L2 uma lista de listas,
-% em que cada lista interior só tem um elemento (ex.: L2 = [[0],[1],[2]),
-% L é uma lista normal
-remove_elements(L1, L2, L):-
-	append(A, B, L1),
-	flatten2(L2, L3), % se L2 = [[0],[1],[2]], então L3 = [0,1,2]
-    append(C, L3, A),
-    append(C, B, L).
+% remove uma ocorrência de um elemento Elem de uma lista
+delete_one(_, [], []).
+delete_one(Elem, [Elem|T], T).
+delete_one(Elem, [H|T], [H|Result]) :-
+  delete_one(Elem, T, Result).
+
+% remove os elementos que estão na segunda lista da primeira lista, de acordo
+% com o número de ocorrências dos mesmos
+remove_elements(Pieces, [], Pieces).
+remove_elements(Pieces, [HLine|TLine], RemainingPieces):-
+    delete_one(HLine,Pieces,RemainingPieces0),
+    remove_elements(RemainingPieces0,TLine,RemainingPieces).
 	
 % Converte uma lista de listas numa única lista. 
 %(https://stackoverflow.com/questions/9059572/flatten-a-list-in-prolog)
