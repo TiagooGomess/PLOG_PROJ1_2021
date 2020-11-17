@@ -88,7 +88,7 @@ askForPosition(Row, Column, Question):-
 			getInt(Input2),
 			Input2 =< 6,
 			Input2 >= 1,
-			translate_row(Input2, Row)
+			translate_row(Input2, Row),!
 		);
 		nl,nl,write('This position is not a valid one!\nThe number of the rows are between 1 and 6 and the columns are between A and F!'),nl,nl,fail
 	).
@@ -99,10 +99,12 @@ askForPiecePosFrom(Board, Player, Row, Column):-
 	repeat,
 	askForPosition(Row, Column, 'Which stack do you want to move to?'),
 	getPieceByRowAndColumn(Board, Row, Column, Piece),
-	Piece = Player, % verifica se a stack que o jogador quer mover lhe pertence
 	(
-		\+ checkIfStackCannotCapture(Board, Row, Column);
-		nl,nl,write('It\'s not possible to capture a stack with that piece!\nPlease choose another one!'),nl,nl,fail
+		(
+			Piece = Player, % verifica se a stack que o jogador quer mover lhe pertence
+			\+ checkIfStackCannotCapture(Board, Row, Column),!
+		);
+		nl,nl,write('You connot move that stack!\nPlease choose another one!'),nl,nl,fail
 	).
 	
 
@@ -110,10 +112,15 @@ askForPiecePosFrom(Board, Player, Row, Column):-
 askForPiecePosTo(Board, RowFrom, ColumnFrom, RowTo, ColumnTo):-
 	repeat,
 	askForPosition(RowTo, ColumnTo, 'For which position do you want to move it?'),
-	checkOrthogonality(RowFrom, ColumnFrom, RowTo, ColumnTo), % verifica se o movimento é feito ortogonalmente
-	checkStacksBetween(Board, RowFrom, ColumnFrom, RowTo, ColumnTo), % verifica se existem stacks entre a posição inicial e final
-	\+ checkEmptyCell(Board, RowTo, ColumnTo). % verifica se a posição final tem alguma peça para ser capturada
-
+	(
+		(
+			checkOrthogonality(RowFrom, ColumnFrom, RowTo, ColumnTo), % verifica se o movimento é feito ortogonalmente
+			checkStacksBetween(Board, RowFrom, ColumnFrom, RowTo, ColumnTo), % verifica se existem stacks entre a posição inicial e final
+			\+ checkEmptyCell(Board, RowTo, ColumnTo),! % verifica se a posição final tem alguma peça para ser capturada
+		);
+		nl,nl,write('This movement is not a valid one!\nPlease choose another final position!'),nl,nl,fail
+	).
+	
 % verifica se a posição (Row, Column) está vazia
 checkEmptyCell(Board, Row, Column):-
 	getPieceByRowAndColumn(Board, Row, Column, Piece),
