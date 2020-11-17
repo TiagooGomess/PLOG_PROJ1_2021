@@ -77,16 +77,22 @@ getStackByRowAndColumn(Board, Row, Column, Stack):-
 % pergunta ao jogador uma posição do tabuleiro
 askForPosition(Row, Column, Question):-
 	repeat,
-	nl,nl,
-	write(Question),nl,nl,
-	write('Column: '),
-	getChar(Input1),
-	translate_column(Input1, Column),
-	write('Row: '),
-	getInt(Input2),
-	Input2 =< 6,
-	Input2 >= 1,
-	translate_row(Input2, Row).
+	(
+		(	
+			nl,nl,
+			write(Question),nl,nl,
+			write('Column: '),
+			getChar(Input1),
+			translate_column(Input1, Column),
+			write('Row: '),
+			getInt(Input2),
+			Input2 =< 6,
+			Input2 >= 1,
+			translate_row(Input2, Row)
+		);
+		nl,nl,write('This position is not a valid one!\nThe number of the rows are between 1 and 6 and the columns are between A and F!'),nl,nl,fail
+	).
+	
 	
 % pergunta ao jogador qual a posição da peça que quer mover e verifica se é válida
 askForPiecePosFrom(Board, Player, Row, Column):-
