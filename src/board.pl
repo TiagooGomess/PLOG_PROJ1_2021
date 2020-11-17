@@ -93,7 +93,12 @@ askForPiecePosFrom(Board, Player, Row, Column):-
 	repeat,
 	askForPosition(Row, Column, 'Which stack do you want to move to?'),
 	getPieceByRowAndColumn(Board, Row, Column, Piece),
-	Piece = Player. % verifica se a stack que o jogador quer mover lhe pertence
+	Piece = Player, % verifica se a stack que o jogador quer mover lhe pertence
+	(
+		\+ checkIfStackCannotCapture(Board, Row, Column);
+		nl,nl,write('It\'s not possible to capture a stack with that piece!\nPlease choose another one!'),nl,nl,fail
+	).
+	
 
 % pergunta ao jogador qual a posição para onde quer mover a peça e verifica se é válida
 askForPiecePosTo(Board, RowFrom, ColumnFrom, RowTo, ColumnTo):-
@@ -116,8 +121,8 @@ checkStacksBetween(Board, Row, ColumnFrom, Row, ColumnTo):-
 	nth0(Row,Board,RowList), % RowList contém a linha onde as stacks se encontram
 	(
 		ColumnFrom < ColumnTo
-		-> checkIfEmpty(RowList, ColumnFrom, ColumnTo);
-		checkIfEmpty(RowList, ColumnTo, ColumnFrom)
+		-> checkIfEmptyBetween(RowList, ColumnFrom, ColumnTo);
+		checkIfEmptyBetween(RowList, ColumnTo, ColumnFrom)
 	).
 % caso em que as stacks estão na mesma coluna
 checkStacksBetween(Board, RowFrom, Column, RowTo, Column):-
@@ -125,11 +130,11 @@ checkStacksBetween(Board, RowFrom, Column, RowTo, Column):-
 	getColumnN(Board, Column, ColumnList), % ColumnList contém a coluna onde as stacks se encontram
 	(
 		RowFrom < RowTo
-		-> checkIfEmpty(ColumnList, RowFrom, RowTo);
-		checkIfEmpty(ColumnList, RowTo, RowFrom)
+		-> checkIfEmptyBetween(ColumnList, RowFrom, RowTo);
+		checkIfEmptyBetween(ColumnList, RowTo, RowFrom)
 	).
 
-% dá-nos a ColumnList na posição de index ColumnList de Board
+% dá-nos a ColumnList na posição de index Column de Board
 getColumnN([],_,[]).
 getColumnN([BoardHeader|BoardRemaining], Column, [ColumnListHeader|ColumnListRemaining]):-
 	nth0(Column, BoardHeader, ColumnListHeader),
@@ -218,3 +223,11 @@ checkEnd(Board, Player):-
 		countPlayerStacks(Board, 1, NumStacks),
 		NumStacks = 0
 	).
+
+% verifica se uma stack não pode capturar outras, ou seja, se não há nenhuma stack
+% na mesma linha ou na mesma coluna
+checkIfStackCannotCapture(Board, Row, Column):-
+	nth0(Row,Board,RowList),
+	checkIfEmptyUnless(RowList,Column),
+	getColumnN(Board,Column,ColumnList),
+	checkIfEmptyUnless(ColumnList,Row).
