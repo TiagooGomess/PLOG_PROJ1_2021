@@ -22,7 +22,7 @@ initial(GameState):-
     createBoard(GameState, 6, Pieces).
  
 % Mostra o tabuleiro de jogo e o jogador atual.
-display_game(GameState, Player, Points):-
+display_game(GameState, Player):-
     clearScreen,
     printHeader,nl,nl,
     row_numbers(Rows), % Rows é uma lista com o número das linhas a ser usada no display do tabuleiro
@@ -30,6 +30,7 @@ display_game(GameState, Player, Points):-
 	printPlayer(Player),
     (
         Player = 2 -> !;
+        countPlayerPoints(GameState,Player,Points),
         write('Your current score is '),write(Points),write('.'),nl,nl
     ).
     
@@ -114,7 +115,10 @@ countRowPoints(Player, RowList, Counter):-
 countRowPoints(_, [], Counter, Counter).
 countRowPoints(Player, [[H|T0]|T], C, Counter):-
 	(
-		H = Player -> occurrences_of([H|T0],2,Counter1); % conta o número de peças verdes a stack tem
+		H = Player -> (
+            occurrences_of([H|T0],2,Counter0), % conta o número de peças verdes que a stack tem
+            Counter1 is Counter + Counter0
+        );
 		Counter1 is Counter
 	),
 	countRowPoints(Player, T, C, Counter1).
@@ -146,8 +150,7 @@ game_loop(GameState, Player, Sucession):-
         checkWinner(GameState),! 
     );
     (   
-        countPlayerPoints(GameState,Player,Points),
-        display_game(GameState, Player, Points),
+        display_game(GameState, Player),
         (
             playerPassTheTurn(GameState, Player) -> (
                 write('\nYou need to pass your turn!'),nl,
