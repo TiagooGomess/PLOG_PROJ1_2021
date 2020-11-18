@@ -18,7 +18,8 @@ initialPieces([2,2,1,2,0,2,1,2,0,2,2,1,0,2,1,0,2,2,2,0,1,0,2,0,2,1,2,1,2,0,2,1,2
 initial(GameState):-
     init_random_state, % muda a seed do random, para termos tabuleiros diferentes de cada vez que iniciamos o jogo
     initialPieces(Pieces),
-    %GameState = [ [[1,1,0,2,0,2,2,2,2,2,2,2,2,2,2,2],[2],[3],[3],[3],[3]], [[3],[3],[3],[1,2,0,0,2,0],[3],[3]], [[3],[1,1,2,1,2,2],[3],[3],[3],[3]], [[3],[3], [1,2,2,2,2,0,2],[3],[3],[3]], [[3],[3],[3],[3],[3],[0]], [[3],[3],[3],[3],[1,2,2,2,0,1],[3]] ].
+    %GameState = [ [[1,1,0,2,0,2,2,2,2,2,2,2,2,2,2,2],[2],[3],[3],[3],[3]], [[3],[3],[3],[1,2,0,0,2,0],[3],[3]], [[3],[1,1,2,1,2,2],[3],[3],[3],[3]], [[3],[3], [1,2,2,2,2,0,2],[3],[3],[3]], [[3],[3],[3],[3],[3],[0]], [[3],[3],[3],[3],[1,2,2,2,0,1],[3]] ],
+    %GameState = [ [[1],[3],[3],[3],[3],[3]], [[3],[3],[3],[3],[3],[3]], [[3],[3],[3],[3],[3],[3]], [[3],[3], [3],[3],[3],[3]], [[3],[3],[3],[3],[3],[3]], [[3],[3],[3],[3],[3],[0]] ].
     createBoard(GameState, 6, Pieces).
  
 % Mostra o tabuleiro de jogo e o jogador atual.
@@ -123,6 +124,32 @@ countRowPoints(Player, [[H|T0]|T], C, Counter):-
 	),
 	countRowPoints(Player, T, C, Counter1).
 
+% dá-nos a altura da pirâmide mais alta do jogador
+getHighestStackHeight(Board, Player, Height):-
+    getHighestStackHeight(Board,Player,Height,0,6).
+getHighestStackHeight(_,_,Height,Height,0).
+getHighestStackHeight(Board,Player,N,Height,Row):-
+    Row > 0,
+    Row1 is Row - 1,
+    nth0(Row1,Board,RowList),
+    getHighestStackHeightRow(Player,RowList,Height0),
+    Height1 is max(Height,Height0),
+    getHighestStackHeight(Board,Player,N,Height1,Row1).
+
+% dá-nos a altura da pirâmide mais alta do jogador, numa certa linha
+getHighestStackHeightRow(Player,RowList,Height):-
+    getHighestStackHeightRow(Player,RowList,Height,0).
+getHighestStackHeightRow(_,[],Height,Height).
+getHighestStackHeightRow(Player,[[H|T0]|T],N,Height):-
+    (
+        H = Player -> (
+            length([H|T0],Height0),
+            Height1 is max(Height,Height0)
+        );
+        Height1 is Height
+    ),
+    getHighestStackHeightRow(Player,T,N,Height1).
+
 % verifica e imprime no ecrã quem foi o jogador vencedor
 checkWinner(Board):-
 	countPlayerPoints(Board, 0, WhitePoints),
@@ -135,7 +162,22 @@ checkWinner(Board):-
 		WhitePoints > BlackPoints -> nl,nl,write('White Player won!'),nl,nl,nl;
 		(
 			BlackPoints > WhitePoints -> nl,nl,write('Black Player won!'),nl,nl,nl;
-			write('It was a tie!') % TODO verificar qual o jogador com a stack mais alta 
+            getHighestStackHeight(GameState, 0, HeightWhite),
+            getHighestStackHeight(GameState, 1, HeightBlack),
+            (
+                HeightWhite > HeightBlack -> (
+                    nl,nl,write('White Player won, because he has de highest stack!'),nl,nl,nl
+                );
+                (
+                    HeightBlack > HeightWhite -> (
+                        nl,nl,write('Black Player won, because he has de highest stack!'),nl,nl,nl
+                    );
+                    (
+                        nl,nl,write('It was a tie! You have the same number of points and the same highest stack height! Please play again!'),nl,nl,nl
+                    )
+                    
+                )
+            )
 		)
 	).
 
@@ -145,7 +187,7 @@ game_loop(GameState, Player):-
     game_loop(GameState, Player, 0).
 game_loop(GameState, Player, Sucession):-
     checkEnd(Sucession) -> (
-        display_game(GameState, 2, _), % Player é 2, para não fazer display do player atual, já que ninguém é a jogar
+        display_game(GameState, 2), % Player é 2, para não fazer display do player atual, já que ninguém é a jogar
         nl,nl,nl,write('Game Over!'),nl,nl,nl,
         checkWinner(GameState),! 
     );
