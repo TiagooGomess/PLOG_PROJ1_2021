@@ -3,6 +3,7 @@
 :- use_module(library(random)).
 :- use_module(library(system), [now/1]).
 
+% muda a seed do random, para termos tabuleiros diferentes de cada vez que iniciamos o jogo
 init_random_state:-
     now(X),
     setrand(X).
@@ -26,6 +27,7 @@ pressEnterToContinue:-
 	write('Press <Enter> to continue.'), nl,
 	get_char(_), !.
 
+% imprime o cabeçalho com o nome do jogo
 printHeader:-
     write('=================================='), nl,
 	write('=       :::: Greener ::::        ='), nl,
@@ -53,9 +55,6 @@ flatten2([L|Ls], FlatL) :-
     flatten2(Ls, NewLs),
     append(NewL, NewLs, FlatL).
 flatten2(L, [L]).
-
-% lista vazia
-empty([]).
 
 % Mapeamento da representação interna das pirâmides para a visualização do tabuleiro
 translate(0, ' W '). % white pyramid
@@ -128,7 +127,7 @@ checkIfEmptyUnless([[H|_]|T], Pos, Len):-
     Len1 is Len - 1,
     checkIfEmptyUnless(T, Pos, Len1).
 
-% https://stackoverflow.com/questions/20765479/create-a-sublist-from-a-list-given-an-index-and-a-number-of-elements-prolog
+% (https://stackoverflow.com/questions/20765479/create-a-sublist-from-a-list-given-an-index-and-a-number-of-elements-prolog)
 % encontra a sublista de L, desde o index M até M + N, ficando a sub-lista em S.
 sub_list(L, M, N, S) :-
     findall(E, (nth0(I, L, E), I >= M, I =< N), S).
