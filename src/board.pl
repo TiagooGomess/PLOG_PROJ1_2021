@@ -223,17 +223,10 @@ countRowStacks(Player, [[H|_]|T], C, Counter):-
 	),
 	countRowStacks(Player, T, C, Counter1).
 
-% verifica se o jogo terminou
-% TODO
+% sucede se o jogador não consegue fazer nenhum movimento
+% TODO: mudar para suceder quando os dois jogadores passam a jogada sucessivamente
 checkEnd(Board, Player):- 
-	(
-		countPlayerStacks(Board, 0, NumStacks),
-		NumStacks = 0
-	);
-	(
-		countPlayerStacks(Board, 1, NumStacks),
-		NumStacks = 0
-	).
+	\+ checkIfPlayerCanMakeMove(Board,Player).
 
 % verifica se uma stack não pode capturar outras, ou seja, se não há nenhuma stack
 % na mesma linha ou na mesma coluna
