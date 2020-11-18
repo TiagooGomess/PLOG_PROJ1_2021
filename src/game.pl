@@ -22,11 +22,15 @@ initial(GameState):-
     %createBoard(GameState, 6, Pieces).
  
 % Mostra o tabuleiro de jogo e o jogador atual.
-display_game(GameState, Player):-
+display_game(GameState, Player, Points):-
     row_numbers(Rows), % Rows é uma lista com o número das linhas a ser usada no display do tabuleiro
 	printBoard(GameState, Rows),
-	printPlayer(Player).
-
+	printPlayer(Player),
+    (
+        Player = 2 -> !;
+        write('Your current score is '),write(Points),write('.'),nl,nl
+    ).
+    
 % determina quem é o próximo jogador
 next_player(0, 1).
 next_player(1, 0).
@@ -90,17 +94,58 @@ checkIfPlayerCanMakeMoveRow(Board,[[H|X]|T],Player,Row,Column):-
 		checkIfPlayerCanMakeMoveRow(Board,T,Player,Row,Column1)
 	).
 
+% conta o número de pontos de um dado jogador.
+countPlayerPoints(Board, Player, Points):-
+	countPlayerPoints(Board, Player, Points, 0, 6).
+countPlayerPoints(_, _, Points, Points, 0).
+countPlayerPoints(Board, Player, N, Points, Row):-
+	Row > 0,
+	Row1 is Row - 1,
+	nth0(Row1, Board, RowList),
+	countRowPoints(Player, RowList, Counter),
+	Points1 is Points + Counter,
+	countPlayerPoints(Board, Player, N, Points1, Row1).
+
+% conta o número de pontos de um dado jogador, numa linha.
+countRowPoints(Player, RowList, Counter):-
+	countRowPoints(Player, RowList, Counter, 0).
+countRowPoints(_, [], Counter, Counter).
+countRowPoints(Player, [[H|T0]|T], C, Counter):-
+	(
+		H = Player -> occurrences_of([H|T0],2,Counter1); % conta o número de peças verdes a stack tem
+		Counter1 is Counter
+	),
+	countRowPoints(Player, T, C, Counter1).
+
+% verifica e imprime no ecrã quem foi o jogador vencedor
+checkWinner(Board, Winner):-
+	countPlayerPoints(Board, 0, WhitePoints),
+	countPlayerPoints(Board, 1, BlackPoints),
+	write('========================================'),nl,nl,
+	nl,nl,write('--> Final Score:'),nl,nl,
+	write('Black Player: '), write(BlackPoints), write(' points.'),nl,nl,
+	write('White Player: '), write(WhitePoints), write(' points.'),nl,nl,
+	(
+		WhitePoints > BlackPoints -> nl,nl,write('White Player won!'),nl,nl,nl;
+		(
+			BlackPoints > WhitePoints -> nl,nl,write('Black Player won!'),nl,nl,nl;
+			write('It was a tie!') % TODO verificar qual o jogador com a stack mais alta 
+		)
+	).
+
 % ciclo do jogo; o terceiro argumento, Succession, é 0 se a jogada anterior não teve que ser passada à frente (pass turn),
 % ou 1 caso contrário; quando for 2, o jogo termina, porque os jogadores tiveram que passar as suas jogadas sucessivamente.
 game_loop(GameState, Player):-
     game_loop(GameState, Player, 0).
 game_loop(GameState, Player, Sucession):-
     checkEnd(GameState, Player, Sucession) -> (
-        display_game(GameState, 2), % Player é 2, para não fazer display do player atual, já que ninguém é a jogar
-        nl,nl,nl,write('Game Over!'),nl,nl,nl,! 
+        display_game(GameState, 2, _), % Player é 2, para não fazer display do player atual, já que ninguém é a jogar
+        nl,nl,nl,write('Game Over!'),nl,nl,nl,
+        checkWinner(GameState, Winner),! 
     );
     (   
-        display_game(GameState, Player),
+        countPlayerPoints(GameState,Player,Points),
+        display_game(GameState, Player, Points),
         (
             playerPassTheTurn(GameState, Player) -> (
                 write('\nYou need to pass your turn!'),nl,

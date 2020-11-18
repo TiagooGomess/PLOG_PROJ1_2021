@@ -180,37 +180,10 @@ clear_cell([BoardRow|RemainingBoardRows], Row, Column, [BoardRow|RemainingNewBoa
 	Row1 is Row - 1,
 	clear_cell(RemainingBoardRows, Row1, Column, RemainingNewBoardRows).
 
+% predicado usado em clear_cell/4
+% procura por uma coluna numa linha do tabuleiro, de forma a eliminar o conteúdo da célula desejada (substituir por [3])
 search_column_to_clear([_|RemainingBoardColumns], 0, [[3]|RemainingBoardColumns]).
 search_column_to_clear([BoardColumn|RemainingBoardColumns], Column, [BoardColumn|RemainingNewBoardColumns]):-
 	Column > 0,
 	Column1 is Column - 1,
 	search_column_to_clear(RemainingBoardColumns, Column1, RemainingNewBoardColumns).
-
-% --------------------------- Não USADO AINDA -----------------------------------
-
-% conta o número de stacks pertencentes a um dado jogador.
-countPlayerStacks(Board, Player, NumStacks):-
-	countPlayerStacks(Board, Player, NumStacks, 0, 6).
-countPlayerStacks(_, _, NumStacks, NumStacks, 0).
-countPlayerStacks(Board, Player, N, NumStacks, Row):-
-	Row > 0,
-	Row1 is Row - 1,
-	nth0(Row1, Board, RowList),
-	countRowStacks(Player, RowList, Counter),
-	NumStacks1 is NumStacks + Counter,
-	countPlayerStacks(Board, Player, N, NumStacks1, Row1).
-
-% conta o número de stacks pertencentes a um dado jogador, numa linha.
-countRowStacks(Player, RowList, Counter):-
-	countRowStacks(Player, RowList, Counter, 0).
-countRowStacks(_, [], Counter, Counter).
-countRowStacks(Player, [[H|_]|T], C, Counter):-
-	(
-		H = Player -> Counter1 is Counter + 1;
-		Counter1 is Counter
-	),
-	countRowStacks(Player, T, C, Counter1).
-
-% --------------------------------------------------------------------------------
-
-
