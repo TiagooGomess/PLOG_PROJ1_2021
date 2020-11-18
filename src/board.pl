@@ -93,7 +93,6 @@ askForPosition(Row, Column, Question):-
 		nl,nl,write('This position is not a valid one!\nThe number of the rows are between 1 and 6 and the columns are between A and F!'),nl,nl,fail
 	).
 	
-	
 % pergunta ao jogador qual a posição da peça que quer mover e verifica se é válida
 askForPiecePosFrom(Board, Player, Row, Column):-
 	repeat,
@@ -107,7 +106,6 @@ askForPiecePosFrom(Board, Player, Row, Column):-
 		nl,nl,write('You connot move that stack!\nPlease choose another one!'),nl,nl,fail
 	).
 	
-
 % pergunta ao jogador qual a posição para onde quer mover a peça e verifica se é válida
 askForPiecePosTo(Board, RowFrom, ColumnFrom, RowTo, ColumnTo):-
 	repeat,
@@ -244,3 +242,33 @@ checkIfStackCannotCapture(Board, Row, Column):-
 	checkIfEmptyUnless(RowList,Column),
 	getColumnN(Board,Column,ColumnList),
 	checkIfEmptyUnless(ColumnList,Row).
+
+% verifica se o Player consegue fazer algum movimento, ou seja, 
+% se tem pelo menos uma stack que tenha outra stack na mesma linha ou coluna
+checkIfPlayerCanMakeMove(Board,Player):-
+	checkIfPlayerCanMakeMove(Board,Board,Player,6).
+checkIfPlayerCanMakeMove([],_,_,0):-fail.
+checkIfPlayerCanMakeMove([Line|T],Board,Player,Row):-
+	Row > 0,
+	Row1 is Row - 1,
+	(
+		RealRow is 6 - Row,
+		checkIfPlayerCanMakeMoveRow(Board,Line,Player,RealRow,6) -> !;
+		checkIfPlayerCanMakeMove(T,Board,Player,Row1)
+	).
+	
+% verifica se o Player consegue fazer algum movimento,
+% para as stacks que tem numa certa linha
+checkIfPlayerCanMakeMoveRow(_,[],_,_,0):-fail.
+checkIfPlayerCanMakeMoveRow(Board,[[H|X]|T],Player,Row,Column):-
+	Column > 0,
+	Column1 is Column - 1,
+	(
+		H = Player -> (
+			RealColumn is 6 - Column,
+			\+ checkIfStackCannotCapture(Board, Row, RealColumn) -> !;
+			fail
+		);
+		checkIfPlayerCanMakeMoveRow(Board,T,Player,Row,Column1)
+	).
+
