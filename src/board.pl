@@ -96,7 +96,7 @@ askForPosition(Row, Column, Question):-
 % pergunta ao jogador qual a posição da peça que quer mover e verifica se é válida
 askForPiecePosFrom(Board, Player, Row, Column):-
 	repeat,
-	askForPosition(Row, Column, 'Which stack do you want to move to?'),
+	askForPosition(Row, Column, 'Which stack do you want to move?'),
 	getPieceByRowAndColumn(Board, Row, Column, Piece),
 	(
 		(
