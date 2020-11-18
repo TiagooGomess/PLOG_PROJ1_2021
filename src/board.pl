@@ -223,9 +223,12 @@ countRowStacks(Player, [[H|_]|T], C, Counter):-
 	),
 	countRowStacks(Player, T, C, Counter1).
 
-% sucede se o jogador não consegue fazer nenhum movimento
-% TODO: mudar para suceder quando os dois jogadores passam a jogada sucessivamente
-checkEnd(Board, Player):- 
+% sucede quando os dois jogadores passam a jogada sucessivamente (Succession = 2)
+checkEnd(Board, Player, Sucession):- 
+	Sucession = 2.
+
+% sucede quando o jogador não pode fazer nenhum movimento
+playerPassTheTurn(Board, Player):-
 	\+ checkIfPlayerCanMakeMove(Board,Player).
 
 % verifica se uma stack não pode capturar outras, ou seja, se não há nenhuma stack

@@ -37,15 +37,29 @@ display_game(GameState, Player):-
 next_player(0, 1).
 next_player(1, 0).
 
+% ciclo do jogo; o terceiro argumento, Succession, é 0 se a jogada anterior não teve que ser passada à frente (pass turn),
+% ou 1 caso contrário; quando for 2, o jogo termina, porque os jogadores tiveram que passar as suas jogadas sucessivamente.
 game_loop(GameState, Player):-
-    checkEnd(GameState, Player) -> (
+    game_loop(GameState, Player, 0).
+game_loop(GameState, Player, Sucession):-
+    checkEnd(GameState, Player, Sucession) -> (
         display_game(GameState, Player),
         write('Game Over!'),! );
     (   
         display_game(GameState, Player),
-        askMove(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd),
-        makeMove(GameState, NewBoard, RowStart, ColumnStart, RowEnd, ColumnEnd),
+        (
+            playerPassTheTurn(GameState, Player) -> (
+                write('\nYou need to pass your turn!\n\n\n'),
+                NewBoard = GameState,
+                Sucession1 is Sucession + 1
+            );
+            (
+                askMove(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd),
+                makeMove(GameState, NewBoard, RowStart, ColumnStart, RowEnd, ColumnEnd),
+                Sucession1 is 0
+            )
+        ),
         next_player(Player, NextPlayer),
-        game_loop(NewBoard, NextPlayer)
+        game_loop(NewBoard, NextPlayer,Sucession1)
     ).
     
