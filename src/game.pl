@@ -7,13 +7,7 @@ printPlayer(0):-
 printPlayer(1):-
     nl,nl,
     write('Black player\'s turn.'),nl,nl.
-printPlayer(Player) :- 
-    Player \= 0,
-    Player \= 1,
-    notValidPlayer.
-notValidPlayer:-
-    nl,nl,
-    write('The player number is not valid! It needs to be 0 or 1!'),nl,nl.
+printPlayer(Player).
 
 % peças a serem dispostas no tabuleiro inicialmente
 initialPieces([2,2,1,2,0,2,1,2,0,2,2,1,0,2,1,0,2,2,2,0,1,0,2,0,2,1,2,1,2,0,2,1,2,0,2,1]).
@@ -43,13 +37,15 @@ game_loop(GameState, Player):-
     game_loop(GameState, Player, 0).
 game_loop(GameState, Player, Sucession):-
     checkEnd(GameState, Player, Sucession) -> (
-        display_game(GameState, Player),
-        write('Game Over!'),! );
+        display_game(GameState, 2), % Player é 2, para não fazer display do player atual, já que ninguém é a jogar
+        nl,nl,nl,write('Game Over!'),nl,nl,nl,! 
+    );
     (   
         display_game(GameState, Player),
         (
             playerPassTheTurn(GameState, Player) -> (
-                write('\nYou need to pass your turn!\n\n\n'),
+                write('\nYou need to pass your turn!'),nl,
+                nl,write('========================================'),nl,nl,
                 NewBoard = GameState,
                 Sucession1 is Sucession + 1
             );
