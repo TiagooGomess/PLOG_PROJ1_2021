@@ -7,7 +7,7 @@ printPlayer(0):-
 printPlayer(1):-
     nl,nl,
     write('Black player\'s turn.'),nl,nl.
-printPlayer(Player).
+printPlayer(_).
 
 % peças a serem dispostas no tabuleiro inicialmente
 initialPieces([2,2,1,2,0,2,1,2,0,2,2,1,0,2,1,0,2,2,2,0,1,0,2,0,2,1,2,1,2,0,2,1,2,0,2,1]).
@@ -18,11 +18,13 @@ initialPieces([2,2,1,2,0,2,1,2,0,2,2,1,0,2,1,0,2,2,2,0,1,0,2,0,2,1,2,1,2,0,2,1,2
 initial(GameState):-
     init_random_state, % muda a seed do random, para termos tabuleiros diferentes de cada vez que iniciamos o jogo
     initialPieces(Pieces),
-    GameState = [ [[1,1,0,2,0,2,2,2,2,2,2,2,2,2,2,2],[2],[3],[3],[3],[3]], [[3],[3],[3],[1,2,0,0,2,0],[3],[3]], [[3],[1,1,2,1,2,2],[3],[3],[3],[3]], [[3],[3], [1,2,2,2,2,0,2],[3],[3],[3]], [[3],[3],[3],[3],[3],[0]], [[3],[3],[3],[3],[1,2,2,2,0,1],[3]] ].
-    %createBoard(GameState, 6, Pieces).
+    %GameState = [ [[1,1,0,2,0,2,2,2,2,2,2,2,2,2,2,2],[2],[3],[3],[3],[3]], [[3],[3],[3],[1,2,0,0,2,0],[3],[3]], [[3],[1,1,2,1,2,2],[3],[3],[3],[3]], [[3],[3], [1,2,2,2,2,0,2],[3],[3],[3]], [[3],[3],[3],[3],[3],[0]], [[3],[3],[3],[3],[1,2,2,2,0,1],[3]] ].
+    createBoard(GameState, 6, Pieces).
  
 % Mostra o tabuleiro de jogo e o jogador atual.
 display_game(GameState, Player, Points):-
+    clearScreen,
+    printHeader,nl,nl,
     row_numbers(Rows), % Rows é uma lista com o número das linhas a ser usada no display do tabuleiro
 	printBoard(GameState, Rows),
 	printPlayer(Player),
@@ -50,7 +52,7 @@ makeMove(Board, NewBoad, RowStart, ColumnStart, RowEnd, ColumnEnd):-
 	clear_cell(NewBoad0, RowStart, ColumnStart, NewBoad).
 
 % sucede quando os dois jogadores passam a jogada sucessivamente (Succession = 2)
-checkEnd(Board, Player, Sucession):- 
+checkEnd(Sucession):- 
 	Sucession = 2.
 
 % sucede quando o jogador não pode fazer nenhum movimento
@@ -82,7 +84,7 @@ checkIfPlayerCanMakeMove([Line|T],Board,Player,Row):-
 % verifica se o Player consegue fazer algum movimento,
 % para as stacks que tem numa certa linha
 checkIfPlayerCanMakeMoveRow(_,[],_,_,0):-fail.
-checkIfPlayerCanMakeMoveRow(Board,[[H|X]|T],Player,Row,Column):-
+checkIfPlayerCanMakeMoveRow(Board,[[H|_]|T],Player,Row,Column):-
 	Column > 0,
 	Column1 is Column - 1,
 	(
@@ -118,7 +120,7 @@ countRowPoints(Player, [[H|T0]|T], C, Counter):-
 	countRowPoints(Player, T, C, Counter1).
 
 % verifica e imprime no ecrã quem foi o jogador vencedor
-checkWinner(Board, Winner):-
+checkWinner(Board):-
 	countPlayerPoints(Board, 0, WhitePoints),
 	countPlayerPoints(Board, 1, BlackPoints),
 	write('========================================'),nl,nl,
@@ -138,10 +140,10 @@ checkWinner(Board, Winner):-
 game_loop(GameState, Player):-
     game_loop(GameState, Player, 0).
 game_loop(GameState, Player, Sucession):-
-    checkEnd(GameState, Player, Sucession) -> (
+    checkEnd(Sucession) -> (
         display_game(GameState, 2, _), % Player é 2, para não fazer display do player atual, já que ninguém é a jogar
         nl,nl,nl,write('Game Over!'),nl,nl,nl,
-        checkWinner(GameState, Winner),! 
+        checkWinner(GameState),! 
     );
     (   
         countPlayerPoints(GameState,Player,Points),
