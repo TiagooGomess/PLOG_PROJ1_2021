@@ -1,7 +1,10 @@
+:-use_module(library(system)).
+
 :-ensure_loaded('utils.pl').
 :-ensure_loaded('board.pl').
 :-ensure_loaded('game.pl').
 :-ensure_loaded('play.pl').
+
 
 printMainMenu:-
 	clearScreen,
@@ -14,10 +17,11 @@ printMainMenu:-
 	write('=================================='), nl,
 	write('Choose an option:'), nl.
 
-getMainMenuOption:-
+mainMenu:-
+	printMainMenu,
     getChar(Input),
 	(
-        Input = '1' -> gameMenu;
+        Input = '1' -> gameModeMenu, play;
         Input = '2' -> howToPlay, play; % entra em howToPlay e volta para play.
         Input = '3';
 
@@ -26,11 +30,85 @@ getMainMenuOption:-
         play
     ).
 
-gameMenu:-
+gameModeMenu:-
+	printGameModeMenu,
+	getChar(Input),
+	(
+		Input = '1' -> clearScreen, playerVsPlayer;
+		Input = '2' -> clearScreen, playerVsBotMenu;
+		Input = '3' -> clearScreen, botVsBot;
+		Input = '4';
+
+		nl,write('Invalid input!'),nl,
+		pressEnterToContinue,nl,
+		gameModeMenu
+	).
+
+printGameModeMenu:-
+	clearScreen,
+	write('================================='), nl,
+	write('=      :::: Game Mode ::::      ='), nl,
+	write('================================='), nl,
+	write('=                               ='), nl,
+	write('=   1. Player vs. Player        ='), nl,
+	write('=   2. Player vs. Computer      ='), nl,
+	write('=   3. Computer vs. Computer    ='), nl,
+	write('=   4. Back                     ='), nl,
+	write('=                               ='), nl,
+	write('================================='), nl,
+	write('Choose an option:'), nl.
+
+playerVsBotMenu:-
+	printPlayerVsBotMenu,
+	getChar(Input),
+	(
+		Input = '1' -> clearScreen, playerVsBotEasy;
+		Input = '2' -> clearScreen, playerVsBotHard;
+		Input = '3';
+
+		nl,
+		nl,write('Invalid input!'),nl,
+		pressEnterToContinue, nl,
+		playerVsBotMenu
+	).
+
+printPlayerVsBotMenu:-
+	clearScreen,
+	write('================================='), nl,
+	write('=    ..:: Bot Difficulty ::..   ='), nl,
+	write('================================='), nl,
+	write('=                               ='), nl,
+	write('=   1. Easy                     ='), nl,
+	write('=   2. Hard                     ='), nl,
+	write('=   3. Back                     ='), nl,
+	write('=                               ='), nl,
+	write('================================='), nl,
+	write('Choose an option:'), nl.
+
+
+playerVsPlayer:-
 	clearScreen,
 	printHeader,nl,nl,nl,
 	initial(GameState),
 	game_loop(GameState, 1).
+
+botVsBot:-
+	clearScreen,
+	write('Comming soon!'),nl,
+	sleep(1),
+	mainMenu.
+
+playerVsBotEasy:-
+	clearScreen,
+	write('Comming soon!'),nl,
+	sleep(1),
+	mainMenu.
+
+playerVsBotHard:-
+	clearScreen,
+	write('Comming soon!'),nl,
+	sleep(1),
+	mainMenu.
 	
 howToPlay:-
 	clearScreen,
