@@ -1,4 +1,5 @@
 :-ensure_loaded('utils.pl').
+:-ensure_loaded('bots.pl').
 
 % Escreve no ecrã quem é o jogador atual
 printPlayer(0):-
@@ -183,9 +184,9 @@ checkWinner(Board):-
 
 % ciclo do jogo; o terceiro argumento, Succession, é 0 se a jogada anterior não teve que ser passada à frente (pass turn),
 % ou 1 caso contrário; quando for 2, o jogo termina, porque os jogadores tiveram que passar as suas jogadas sucessivamente.
-game_loop(GameState, Player):-
-    game_loop(GameState, Player, 0).
-game_loop(GameState, Player, Sucession):-
+game_loop(GameState, Player, GameMode):-
+    game_loop(GameState, Player, 0, GameMode).
+game_loop(GameState, Player, Sucession, GameMode):-
     checkEnd(Sucession) -> (
         display_game(GameState, 2), % Player é 2, para não fazer display do player atual, já que ninguém é a jogar
         nl,nl,nl,write('Game Over!'),nl,nl,nl,
@@ -201,12 +202,21 @@ game_loop(GameState, Player, Sucession):-
                 Sucession1 is Sucession + 1
             );
             (
-                askMove(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd),
+                (
+                    Player = 0 -> (
+                        GameMode = 'PlayerVsPlayer' -> askMove(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd);
+                        GameMode = 'PlayerVsBotEasy' -> sleep(1), getMoveEasy(GameState, Player, RowStart, ColumnStart, RowEnd);
+                        nl,nl,nl,write('Invalid Game Mode!!!'),nl,nl,nl,fail
+                    );
+                    askMove(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd)
+                    
+                ),
+                %askMove(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd),
                 makeMove(GameState, NewBoard, RowStart, ColumnStart, RowEnd, ColumnEnd),
                 Sucession1 is 0
             )
         ),
         next_player(Player, NextPlayer),
-        game_loop(NewBoard, NextPlayer,Sucession1)
+        game_loop(NewBoard, NextPlayer,Sucession1, GameMode)
     ).
     

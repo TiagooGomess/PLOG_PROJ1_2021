@@ -103,7 +103,7 @@ askForPiecePosFrom(Board, Player, Row, Column):-
 			Piece = Player, % verifica se a stack que o jogador quer mover lhe pertence
 			\+ checkIfStackCannotCapture(Board, Row, Column),!
 		);
-		nl,nl,write('You connot move that stack!\nPlease choose another one!'),nl,nl,fail
+		nl,nl,write('You cannot move that stack!\nPlease choose another one!'),nl,nl,fail
 	).
 	
 % pergunta ao jogador qual a posição para onde quer mover a peça e verifica se é válida
