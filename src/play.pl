@@ -2,3 +2,5 @@
 
 play:-
     mainMenu.
+
+:-play.

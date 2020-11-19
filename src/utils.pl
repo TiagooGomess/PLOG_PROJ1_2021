@@ -95,22 +95,32 @@ translate_row(1, 5).
 checkOrthogonality(RowFrom, ColumnFrom, RowTo, ColumnTo):-
     RowFrom = RowTo;
     ColumnFrom = ColumnTo.
-    
+
 % verifica se as células da lista List estão vazias ([3]) entre o index PosFrom e PosTo (não inclusive)
 checkIfEmptyBetween(List, PosFrom, PosTo):-
     PosFrom1 is PosFrom + 1, 
-    Count is PosTo - PosFrom,
+    Count is PosTo - PosFrom - 1,
+    nl,write('PosFrom1: '),write(PosFrom1),nl,
+    nl,write('Count: '),write(Count),nl,
     sub_list(List, PosFrom1, Count, SubList), % sub-lista que queremos verificar se está vazia (só com [3])
-    Len is Count - 1,
-    checkIfEmptyBetween(SubList, Len).
+    nl,write(SubList),nl,
+    checkIfEmptyBetween(SubList, Count).
 % se chegarmos a este ponto de execução, em que a lista foi toda processada, estão a lista só tem elementos [3]
-checkIfEmptyBetween(_, 0).
+checkIfEmptyBetween([], 0).
 % percorre a lista e só continua a execução se o elemento da lista é [3]
 checkIfEmptyBetween([[H|_]|T], Len):-
     Len > 0,
     Len1 is Len - 1,
     H = 3,
     checkIfEmptyBetween(T, Len1).
+
+% (https://stackoverflow.com/questions/20765479/create-a-sublist-from-a-list-given-an-index-and-a-number-of-elements-prolog)
+% encontra a sublista de Xs, desde o index Offset até Offset + Count, ficando a sub-lista em Ys.
+sub_list( Xs , Offset , Count , Ys ) :- %
+  length(Prefix,Offset ) ,             % construct a list of variables of length 'offset'
+  length(Ys,Count) ,                   % construct a list of variables of length 'count'
+  append(Prefix,Suffix,Xs) ,           % strip the first first 'offset' items from the source list ,
+  append(Ys,_,Suffix).                 % extract the first 'count' items from what's left.
 
 % verifica se as células da lista List estão vazias ([3]), com excepção da célula de index Pos
 checkIfEmptyUnless(List,Pos):-
@@ -126,8 +136,3 @@ checkIfEmptyUnless([[H|_]|T], Pos, Len):-
     ),
     Len1 is Len - 1,
     checkIfEmptyUnless(T, Pos, Len1).
-
-% (https://stackoverflow.com/questions/20765479/create-a-sublist-from-a-list-given-an-index-and-a-number-of-elements-prolog)
-% encontra a sublista de L, desde o index M até M + N, ficando a sub-lista em S.
-sub_list(L, M, N, S) :-
-    findall(E, (nth0(I, L, E), I >= M, I =< N), S).

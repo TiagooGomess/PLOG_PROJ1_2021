@@ -21,7 +21,7 @@ mainMenu:-
 	printMainMenu,
     getChar(Input),
 	(
-        Input = '1' -> gameModeMenu, play;
+        Input = '1' -> gameModeMenu, playAgain;
         Input = '2' -> howToPlay, play; % entra em howToPlay e volta para play.
         Input = '3';
 
@@ -75,7 +75,7 @@ playerVsBotMenu:-
 printPlayerVsBotMenu:-
 	clearScreen,
 	write('================================='), nl,
-	write('=    ..:: Bot Difficulty ::..   ='), nl,
+	write('=    :::: Bot Difficulty ::::   ='), nl,
 	write('================================='), nl,
 	write('=                               ='), nl,
 	write('=   1. Easy                     ='), nl,
@@ -109,6 +109,31 @@ playerVsBotHard:-
 	write('Comming soon!'),nl,
 	sleep(1),
 	mainMenu.
+
+playAgain:-
+	printPlayAgain,
+	getChar(Input),
+	(
+		Input = '1' -> clearScreen, mainMenu;
+		Input = '2';
+
+		nl,
+		nl,write('Invalid input!'),nl,
+		pressEnterToContinue, nl,
+		playAgain
+	).
+
+printPlayAgain:-
+	nl,nl,nl,nl,
+	write('================================='), nl,
+	write('=    ::::   Play Again?  ::::   ='), nl,
+	write('================================='), nl,
+	write('=                               ='), nl,
+	write('=   1. Yes!                     ='), nl,
+	write('=   2. No!                      ='), nl,
+	write('=                               ='), nl,
+	write('================================='), nl,
+	write('Choose an option:'), nl.
 	
 howToPlay:-
 	clearScreen,
