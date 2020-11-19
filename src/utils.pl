@@ -100,10 +100,7 @@ checkOrthogonality(RowFrom, ColumnFrom, RowTo, ColumnTo):-
 checkIfEmptyBetween(List, PosFrom, PosTo):-
     PosFrom1 is PosFrom + 1, 
     Count is PosTo - PosFrom - 1,
-    nl,write('PosFrom1: '),write(PosFrom1),nl,
-    nl,write('Count: '),write(Count),nl,
     sub_list(List, PosFrom1, Count, SubList), % sub-lista que queremos verificar se está vazia (só com [3])
-    nl,write(SubList),nl,
     checkIfEmptyBetween(SubList, Count).
 % se chegarmos a este ponto de execução, em que a lista foi toda processada, estão a lista só tem elementos [3]
 checkIfEmptyBetween([], 0).
