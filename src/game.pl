@@ -20,7 +20,7 @@ initial(GameState):-
     init_random_state, % muda a seed do random, para termos tabuleiros diferentes de cada vez que iniciamos o jogo
     initialPieces(Pieces),
     %GameState = [ [[1,1,0,2,0,2,2,2,2,2,2,2,2,2,2,2],[2],[3],[3],[3],[3]], [[3],[3],[3],[1,2,0,0,2,0],[3],[3]], [[3],[1,1,2,1,2,2],[3],[3],[3],[3]], [[3],[3], [1,2,2,2,2,0,2],[3],[3],[3]], [[3],[3],[3],[3],[3],[0]], [[3],[3],[3],[3],[1,2,2,2,0,1],[3]] ],
-    %GameState = [ [[1],[3],[2],[3],[3],[3]], [[3],[3],[3],[3],[3],[3]], [[3],[3],[3],[3],[3],[3]], [[3],[3], [3],[3],[3],[3]], [[3],[3],[3],[3],[3],[3]], [[3],[3],[3],[2],[3],[0]] ].
+    %GameState = [ [[1],[3],[2],[3],[3],[3]], [[3],[3],[3],[3],[3],[3]], [[3],[3],[3],[3],[3],[2]], [[3],[3], [3],[3],[3],[3]], [[3],[3],[3],[3],[3],[3]], [[3],[3],[3],[2],[3],[0]] ].
     createBoard(GameState, 6, Pieces).
  
 % Mostra o tabuleiro de jogo e o jogador atual.
@@ -196,7 +196,7 @@ game_loop(GameState, Player, Sucession, GameMode):-
         display_game(GameState, Player),
         (
             playerPassTheTurn(GameState, Player) -> (
-                write('\nYou need to pass your turn!'),nl,
+                write('\nYou need to pass your turn!'),nl,sleep(1),
                 nl,write('========================================'),nl,nl,
                 NewBoard = GameState,
                 Sucession1 is Sucession + 1
@@ -205,7 +205,7 @@ game_loop(GameState, Player, Sucession, GameMode):-
                 (
                     Player = 0 -> (
                         GameMode = 'PlayerVsPlayer' -> askMove(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd);
-                        GameMode = 'PlayerVsBotEasy' -> sleep(1), getMoveEasy(GameState, Player, RowStart, ColumnStart, RowEnd);
+                        GameMode = 'PlayerVsBotEasy' -> sleep(1), getMoveEasy(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd), write('\n\nGetMoveEasy succeded!!!\n\n');
                         nl,nl,nl,write('Invalid Game Mode!!!'),nl,nl,nl,fail
                     );
                     askMove(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd)
@@ -217,6 +217,6 @@ game_loop(GameState, Player, Sucession, GameMode):-
             )
         ),
         next_player(Player, NextPlayer),
-        game_loop(NewBoard, NextPlayer,Sucession1, GameMode)
+        game_loop(NewBoard, NextPlayer, Sucession1, GameMode)
     ).
     

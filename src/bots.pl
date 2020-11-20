@@ -4,35 +4,29 @@
 
 :- use_module(library(between)).
 
-getMoveEasy(GameState, Player, RowStart, ColumnStart, RowEnd):-
-    getPiecePosFrom(Board, Player, RowStart, ColumnStart),
-	getPiecePosTo(Board, RowStart, ColumnStart, RowEnd, ColumnEnd).
+getMoveEasy(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd):-
+    getPiecePosFrom(GameState, Player, RowStart, ColumnStart).
+	getPiecePosTo(GameState, RowStart, ColumnStart, RowEnd, ColumnEnd).
 
-getRowAndColumn(Board, Player,Row,Column):-
+getRandomRowAndColumn(Row,Column):-
     between(0,5,Row),
-    between(0,5,Column),
-    getPieceByRowAndColumn(Board, Row, Column, Piece),
-    Piece = Player.
+    between(0,5,Column).
 
-% pergunta ao jogador qual a posição da peça que quer mover e verifica se é válida
 getPiecePosFrom(Board, Player, Row, Column):-
 	repeat,
-    getRowAndColumn(Board, Player,Row,Column),
-    nl,write('Row:'),write(Row),nl,
-    write('Column:'),write(Column),nl,
-	getPieceByRowAndColumn(Board, Row, Column, Piece),
+	getRandomRowAndColumn(Row,Column),
 	(
 		(
-			Piece = Player, % verifica se a stack que o jogador quer mover lhe pertence
+			getPieceByRowAndColumn(Board, Row, Column, Piece),
+   	 		Piece = Player,
 			\+ checkIfStackCannotCapture(Board, Row, Column),!
 		);
 		fail
 	).
 	
-% pergunta ao jogador qual a posição para onde quer mover a peça e verifica se é válida
 getPiecePosTo(Board, RowFrom, ColumnFrom, RowTo, ColumnTo):-
 	repeat,
-	getRowAndColumn(Board, Player,Row,Column),
+	getRandomRowAndColumn(Row,Column),
 	(
 		(
 			checkOrthogonality(RowFrom, ColumnFrom, RowTo, ColumnTo), % verifica se o movimento é feito ortogonalmente
@@ -41,3 +35,4 @@ getPiecePosTo(Board, RowFrom, ColumnFrom, RowTo, ColumnTo):-
 		);
 		fail
 	).
+	
