@@ -36,7 +36,7 @@ gameModeMenu:-
 	(
 		Input = '1' -> clearScreen, playerVsPlayer;
 		Input = '2' -> clearScreen, playerVsBotMenu;
-		Input = '3' -> clearScreen, botVsBot;
+		Input = '3' -> clearScreen, computerVsComputerMenu;
 		Input = '4';
 
 		nl,write('Invalid input!'),nl,
@@ -87,6 +87,76 @@ printPlayerVsBotMenu:-
 	write('================================='), nl,
 	write('Choose an option:'), nl.
 
+printComputerVsComputerMenu:-
+	clearScreen,
+	write('================================='), nl,
+	write('=    ::::  Bots Levels   ::::   ='), nl,
+	write('================================='), nl,
+	write('=                               ='), nl,
+	write('=   1. Easy vs Easy             ='), nl,
+	write('=   2. Easy vs Hard             ='), nl,
+	write('=   3. Easy vs Dumb             ='), nl,
+	write('=   4. Hard vs Hard             ='), nl,
+	write('=   5. Hard vs Dumb             ='), nl,
+	write('=   6. Dumb vs Dumb             ='), nl,
+	write('=                               ='), nl,
+	write('================================='), nl,
+	write('Choose an option:'), nl.
+
+computerVsComputerMenu:-
+	printComputerVsComputerMenu,
+	getChar(Input),
+	(
+		Input = '1' -> clearScreen, botEasyVsBotEasy;
+		Input = '2' -> clearScreen, botEasyVsBotHard;
+		Input = '3' -> clearScreen, botEasyVsBotDumb;
+		Input = '4' -> clearScreen, botHardVsBotHard;
+		Input = '5' -> clearScreen, botHardVsBotDumb;
+		Input = '6' -> clearScreen, botDumbVsBotDumb;
+		Input = '7';
+
+		nl,
+		nl,write('Invalid input!'),nl,
+		pressEnterToContinue, nl,
+		computerVsComputerMenu
+	).
+
+botEasyVsBotEasy:-
+	clearScreen,
+	printHeader,nl,nl,nl,
+	initial(GameState),
+	game_loop(GameState, 1, 'BotEasyVsBotEasy').
+
+botEasyVsBotHard:-
+	clearScreen,
+	printHeader,nl,nl,nl,
+	initial(GameState),
+	game_loop(GameState, 1, 'BotEasyVsBotHard').
+
+botEasyVsBotDumb:-
+	clearScreen,
+	printHeader,nl,nl,nl,
+	initial(GameState),
+	game_loop(GameState, 1, 'BotEasyVsBotDumb').
+
+botHardVsBotHard:-
+	clearScreen,
+	printHeader,nl,nl,nl,
+	initial(GameState),
+	game_loop(GameState, 1, 'BotHardVsBotHard').
+
+botHardVsBotDumb:-
+	clearScreen,
+	printHeader,nl,nl,nl,
+	initial(GameState),
+	game_loop(GameState, 1, 'BotHardVsBotDumb').
+
+botDumbVsBotDumb:-
+	clearScreen,
+	printHeader,nl,nl,nl,
+	initial(GameState),
+	game_loop(GameState, 1, 'BotDumbVsBotDumb').
+
 
 playerVsPlayer:-
 	clearScreen,
@@ -94,11 +164,6 @@ playerVsPlayer:-
 	initial(GameState),
 	game_loop(GameState, 1, 'PlayerVsPlayer').
 
-botVsBot:-
-	clearScreen,
-	write('Comming soon!'),nl,
-	sleep(1),
-	mainMenu.
 
 playerVsBotEasy:-
 	clearScreen,

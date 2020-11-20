@@ -203,6 +203,16 @@ game_loop(GameState, Player, Sucession, GameMode):-
             );
             (
                 (
+                    GameMode = 'BotEasyVsBotEasy';
+                    GameMode = 'BotEasyVsBotHard';
+                    GameMode = 'BotEasyVsBotDumb';
+                    GameMode = 'BotHardVsBotHard';
+                    GameMode = 'BotHardVsBotDumb';
+                    GameMode = 'BotDumbVsBotDumb'
+                ) -> (
+                    write('\n\nComming soon!\n\n'),!
+                );
+                (
                     Player = 0 -> (
                         GameMode = 'PlayerVsPlayer' -> askMove(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd);
                         GameMode = 'PlayerVsBotEasy' -> getMoveEasy(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd), nl,nl,write('Moving from ('), write(RowStart), write(','),write(ColumnStart),write(') to ('),write(RowEnd),write(','),write(ColumnEnd),write(')\n'),nl,write('========================================'),nl,nl,sleep(2);
