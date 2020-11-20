@@ -133,3 +133,6 @@ checkIfEmptyUnless([[H|_]|T], Pos, Len):-
     ),
     Len1 is Len - 1,
     checkIfEmptyUnless(T, Pos, Len1).
+
+sleepBot:-
+    sleep(0.5).

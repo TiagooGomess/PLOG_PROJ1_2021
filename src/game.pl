@@ -226,25 +226,25 @@ game_loop(GameState, Player, Sucession, GameMode):-
                 (
                     (
                         GameMode = 'BotEasyVsBotEasy' -> (
-                            choose_move(GameState, Player, 'Easy', RowStart, ColumnStart, RowEnd, ColumnEnd), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd, 'Easy'), sleep(2)
+                            choose_move(GameState, Player, 'Easy', RowStart, ColumnStart, RowEnd, ColumnEnd), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd, 'Easy'), sleepBot
                         );
                         GameMode = 'BotEasyVsBotHard' -> (
-                            Player = 1 -> getMoveEasy(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd, 'Easy'), sleep(2);
-                            choose_move(GameState, Player, 'Hard', RowStart, ColumnStart, RowEnd, ColumnEnd), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd, 'Hard'), sleep(2)
+                            Player = 1 -> getMoveEasy(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd, 'Easy'), sleepBot;
+                            choose_move(GameState, Player, 'Hard', RowStart, ColumnStart, RowEnd, ColumnEnd), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd, 'Hard'), sleepBot
                         );
                         GameMode = 'BotEasyVsBotDumb' -> (
-                            Player = 1 -> getMoveEasy(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd, 'Easy'), sleep(2);
-                            choose_move(GameState, Player, 'Dumb', RowStart, ColumnStart, RowEnd, ColumnEnd), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd, 'Dumb'), sleep(2)
+                            Player = 1 -> getMoveEasy(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd, 'Easy'), sleepBot;
+                            choose_move(GameState, Player, 'Dumb', RowStart, ColumnStart, RowEnd, ColumnEnd), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd, 'Dumb'), sleepBot
                         );
                         GameMode = 'BotHardVsBotHard' -> (
-                            choose_move(GameState, Player, 'Hard', RowStart, ColumnStart, RowEnd, ColumnEnd), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd, 'Hard'), sleep(2)
+                            choose_move(GameState, Player, 'Hard', RowStart, ColumnStart, RowEnd, ColumnEnd), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd, 'Hard'), sleepBot
                         );
                         GameMode = 'BotHardVsBotDumb' -> (
-                            Player = 1 -> choose_move(GameState, Player, 'Hard', RowStart, ColumnStart, RowEnd, ColumnEnd), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd, 'Hard'), sleep(2);
-                            choose_move(GameState, Player, 'Dumb', RowStart, ColumnStart, RowEnd, ColumnEnd), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd, 'Dumb'), sleep(2)
+                            Player = 1 -> choose_move(GameState, Player, 'Hard', RowStart, ColumnStart, RowEnd, ColumnEnd), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd, 'Hard'), sleepBot;
+                            choose_move(GameState, Player, 'Dumb', RowStart, ColumnStart, RowEnd, ColumnEnd), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd, 'Dumb'), sleepBot
                         );
                         GameMode = 'BotDumbVsBotDumb' -> (
-                            choose_move(GameState, Player, 'Dumb', RowStart, ColumnStart, RowEnd, ColumnEnd), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd, 'Dumb'), sleep(2)
+                            choose_move(GameState, Player, 'Dumb', RowStart, ColumnStart, RowEnd, ColumnEnd), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd, 'Dumb'), sleepBot
                         )
                     ),
                     move(GameState, NewBoard, RowStart, ColumnStart, RowEnd, ColumnEnd),
@@ -254,9 +254,9 @@ game_loop(GameState, Player, Sucession, GameMode):-
                     (
                         Player = 0 -> (
                         GameMode = 'PlayerVsPlayer' -> askMove(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd);
-                        GameMode = 'PlayerVsBotEasy' -> choose_move(GameState, Player, 'Easy', RowStart, ColumnStart, RowEnd, ColumnEnd), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd,'Easy'), sleep(2);
-                        GameMode = 'PlayerVsBotHard' -> choose_move(GameState, Player, 'Hard', RowStart, ColumnStart, RowEnd, ColumnEnd), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd,'Hard'), sleep(2);
-                        GameMode = 'PlayerVsBotDumb' -> choose_move(GameState, Player, 'Dumb', RowStart, ColumnStart, RowEnd, ColumnEnd), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd,'Dumb') ,sleep(2);
+                        GameMode = 'PlayerVsBotEasy' -> choose_move(GameState, Player, 'Easy', RowStart, ColumnStart, RowEnd, ColumnEnd), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd,'Easy'), sleepBot;
+                        GameMode = 'PlayerVsBotHard' -> choose_move(GameState, Player, 'Hard', RowStart, ColumnStart, RowEnd, ColumnEnd), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd,'Hard'), sleepBot;
+                        GameMode = 'PlayerVsBotDumb' -> choose_move(GameState, Player, 'Dumb', RowStart, ColumnStart, RowEnd, ColumnEnd), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd,'Dumb'), sleepBot;
                         nl,nl,nl,write('Invalid Game Mode!!!'),nl,nl,nl,fail
                         );
                         askMove(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd)
