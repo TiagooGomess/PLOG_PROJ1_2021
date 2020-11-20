@@ -1,4 +1,5 @@
 :-ensure_loaded('utils.pl').
+:-ensure_loaded('bots.pl').
 
 % Escreve no ecrã quem é o jogador atual
 printPlayer(0):-
@@ -19,7 +20,7 @@ initial(GameState):-
     init_random_state, % muda a seed do random, para termos tabuleiros diferentes de cada vez que iniciamos o jogo
     initialPieces(Pieces),
     %GameState = [ [[1,1,0,2,0,2,2,2,2,2,2,2,2,2,2,2],[2],[3],[3],[3],[3]], [[3],[3],[3],[1,2,0,0,2,0],[3],[3]], [[3],[1,1,2,1,2,2],[3],[3],[3],[3]], [[3],[3], [1,2,2,2,2,0,2],[3],[3],[3]], [[3],[3],[3],[3],[3],[0]], [[3],[3],[3],[3],[1,2,2,2,0,1],[3]] ],
-    %GameState = [ [[1],[3],[2],[3],[3],[3]], [[3],[3],[3],[3],[3],[3]], [[3],[3],[3],[3],[3],[3]], [[3],[3], [3],[3],[3],[3]], [[3],[3],[3],[3],[3],[3]], [[3],[3],[3],[2],[3],[0]] ].
+    %GameState = [ [[1],[3],[2],[3],[3],[3]], [[3],[3],[3],[3],[3],[3]], [[3],[3],[3],[3],[3],[2]], [[3],[3], [3],[3],[3],[3]], [[3],[3],[3],[3],[3],[3]], [[3],[3],[3],[2],[3],[0]] ].
     createBoard(GameState, 6, Pieces).
  
 % Mostra o tabuleiro de jogo e o jogador atual.
@@ -183,9 +184,9 @@ checkWinner(Board):-
 
 % ciclo do jogo; o terceiro argumento, Succession, é 0 se a jogada anterior não teve que ser passada à frente (pass turn),
 % ou 1 caso contrário; quando for 2, o jogo termina, porque os jogadores tiveram que passar as suas jogadas sucessivamente.
-game_loop(GameState, Player):-
-    game_loop(GameState, Player, 0).
-game_loop(GameState, Player, Sucession):-
+game_loop(GameState, Player, GameMode):-
+    game_loop(GameState, Player, 0, GameMode).
+game_loop(GameState, Player, Sucession, GameMode):-
     checkEnd(Sucession) -> (
         display_game(GameState, 2), % Player é 2, para não fazer display do player atual, já que ninguém é a jogar
         nl,nl,nl,write('Game Over!'),nl,nl,nl,
@@ -195,18 +196,27 @@ game_loop(GameState, Player, Sucession):-
         display_game(GameState, Player),
         (
             playerPassTheTurn(GameState, Player) -> (
-                write('\nYou need to pass your turn!'),nl,
+                write('\nYou need to pass your turn!'),nl,sleep(1),
                 nl,write('========================================'),nl,nl,
                 NewBoard = GameState,
                 Sucession1 is Sucession + 1
             );
             (
-                askMove(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd),
+                (
+                    Player = 0 -> (
+                        GameMode = 'PlayerVsPlayer' -> askMove(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd);
+                        GameMode = 'PlayerVsBotEasy' -> sleep(1), getMoveEasy(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd), write('\n\nGetMoveEasy succeded!!!\n\n');
+                        nl,nl,nl,write('Invalid Game Mode!!!'),nl,nl,nl,fail
+                    );
+                    askMove(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd)
+                    
+                ),
+                %askMove(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd),
                 makeMove(GameState, NewBoard, RowStart, ColumnStart, RowEnd, ColumnEnd),
                 Sucession1 is 0
             )
         ),
         next_player(Player, NextPlayer),
-        game_loop(NewBoard, NextPlayer,Sucession1)
+        game_loop(NewBoard, NextPlayer, Sucession1, GameMode)
     ).
     

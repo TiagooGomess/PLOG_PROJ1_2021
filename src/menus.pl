@@ -90,7 +90,7 @@ playerVsPlayer:-
 	clearScreen,
 	printHeader,nl,nl,nl,
 	initial(GameState),
-	game_loop(GameState, 1).
+	game_loop(GameState, 1, 'PlayerVsPlayer').
 
 botVsBot:-
 	clearScreen,
@@ -100,9 +100,9 @@ botVsBot:-
 
 playerVsBotEasy:-
 	clearScreen,
-	write('Comming soon!'),nl,
-	sleep(1),
-	mainMenu.
+	printHeader,nl,nl,nl,
+	initial(GameState),
+	game_loop(GameState, 1, 'PlayerVsBotEasy').
 
 playerVsBotHard:-
 	clearScreen,
