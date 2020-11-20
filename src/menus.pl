@@ -5,7 +5,7 @@
 :-ensure_loaded('game.pl').
 :-ensure_loaded('play.pl').
 
-
+% imprime o menu principal
 printMainMenu:-
 	clearScreen,
 	printHeader,
@@ -17,6 +17,7 @@ printMainMenu:-
 	write('=================================='), nl,
 	write('Choose an option:'), nl.
 
+% menu principal
 mainMenu:-
 	printMainMenu,
     getChar(Input),
@@ -30,6 +31,7 @@ mainMenu:-
         play
     ).
 
+% menu para escolher o modo de jogo
 gameModeMenu:-
 	printGameModeMenu,
 	getChar(Input),
@@ -44,6 +46,7 @@ gameModeMenu:-
 		gameModeMenu
 	).
 
+% imprime o menu do modo de jogo
 printGameModeMenu:-
 	clearScreen,
 	write('================================='), nl,
@@ -58,6 +61,7 @@ printGameModeMenu:-
 	write('================================='), nl,
 	write('Choose an option:'), nl.
 
+% menu de jogador contra computador
 playerVsBotMenu:-
 	printPlayerVsBotMenu,
 	getChar(Input),
@@ -73,6 +77,7 @@ playerVsBotMenu:-
 		playerVsBotMenu
 	).
 
+% imprime o menu de jogador contra computador
 printPlayerVsBotMenu:-
 	clearScreen,
 	write('================================='), nl,
@@ -87,6 +92,7 @@ printPlayerVsBotMenu:-
 	write('================================='), nl,
 	write('Choose an option:'), nl.
 
+% imprime o menu de computador contra computador
 printComputerVsComputerMenu:-
 	clearScreen,
 	write('================================='), nl,
@@ -103,6 +109,7 @@ printComputerVsComputerMenu:-
 	write('================================='), nl,
 	write('Choose an option:'), nl.
 
+% menu de computador contra computador
 computerVsComputerMenu:-
 	printComputerVsComputerMenu,
 	getChar(Input),
@@ -121,68 +128,77 @@ computerVsComputerMenu:-
 		computerVsComputerMenu
 	).
 
+% iniciar o jogo bot easy contra bot easy
 botEasyVsBotEasy:-
 	clearScreen,
 	printHeader,nl,nl,nl,
 	initial(GameState),
 	game_loop(GameState, 1, 'BotEasyVsBotEasy').
 
+% iniciar o jogo bot easy contra bot hard
 botEasyVsBotHard:-
 	clearScreen,
 	printHeader,nl,nl,nl,
 	initial(GameState),
 	game_loop(GameState, 1, 'BotEasyVsBotHard').
 
+% iniciar o jogo bot easy contra bot dumb
 botEasyVsBotDumb:-
 	clearScreen,
 	printHeader,nl,nl,nl,
 	initial(GameState),
 	game_loop(GameState, 1, 'BotEasyVsBotDumb').
 
+% iniciar o jogo bot hard contra bot hard
 botHardVsBotHard:-
 	clearScreen,
 	printHeader,nl,nl,nl,
 	initial(GameState),
 	game_loop(GameState, 1, 'BotHardVsBotHard').
 
+% iniciar o jogo bot hard contra bot dumb
 botHardVsBotDumb:-
 	clearScreen,
 	printHeader,nl,nl,nl,
 	initial(GameState),
 	game_loop(GameState, 1, 'BotHardVsBotDumb').
 
+% iniciar o jogo bot dumb contra bot dumb
 botDumbVsBotDumb:-
 	clearScreen,
 	printHeader,nl,nl,nl,
 	initial(GameState),
 	game_loop(GameState, 1, 'BotDumbVsBotDumb').
 
-
+% iniciar o jogo jogador contra jogador
 playerVsPlayer:-
 	clearScreen,
 	printHeader,nl,nl,nl,
 	initial(GameState),
 	game_loop(GameState, 1, 'PlayerVsPlayer').
 
-
+% iniciar o jogo jogador contra bot easy
 playerVsBotEasy:-
 	clearScreen,
 	printHeader,nl,nl,nl,
 	initial(GameState),
 	game_loop(GameState, 1, 'PlayerVsBotEasy').
 
+% iniciar o jogo jogador contra bot hard
 playerVsBotHard:-
 	clearScreen,
 	printHeader,nl,nl,nl,
 	initial(GameState),
 	game_loop(GameState, 1, 'PlayerVsBotHard').
 
+% iniciar o jogo jogador contra bot dumb
 playerVsBotDumb:-
 	clearScreen,
 	printHeader,nl,nl,nl,
 	initial(GameState),
 	game_loop(GameState, 1, 'PlayerVsBotDumb').
 
+% menu do jogar novamente
 playAgain:-
 	printPlayAgain,
 	getChar(Input),
@@ -196,6 +212,7 @@ playAgain:-
 		playAgain
 	).
 
+% imprime o menu do jogar novamente
 printPlayAgain:-
 	nl,nl,nl,nl,
 	write('================================='), nl,
@@ -207,7 +224,8 @@ printPlayAgain:-
 	write('=                               ='), nl,
 	write('================================='), nl,
 	write('Choose an option:'), nl.
-	
+
+% imprime as instruções do jogo
 howToPlay:-
 	clearScreen,
 	write('==============================================================='), nl,
