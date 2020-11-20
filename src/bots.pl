@@ -14,7 +14,7 @@ getRandomMove(RowFrom, ColumnFrom, RowTo, ColumnTo):-
     between(0,5,ColumnTo).
 
 % obtém todos os movimentos válidos na forma [RowFrom, ColumnFrom, RowTo, ColumnTo]
-getAllValidMoves(Board,Player,AllMoves):-
+valid_moves(Board,Player,AllMoves):-
 	findall(
         [RowFrom, ColumnFrom, RowTo, ColumnTo],
         (
@@ -31,7 +31,7 @@ getAllValidMoves(Board,Player,AllMoves):-
 
 % este predicado dá-nos um movimento aleatório válido
 getMoveEasy(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd):-
-	getAllValidMoves(GameState, Player, AllMoves),
+	valid_moves(GameState, Player, AllMoves),
 	random_member(Move,AllMoves),
 	nth0(0,Move,RowStart),
 	nth0(1,Move,ColumnStart),
@@ -42,13 +42,13 @@ getMoveEasy(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd):-
 % MoveWithScore fica na forma [MoveScore,[RowStart, ColumnStart, RowEnd, ColumnEnd]],
 % para ser mais fácil ordenar os movimentos por score
 addMoveScore(GameState, Player, Move, MoveWithScore):-
-	countPlayerPoints(GameState, Player, PointsBefore),
+	value(GameState, Player, PointsBefore),
 	nth0(0,Move,RowStart),
 	nth0(1,Move,ColumnStart),
 	nth0(2,Move,RowEnd),
 	nth0(3,Move,ColumnEnd),
-	makeMove(GameState, NewGameState, RowStart, ColumnStart, RowEnd, ColumnEnd),
-	countPlayerPoints(NewGameState, Player, PointsAfter),
+	move(GameState, NewGameState, RowStart, ColumnStart, RowEnd, ColumnEnd),
+	value(NewGameState, Player, PointsAfter),
 	MoveScore is PointsAfter - PointsBefore,
 	MoveWithScore = [MoveScore,Move].
 
@@ -62,7 +62,7 @@ addScoreToMoves(GameState,Player,[Move|T],M,AllMovesWithScore):-
 
 % este predicado dá-nos o melhor movimento possível, ou seja, o que dá a melhor pontuação
 getMoveHard(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd):-
-	getAllValidMoves(GameState, Player, AllMoves),
+	valid_moves(GameState, Player, AllMoves),
 	addScoreToMoves(GameState, Player, AllMoves, AllMovesWithScore),
 	sort(AllMovesWithScore,AllMovesWithScoreSorted0),
 	reverse(AllMovesWithScoreSorted0,AllMovesWithScoreSorted),
@@ -75,7 +75,7 @@ getMoveHard(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd):-
 
 % este predicado dá-nos o pior movimento possível, ou seja, o que dá a pior pontuação
 getMoveDumb(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd):-
-	getAllValidMoves(GameState, Player, AllMoves),
+	valid_moves(GameState, Player, AllMoves),
 	addScoreToMoves(GameState, Player, AllMoves, AllMovesWithScore),
 	sort(AllMovesWithScore,AllMovesWithScoreSorted),
 	nth0(0,AllMovesWithScoreSorted,MoveWithScore),
@@ -84,3 +84,10 @@ getMoveDumb(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd):-
 	nth0(1,Move,ColumnStart),
 	nth0(2,Move,RowEnd),
 	nth0(3,Move,ColumnEnd).
+
+choose_move(GameState,Player,Level,RowStart, ColumnStart, RowEnd, ColumnEnd):-
+	(
+		Level = 'Easy' -> getMoveEasy(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd);
+		Level = 'Hard' -> getMoveHard(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd);
+		Level = 'Dumb' -> getMoveDumb(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd)
+	).
