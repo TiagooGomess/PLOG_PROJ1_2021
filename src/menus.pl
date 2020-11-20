@@ -106,9 +106,9 @@ playerVsBotEasy:-
 
 playerVsBotHard:-
 	clearScreen,
-	write('Comming soon!'),nl,
-	sleep(1),
-	mainMenu.
+	printHeader,nl,nl,nl,
+	initial(GameState),
+	game_loop(GameState, 1, 'PlayerVsBotHard').
 
 playAgain:-
 	printPlayAgain,

@@ -20,8 +20,7 @@ initial(GameState):-
     init_random_state, % muda a seed do random, para termos tabuleiros diferentes de cada vez que iniciamos o jogo
     initialPieces(Pieces),
     %GameState = [ [[1,1,0,2,0,2,2,2,2,2,2,2,2,2,2,2],[2],[3],[3],[3],[3]], [[3],[3],[3],[1,2,0,0,2,0],[3],[3]], [[3],[1,1,2,1,2,2],[3],[3],[3],[3]], [[3],[3], [1,2,2,2,2,0,2],[3],[3],[3]], [[3],[3],[3],[3],[3],[0]], [[3],[3],[3],[3],[1,2,2,2,0,1],[3]] ],
-    %GameState = [ [[1],[3],[2],[3],[1],[3]], [[1],[3],[3],[2],[3],[3]], [[3],[3],[3],[3],[3],[2]], [[3],[3], [3],[3],[3],[3]], [[3],[3],[3],[3],[3],[3]], [[3],[3],[3],[2],[3],[0]] ],
-    %getAllValidMoves(GameState,1,AllMoves), write(AllMoves).
+    %GameState = [ [[1],[3],[2],[3],[1],[3]], [[1],[3],[3],[2],[3],[3]], [[3],[3],[3],[3],[3],[2]], [[3],[3], [3],[3],[3],[3]], [[3],[3],[3],[3],[3],[3]], [[3],[3],[3],[2],[3],[0]] ].
     createBoard(GameState, 6, Pieces).
  
 % Mostra o tabuleiro de jogo e o jogador atual.
@@ -207,6 +206,7 @@ game_loop(GameState, Player, Sucession, GameMode):-
                     Player = 0 -> (
                         GameMode = 'PlayerVsPlayer' -> askMove(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd);
                         GameMode = 'PlayerVsBotEasy' -> getMoveEasy(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd), nl,nl,write('Moving from ('), write(RowStart), write(','),write(ColumnStart),write(') to ('),write(RowEnd),write(','),write(ColumnEnd),write(')\n'),nl,write('========================================'),nl,nl,sleep(2);
+                        GameMode = 'PlayerVsBotHard' -> getMoveHard(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd), nl,nl,write('Moving from ('), write(RowStart), write(','),write(ColumnStart),write(') to ('),write(RowEnd),write(','),write(ColumnEnd),write(')\n'),nl,write('========================================'),nl,nl,sleep(2);
                         nl,nl,nl,write('Invalid Game Mode!!!'),nl,nl,nl,fail
                     );
                     askMove(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd)
