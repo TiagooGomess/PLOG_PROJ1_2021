@@ -205,13 +205,12 @@ game_loop(GameState, Player, Sucession, GameMode):-
                 (
                     Player = 0 -> (
                         GameMode = 'PlayerVsPlayer' -> askMove(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd);
-                        GameMode = 'PlayerVsBotEasy' -> sleep(1), getMoveEasy(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd), write('\n\nGetMoveEasy succeded!!!\n\n');
+                        GameMode = 'PlayerVsBotEasy' -> getMoveEasy(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd), nl,nl,write('Moving from ('), write(RowStart), write(','),write(ColumnStart),write(') to ('),write(RowEnd),write(','),write(ColumnEnd),write(')\n'),nl,write('========================================'),nl,nl,sleep(2);
                         nl,nl,nl,write('Invalid Game Mode!!!'),nl,nl,nl,fail
                     );
                     askMove(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd)
                     
                 ),
-                %askMove(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd),
                 makeMove(GameState, NewBoard, RowStart, ColumnStart, RowEnd, ColumnEnd),
                 Sucession1 is 0
             )

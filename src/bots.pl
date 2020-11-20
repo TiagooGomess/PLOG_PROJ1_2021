@@ -6,7 +6,7 @@
 
 % este predicado dá-nos um movimento aleatório válido
 getMoveEasy(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd):-
-    getPiecePosFrom(GameState, Player, RowStart, ColumnStart).
+    getPiecePosFrom(GameState, Player, RowStart, ColumnStart),
 	getPiecePosTo(GameState, RowStart, ColumnStart, RowEnd, ColumnEnd).
 
 % este predicado dá-nos uma linha e uma coluna aleatórias, entre 0 e 5
@@ -20,6 +20,7 @@ getPiecePosFrom(Board, Player, Row, Column):-
 	getRandomRowAndColumn(Row,Column),
 	(
 		(
+			getPieceByRowAndColumn(Board, Row, Column, Piece),
    	 		Piece = Player, % verifica se a stack pertence ao jogador atual
 			\+ checkIfStackCannotCapture(Board, Row, Column),! % verifica se a stack pode capturar outras stacks
 		);
@@ -29,7 +30,7 @@ getPiecePosFrom(Board, Player, Row, Column):-
 % escolhe uma posição final válida de forma aleatória
 getPiecePosTo(Board, RowFrom, ColumnFrom, RowTo, ColumnTo):-
 	repeat,
-	getRandomRowAndColumn(Row,Column),
+	getRandomRowAndColumn(RowTo,ColumnTo),
 	(
 		(
 			checkOrthogonality(RowFrom, ColumnFrom, RowTo, ColumnTo), % verifica se o movimento é feito ortogonalmente
