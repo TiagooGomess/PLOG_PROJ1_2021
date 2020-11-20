@@ -2,7 +2,7 @@
 :-ensure_loaded('board.pl').
 :-ensure_loaded('game.pl').
 
-:- use_module(library(between)).
+:- use_module(library(random)).
 
 % este predicado dá-nos um movimento aleatório válido
 getMoveEasy(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd):-
@@ -11,8 +11,8 @@ getMoveEasy(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd):-
 
 % este predicado dá-nos uma linha e uma coluna aleatórias, entre 0 e 5
 getRandomRowAndColumn(Row,Column):-
-    between(0,5,Row),
-    between(0,5,Column).
+    random(0,6,Row),
+    random(0,6,Column).
 
 % escolhe uma peça válida para mover de forma aleatória
 getPiecePosFrom(Board, Player, Row, Column):-
