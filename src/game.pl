@@ -55,8 +55,11 @@ move(Board, NewBoad, RowStart, ColumnStart, RowEnd, ColumnEnd):-
 	clear_cell(NewBoad0, RowStart, ColumnStart, NewBoad).
 
 % sucede quando os dois jogadores passam a jogada sucessivamente (Succession = 2)
-game_over(Sucession):- 
-	Sucession = 2.
+game_over(GameState, Sucession):- 
+	Sucession = 2,
+    display_game(GameState, 2), % Player é 2, para não fazer display do player atual, já que ninguém é a jogar
+    nl,nl,nl,write('Game Over!'),nl,nl,nl,
+    checkWinner(GameState).
 
 % sucede quando o jogador não pode fazer nenhum movimento
 playerPassTheTurn(Board, Player):-
@@ -207,11 +210,7 @@ describeBotMove(RStart, CStart, REnd, CEnd,BotLevel):-
 game_loop(GameState, Player, GameMode):-
     game_loop(GameState, Player, 0, GameMode).
 game_loop(GameState, Player, Sucession, GameMode):-
-    game_over(Sucession) -> (
-        display_game(GameState, 2), % Player é 2, para não fazer display do player atual, já que ninguém é a jogar
-        nl,nl,nl,write('Game Over!'),nl,nl,nl,
-        checkWinner(GameState),! 
-    );
+    game_over(GameState, Sucession) -> !;
     (   
         display_game(GameState, Player),
         (
@@ -223,7 +222,7 @@ game_loop(GameState, Player, Sucession, GameMode):-
             );
             (
 
-                (
+                ( % computer vs computer mode
                     (
                         GameMode = 'BotEasyVsBotEasy' -> (
                             choose_move(GameState, Player, 'Easy', RowStart, ColumnStart, RowEnd, ColumnEnd), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd, 'Easy'), sleepBot
@@ -250,7 +249,7 @@ game_loop(GameState, Player, Sucession, GameMode):-
                     move(GameState, NewBoard, RowStart, ColumnStart, RowEnd, ColumnEnd),
                     Sucession1 is 0
                 );
-                (
+                ( % player vs player ou player vs computer modes
                     (
                         Player = 0 -> (
                         GameMode = 'PlayerVsPlayer' -> askMove(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd);
