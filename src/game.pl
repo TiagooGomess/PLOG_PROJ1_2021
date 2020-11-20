@@ -20,7 +20,8 @@ initial(GameState):-
     init_random_state, % muda a seed do random, para termos tabuleiros diferentes de cada vez que iniciamos o jogo
     initialPieces(Pieces),
     %GameState = [ [[1,1,0,2,0,2,2,2,2,2,2,2,2,2,2,2],[2],[3],[3],[3],[3]], [[3],[3],[3],[1,2,0,0,2,0],[3],[3]], [[3],[1,1,2,1,2,2],[3],[3],[3],[3]], [[3],[3], [1,2,2,2,2,0,2],[3],[3],[3]], [[3],[3],[3],[3],[3],[0]], [[3],[3],[3],[3],[1,2,2,2,0,1],[3]] ],
-    %GameState = [ [[1],[3],[2],[3],[3],[3]], [[3],[3],[3],[3],[3],[3]], [[3],[3],[3],[3],[3],[2]], [[3],[3], [3],[3],[3],[3]], [[3],[3],[3],[3],[3],[3]], [[3],[3],[3],[2],[3],[0]] ].
+    %GameState = [ [[1],[3],[2],[3],[1],[3]], [[1],[3],[3],[2],[3],[3]], [[3],[3],[3],[3],[3],[2]], [[3],[3], [3],[3],[3],[3]], [[3],[3],[3],[3],[3],[3]], [[3],[3],[3],[2],[3],[0]] ],
+    %getAllValidMoves(GameState,1,AllMoves), write(AllMoves).
     createBoard(GameState, 6, Pieces).
  
 % Mostra o tabuleiro de jogo e o jogador atual.

@@ -1,41 +1,39 @@
+:- use_module(library(random)).
+:- use_module(library(between)).
+:- use_module(library(lists)).
+
 :-ensure_loaded('utils.pl').
 :-ensure_loaded('board.pl').
 :-ensure_loaded('game.pl').
 
-:- use_module(library(random)).
+% obtém um movimento, na forma [RowFrom, ColumnFrom, RowTo, ColumnTo]
+getRandomMove(RowFrom, ColumnFrom, RowTo, ColumnTo):-
+	between(0,5,RowFrom),
+    between(0,5,ColumnFrom),
+	between(0,5,RowTo),
+    between(0,5,ColumnTo).
+
+% obtém todos os movimentos válidos na forma [RowFrom, ColumnFrom, RowTo, ColumnTo]
+getAllValidMoves(Board,Player,AllMoves):-
+	findall(
+        [RowFrom, ColumnFrom, RowTo, ColumnTo],
+        (
+            getRandomMove(RowFrom, ColumnFrom, RowTo, ColumnTo),
+			getPieceByRowAndColumn(Board, RowFrom, ColumnFrom, Piece),
+   	 		Piece = Player, % verifica se a stack pertence ao jogador atual
+			\+ checkIfStackCannotCapture(Board, RowFrom, ColumnFrom), % verifica se a stack pode capturar outras stacks
+			checkOrthogonality(RowFrom, ColumnFrom, RowTo, ColumnTo), % verifica se o movimento é feito ortogonalmente
+			checkStacksBetween(Board, RowFrom, ColumnFrom, RowTo, ColumnTo), % verifica se existem stacks entre a posição inicial e final
+			\+ checkEmptyCell(Board, RowTo, ColumnTo) % verifica se a posição final tem alguma peça para ser capturada
+		),
+    	AllMoves
+	).
 
 % este predicado dá-nos um movimento aleatório válido
 getMoveEasy(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd):-
-    getPiecePosFrom(GameState, Player, RowStart, ColumnStart),
-	getPiecePosTo(GameState, RowStart, ColumnStart, RowEnd, ColumnEnd).
-
-% este predicado dá-nos uma linha e uma coluna aleatórias, entre 0 e 5
-getRandomRowAndColumn(Row,Column):-
-    random(0,6,Row),
-    random(0,6,Column).
-
-% escolhe uma peça válida para mover de forma aleatória
-getPiecePosFrom(Board, Player, Row, Column):-
-	repeat,
-	getRandomRowAndColumn(Row,Column),
-	(
-		(
-			getPieceByRowAndColumn(Board, Row, Column, Piece),
-   	 		Piece = Player, % verifica se a stack pertence ao jogador atual
-			\+ checkIfStackCannotCapture(Board, Row, Column),! % verifica se a stack pode capturar outras stacks
-		);
-		fail
-	).
-
-% escolhe uma posição final válida de forma aleatória
-getPiecePosTo(Board, RowFrom, ColumnFrom, RowTo, ColumnTo):-
-	repeat,
-	getRandomRowAndColumn(RowTo,ColumnTo),
-	(
-		(
-			checkOrthogonality(RowFrom, ColumnFrom, RowTo, ColumnTo), % verifica se o movimento é feito ortogonalmente
-			checkStacksBetween(Board, RowFrom, ColumnFrom, RowTo, ColumnTo), % verifica se existem stacks entre a posição inicial e final
-			\+ checkEmptyCell(Board, RowTo, ColumnTo),! % verifica se a posição final tem alguma peça para ser capturada
-		);
-		fail
-	).
+	getAllValidMoves(GameState, Player, AllMoves),
+	random_member(Move,AllMoves),
+	nth0(0,Move,RowStart),
+	nth0(1,Move,ColumnStart),
+	nth0(2,Move,RowEnd),
+	nth0(3,Move,ColumnEnd).
