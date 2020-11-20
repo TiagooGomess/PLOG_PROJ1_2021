@@ -64,7 +64,8 @@ playerVsBotMenu:-
 	(
 		Input = '1' -> clearScreen, playerVsBotEasy;
 		Input = '2' -> clearScreen, playerVsBotHard;
-		Input = '3';
+		Input = '3' -> clearScreen, playerVsBotDumb;
+		Input = '4';
 
 		nl,
 		nl,write('Invalid input!'),nl,
@@ -80,7 +81,8 @@ printPlayerVsBotMenu:-
 	write('=                               ='), nl,
 	write('=   1. Easy                     ='), nl,
 	write('=   2. Hard                     ='), nl,
-	write('=   3. Back                     ='), nl,
+	write('=   3. Dumb                     ='), nl,
+	write('=   4. Back                     ='), nl,
 	write('=                               ='), nl,
 	write('================================='), nl,
 	write('Choose an option:'), nl.
@@ -109,6 +111,12 @@ playerVsBotHard:-
 	printHeader,nl,nl,nl,
 	initial(GameState),
 	game_loop(GameState, 1, 'PlayerVsBotHard').
+
+playerVsBotDumb:-
+	clearScreen,
+	printHeader,nl,nl,nl,
+	initial(GameState),
+	game_loop(GameState, 1, 'PlayerVsBotDumb').
 
 playAgain:-
 	printPlayAgain,

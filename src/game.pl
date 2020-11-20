@@ -207,6 +207,7 @@ game_loop(GameState, Player, Sucession, GameMode):-
                         GameMode = 'PlayerVsPlayer' -> askMove(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd);
                         GameMode = 'PlayerVsBotEasy' -> getMoveEasy(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd), nl,nl,write('Moving from ('), write(RowStart), write(','),write(ColumnStart),write(') to ('),write(RowEnd),write(','),write(ColumnEnd),write(')\n'),nl,write('========================================'),nl,nl,sleep(2);
                         GameMode = 'PlayerVsBotHard' -> getMoveHard(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd), nl,nl,write('Moving from ('), write(RowStart), write(','),write(ColumnStart),write(') to ('),write(RowEnd),write(','),write(ColumnEnd),write(')\n'),nl,write('========================================'),nl,nl,sleep(2);
+                        GameMode = 'PlayerVsBotDumb' -> getMoveDumb(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd), nl,nl,write('Moving from ('), write(RowStart), write(','),write(ColumnStart),write(') to ('),write(RowEnd),write(','),write(ColumnEnd),write(')\n'),nl,write('========================================'),nl,nl,sleep(2);
                         nl,nl,nl,write('Invalid Game Mode!!!'),nl,nl,nl,fail
                     );
                     askMove(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd)

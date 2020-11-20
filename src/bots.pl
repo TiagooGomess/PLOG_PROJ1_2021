@@ -72,3 +72,15 @@ getMoveHard(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd):-
 	nth0(1,Move,ColumnStart),
 	nth0(2,Move,RowEnd),
 	nth0(3,Move,ColumnEnd).
+
+% este predicado dá-nos o pior movimento possível, ou seja, o que dá a pior pontuação
+getMoveDumb(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd):-
+	getAllValidMoves(GameState, Player, AllMoves),
+	addScoreToMoves(GameState, Player, AllMoves, AllMovesWithScore),
+	sort(AllMovesWithScore,AllMovesWithScoreSorted),
+	nth0(0,AllMovesWithScoreSorted,MoveWithScore),
+	nth0(1,MoveWithScore,Move),
+	nth0(0,Move,RowStart),
+	nth0(1,Move,ColumnStart),
+	nth0(2,Move,RowEnd),
+	nth0(3,Move,ColumnEnd).
