@@ -182,13 +182,15 @@ checkWinner(Board):-
 		)
 	).
 
-describeBotMove(RStart, CStart, REnd, CEnd):-
+describeBotMove(RStart, CStart, REnd, CEnd,BotLevel):-
     translate_column(ColumnStart,CStart),
     translate_column(ColumnEnd,CEnd),
     translate_row(RowStart,RStart),
     translate_row(RowEnd,REnd),
     nl,nl,
-    write('Moving stack from ('),
+    write(BotLevel),
+    write(' bot '),
+    write('moving stack from ('),
     write(ColumnStart),
     write(','),
     write(RowStart),
@@ -224,25 +226,25 @@ game_loop(GameState, Player, Sucession, GameMode):-
                 (
                     (
                         GameMode = 'BotEasyVsBotEasy' -> (
-                            getMoveHard(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd), sleep(2)
+                            getMoveEasy(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd, 'Easy'), sleep(2)
                         );
                         GameMode = 'BotEasyVsBotHard' -> (
-                            Player = 0 -> getMoveEasy(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd), sleep(2);
-                            getMoveHard(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd), sleep(2)
+                            Player = 1 -> getMoveEasy(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd, 'Easy'), sleep(2);
+                            getMoveHard(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd, 'Hard'), sleep(2)
                         );
                         GameMode = 'BotEasyVsBotDumb' -> (
-                            Player = 0 -> getMoveEasy(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd), sleep(2);
-                            getMoveDumb(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd), sleep(2)
+                            Player = 1 -> getMoveEasy(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd, 'Easy'), sleep(2);
+                            getMoveDumb(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd, 'Dumb'), sleep(2)
                         );
                         GameMode = 'BotHardVsBotHard' -> (
-                            getMoveHard(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd), sleep(2)
+                            getMoveHard(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd, 'Hard'), sleep(2)
                         );
                         GameMode = 'BotHardVsBotDumb' -> (
-                            Player = 0 -> getMoveHard(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd), sleep(2);
-                            getMoveDumb(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd), sleep(2)
+                            Player = 1 -> getMoveHard(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd, 'Hard'), sleep(2);
+                            getMoveDumb(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd, 'Dumb'), sleep(2)
                         );
                         GameMode = 'BotDumbVsBotDumb' -> (
-                            getMoveDumb(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd), sleep(2)
+                            getMoveDumb(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd, 'Dumb'), sleep(2)
                         )
                     ),
                     makeMove(GameState, NewBoard, RowStart, ColumnStart, RowEnd, ColumnEnd),
@@ -252,9 +254,9 @@ game_loop(GameState, Player, Sucession, GameMode):-
                     (
                         Player = 0 -> (
                         GameMode = 'PlayerVsPlayer' -> askMove(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd);
-                        GameMode = 'PlayerVsBotEasy' -> getMoveEasy(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd), sleep(2);
-                        GameMode = 'PlayerVsBotHard' -> getMoveHard(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd), sleep(2);
-                        GameMode = 'PlayerVsBotDumb' -> getMoveDumb(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd) ,sleep(2);
+                        GameMode = 'PlayerVsBotEasy' -> getMoveEasy(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd,'Easy'), sleep(2);
+                        GameMode = 'PlayerVsBotHard' -> getMoveHard(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd,'Hard'), sleep(2);
+                        GameMode = 'PlayerVsBotDumb' -> getMoveDumb(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd,'Dumb') ,sleep(2);
                         nl,nl,nl,write('Invalid Game Mode!!!'),nl,nl,nl,fail
                         );
                         askMove(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd)
