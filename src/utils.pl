@@ -136,5 +136,5 @@ checkIfEmptyUnless([[H|_]|T], Pos, Len):-
 
 % faz um sleep durante um certo número de segundos;
 % útil para os bots
-sleepBot:-
-    sleep(0.5).
+sleepBot(NumSeconds):-
+    sleep(NumSeconds).
