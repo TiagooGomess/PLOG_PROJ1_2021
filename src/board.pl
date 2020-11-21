@@ -99,11 +99,15 @@ askForPosition(Row, Column, Question, Size):-
 			translate_column(Input1, Column),
 			write('Row: '),
 			getInt(Input2),
-			Input2 =< Size,
+			Input2 @=< Size,
 			Input2 >= 1,
 			translate_row(Input2, Row),!
 		);
-		nl,nl,write('This position is not a valid one!\nThe number of the rows are between 1 and 6 and the columns are between A and F!'),nl,nl,fail
+		(
+			Size = 6 -> nl,nl,write('This position is not a valid one!\nThe number of the rows are between 1 and 6 and the columns are between A and F!'),nl,nl,fail;
+			Size = 9 -> nl,nl,write('This position is not a valid one!\nThe number of the rows are between 1 and 9 and the columns are between A and I!'),nl,nl,fail;
+			nl,nl,write('Invalid Size!'),nl,nl,!
+		)
 	).
 	
 % pergunta ao jogador qual a posição da peça que quer mover e verifica se é válida
