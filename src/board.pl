@@ -6,15 +6,15 @@
 % cria um tabuleiro, no formato lista de listas de listas, em que as listas mais interiores
 % são formadas por apenas um elemento, já que no início as stacks têm todas uma altura de 1
 createBoard(Board, Size, Pieces):-
-	createBoard(Board, [], Size, Pieces).
-createBoard(Board, Board, 0, []).
-createBoard(B, Board, Size, Pieces):-
+	createBoard(Board, [], Size, Pieces, Size).
+createBoard(Board, Board, 0, [], _).
+createBoard(B, Board, Size, Pieces, S):-
 	Size > 0,
 	Size1 is Size - 1,
-	createLine(6, Pieces, Line),
+	createLine(S, Pieces, Line),
 	flatten2(Line,Line1), % se Line = [[0],[1],[2]], então Line1 = [0,1,2]
 	remove_elements(Pieces, Line1, RemainingPieces),
-	createBoard(B, [Line|Board], Size1, RemainingPieces).
+	createBoard(B, [Line|Board], Size1, RemainingPieces, S).
 	
 % copia N elementos de L1 (lista com todas as peças restantes) para [[X]|T] de forma aleatória
 % [[X]|T] é uma lista de listas; esta função cria uma linha em que cada célula da linha possui
@@ -27,18 +27,31 @@ createLine(N, L1, [[X]|T]):-
 	select(X, L1, Remaining),
 	createLine(N1, Remaining, T).
 	
-% imprime o tabuleiro, incluindo os números das linhas e colunas
-printBoard(_,[]):-
+% imprime o tabuleiro, incluindo os números das linhas e colunas;
+% tabuleiro 6 x 6
+printBoard(_,[],6):-
 	write('  |-----|-----|-----|-----|-----|-----|'),nl,
     write('     A     B     C     D     E     F ').
-printBoard([H|T],[Row|RowT]):-
+printBoard([H|T],[Row|RowT],6):-
 	write('  |-----|-----|-----|-----|-----|-----|'),nl,
 	write(Row),
 	write(' '),
 	printLine(H),
 	write('|'),
 	nl,
-	printBoard(T,RowT).
+	printBoard(T,RowT,6).
+% tabuleiro 9 x 9
+printBoard(_,[],9):-
+	write('  |-----|-----|-----|-----|-----|-----|-----|-----|-----|'),nl,
+    write('     A     B     C     D     E     F     G     H     I ').
+printBoard([H|T],[Row|RowT],9):-
+	write('  |-----|-----|-----|-----|-----|-----|-----|-----|-----|'),nl,
+	write(Row),
+	write(' '),
+	printLine(H),
+	write('|'),
+	nl,
+	printBoard(T,RowT,9).
 	
 % imprime a Head de cada lista da linha e o número de pirâmides verdes, em cada célula (caso existam)
 printLine([]).
@@ -75,7 +88,7 @@ getStackByRowAndColumn(Board, Row, Column, Stack):-
     nth0(Column,RowList,Stack).
 
 % pergunta ao jogador uma posição do tabuleiro
-askForPosition(Row, Column, Question):-
+askForPosition(Row, Column, Question, Size):-
 	repeat,
 	(
 		(	
@@ -86,7 +99,7 @@ askForPosition(Row, Column, Question):-
 			translate_column(Input1, Column),
 			write('Row: '),
 			getInt(Input2),
-			Input2 =< 6,
+			Input2 =< Size,
 			Input2 >= 1,
 			translate_row(Input2, Row),!
 		);
@@ -94,9 +107,9 @@ askForPosition(Row, Column, Question):-
 	).
 	
 % pergunta ao jogador qual a posição da peça que quer mover e verifica se é válida
-askForPiecePosFrom(Board, Player, Row, Column):-
+askForPiecePosFrom(Board, Player, Row, Column, Size):-
 	repeat,
-	askForPosition(Row, Column, 'Which stack do you want to move?'),
+	askForPosition(Row, Column, 'Which stack do you want to move?', Size),
 	getPieceByRowAndColumn(Board, Row, Column, Piece),
 	(
 		(
@@ -107,9 +120,9 @@ askForPiecePosFrom(Board, Player, Row, Column):-
 	).
 	
 % pergunta ao jogador qual a posição para onde quer mover a peça e verifica se é válida
-askForPiecePosTo(Board, RowFrom, ColumnFrom, RowTo, ColumnTo):-
+askForPiecePosTo(Board, RowFrom, ColumnFrom, RowTo, ColumnTo, Size):-
 	repeat,
-	askForPosition(RowTo, ColumnTo, 'For which position do you want to move it?'),
+	askForPosition(RowTo, ColumnTo, 'For which position do you want to move it?', Size),
 	(
 		(
 			checkOrthogonality(RowFrom, ColumnFrom, RowTo, ColumnTo), % verifica se o movimento é feito ortogonalmente

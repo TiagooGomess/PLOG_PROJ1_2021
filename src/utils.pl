@@ -67,7 +67,8 @@ occurrences_of(List, X, Count):-
     aggregate_all(count, member(X, List), Count).
 
 % número das linhas a ser usado no display do tabuleiro
-row_numbers([6,5,4,3,2,1]).
+row_numbers([6,5,4,3,2,1],6).
+row_numbers([9,8,7,6,5,4,3,2,1],9).
 
 % translates the letters of the columns that are visible to the players to the real indexes
 translate_column('A', 0).
@@ -76,20 +77,29 @@ translate_column('C', 2).
 translate_column('D', 3).
 translate_column('E', 4).
 translate_column('F', 5).
+translate_column('G', 6).
+translate_column('H', 7).
+translate_column('I', 8).
 translate_column('a', 0).
 translate_column('b', 1).
 translate_column('c', 2).
 translate_column('d', 3).
 translate_column('e', 4).
 translate_column('f', 5).
+translate_column('g', 6).
+translate_column('h', 7).
+translate_column('i', 8).
 
 % translates the numbers of the rows that are visible to the players to the real indexes
-translate_row(6, 0).
-translate_row(5, 1).
-translate_row(4, 2).
-translate_row(3, 3).
-translate_row(2, 4).
-translate_row(1, 5).
+translate_row(9, 0).
+translate_row(8, 1).
+translate_row(7, 2).
+translate_row(6, 3).
+translate_row(5, 4).
+translate_row(4, 5).
+translate_row(3, 6).
+translate_row(2, 7).
+translate_row(1, 8).
 
 % verifica se o movimento é feito ortogonalmente
 checkOrthogonality(RowFrom, ColumnFrom, RowTo, ColumnTo):-

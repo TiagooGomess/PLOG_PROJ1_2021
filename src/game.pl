@@ -10,29 +10,29 @@ printPlayer(1):-
     write('Black player\'s turn.'),nl,nl.
 printPlayer(_).
 
-% peças a serem dispostas no tabuleiro inicialmente
-initialPieces([2,2,1,2,0,2,1,2,0,2,2,1,0,2,1,0,2,2,2,0,1,0,2,0,2,1,2,1,2,0,2,1,2,0,2,1]).
+% peças a serem dispostas no tabuleiro inicialmente, dependendo do tamanho
+% 9 pretas, 9 brancas e 18 verdes (tabuleiro 6 x 6)
+initialPieces(6,[2,2,1,2,0,2,1,2,0,2,2,1,0,2,1,0,2,2,2,0,1,0,2,0,2,1,2,1,2,0,2,1,2,0,2,1]).
+% 20 brancas, 20 pretas e 41 verdes (tabuleiro 9 x 9)
+initialPieces(9,[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2]).
 
-% cria o tabuleiro inicial, de tamanho 6 x 6, com 9 pirâmides brancas (0), 
-% 9 pirâmides pretas (1) e 18 pirâmides verdes (2).
+% cria o tabuleiro inicial, com um tamanho BoardSize x BoardSize;
 % as peças são dispostas no tabuleiro de forma aleatória.
-initial(GameState):-
+initial(GameState, BoardSize):-
     init_random_state, % muda a seed do random, para termos tabuleiros diferentes de cada vez que iniciamos o jogo
-    initialPieces(Pieces),
-    %GameState = [ [[1,1,0,2,0,2,2,2,2,2,2,2,2,2,2,2],[2],[3],[3],[3],[3]], [[3],[3],[3],[1,2,0,0,2,0],[3],[3]], [[3],[1,1,2,1,2,2],[3],[3],[3],[3]], [[3],[3], [1,2,2,2,2,0,2],[3],[3],[3]], [[3],[3],[3],[3],[3],[0]], [[3],[3],[3],[3],[1,2,2,2,0,1],[3]] ],
-    %GameState = [ [[1],[3],[2],[3],[1],[3]], [[1],[3],[3],[2],[3],[3]], [[3],[3],[3],[3],[3],[2]], [[3],[3], [3],[3],[3],[3]], [[3],[3],[3],[3],[3],[3]], [[3],[3],[3],[2],[3],[0]] ].
-    createBoard(GameState, 6, Pieces).
+    initialPieces(BoardSize,Pieces),
+    createBoard(GameState, BoardSize, Pieces).
  
 % Mostra o tabuleiro de jogo e o jogador atual.
-display_game(GameState, Player):-
+display_game(GameState, Player, Size):-
     clearScreen,
     printHeader,nl,nl,
-    row_numbers(Rows), % Rows é uma lista com o número das linhas a ser usada no display do tabuleiro
-	printBoard(GameState, Rows),
+    row_numbers(Rows,Size), % Rows é uma lista com o número das linhas a ser usada no display do tabuleiro
+	printBoard(GameState, Rows, Size),
 	printPlayer(Player),
     (
         Player = 2 -> !;
-        value(GameState,Player,Points),
+        value(GameState,Player,Points,Size),
         write('Your current score is '),write(Points),write('.'),nl,nl
     ).
     
@@ -42,10 +42,10 @@ next_player(1, 0).
 
 % pergunta ao jogador que peça quer mover e para que posição;
 % pergunta sempre até ao jogador inserir posições iniciais e finais válidas
-askMove(Board, Player, RowStart, ColumnStart, RowEnd, ColumnEnd):-
+askMove(Board, Player, RowStart, ColumnStart, RowEnd, ColumnEnd, Size):-
 	nl,write('========================================'),nl,
-	askForPiecePosFrom(Board, Player, RowStart, ColumnStart),nl,
-	askForPiecePosTo(Board, RowStart, ColumnStart, RowEnd, ColumnEnd),
+	askForPiecePosFrom(Board, Player, RowStart, ColumnStart, Size),nl,
+	askForPiecePosTo(Board, RowStart, ColumnStart, RowEnd, ColumnEnd, Size),
 	nl,nl,write('========================================'),nl,nl.
 
 % move a stack da posição (ColumnStart,RowStart) para (ColumnEnd,RowEnd)
@@ -55,15 +55,15 @@ move(Board, NewBoad, RowStart, ColumnStart, RowEnd, ColumnEnd):-
 	clear_cell(NewBoad0, RowStart, ColumnStart, NewBoad).
 
 % sucede quando os dois jogadores passam a jogada sucessivamente (Succession = 2)
-game_over(GameState, Sucession):- 
+game_over(GameState, Sucession, Size):- 
 	Sucession = 2,
-    display_game(GameState, 2), % Player é 2, para não fazer display do player atual, já que ninguém é a jogar
+    display_game(GameState, 2, Size), % Player é 2, para não fazer display do player atual, já que ninguém é a jogar
     nl,nl,nl,write('Game Over!'),nl,nl,nl,
-    checkWinner(GameState).
+    checkWinner(GameState,Size).
 
 % sucede quando o jogador não pode fazer nenhum movimento
-playerPassTheTurn(Board, Player):-
-	\+ checkIfPlayerCanMakeMove(Board,Player).
+playerPassTheTurn(Board, Player, Size):-
+	\+ checkIfPlayerCanMakeMove(Board,Player,Size).
 
 % verifica se uma stack não pode capturar outras, ou seja, se não há nenhuma stack
 % na mesma linha ou na mesma coluna
@@ -75,36 +75,36 @@ checkIfStackCannotCapture(Board, Row, Column):-
 
 % verifica se o Player consegue fazer algum movimento, ou seja, 
 % se tem pelo menos uma stack que tenha outra stack na mesma linha ou coluna
-checkIfPlayerCanMakeMove(Board,Player):-
-	checkIfPlayerCanMakeMove(Board,Board,Player,6).
-checkIfPlayerCanMakeMove([],_,_,0):-fail.
-checkIfPlayerCanMakeMove([Line|T],Board,Player,Row):-
+checkIfPlayerCanMakeMove(Board,Player,Size):-
+	checkIfPlayerCanMakeMove(Board,Board,Player,Size,Size).
+checkIfPlayerCanMakeMove([],_,_,0,_):-fail.
+checkIfPlayerCanMakeMove([Line|T],Board,Player,Row,Size):-
 	Row > 0,
 	Row1 is Row - 1,
 	(
-		RealRow is 6 - Row,
-		checkIfPlayerCanMakeMoveRow(Board,Line,Player,RealRow,6) -> !;
-		checkIfPlayerCanMakeMove(T,Board,Player,Row1)
+		RealRow is Size - Row,
+		checkIfPlayerCanMakeMoveRow(Board,Line,Player,RealRow,Size,Size) -> !;
+		checkIfPlayerCanMakeMove(T,Board,Player,Row1,Size)
 	).
 	
 % verifica se o Player consegue fazer algum movimento,
 % para as stacks que tem numa certa linha
-checkIfPlayerCanMakeMoveRow(_,[],_,_,0):-fail.
-checkIfPlayerCanMakeMoveRow(Board,[[H|_]|T],Player,Row,Column):-
+checkIfPlayerCanMakeMoveRow(_,[],_,_,0,_):-fail.
+checkIfPlayerCanMakeMoveRow(Board,[[H|_]|T],Player,Row,Column,Size):-
 	Column > 0,
 	Column1 is Column - 1,
 	(
 		H = Player -> (
-			RealColumn is 6 - Column,
+			RealColumn is Size - Column,
 			\+ checkIfStackCannotCapture(Board, Row, RealColumn) -> !;
 			fail
 		);
-		checkIfPlayerCanMakeMoveRow(Board,T,Player,Row,Column1)
+		checkIfPlayerCanMakeMoveRow(Board,T,Player,Row,Column1,Size)
 	).
 
 % conta o número de pontos de um dado jogador.
-value(Board, Player, Points):-
-	value(Board, Player, Points, 0, 6).
+value(Board, Player, Points,Size):-
+	value(Board, Player, Points, 0, Size).
 value(_, _, Points, Points, 0).
 value(Board, Player, N, Points, Row):-
 	Row > 0,
@@ -129,16 +129,16 @@ countRowPoints(Player, [[H|T0]|T], C, Counter):-
 	countRowPoints(Player, T, C, Counter1).
 
 % dá-nos a altura da pirâmide mais alta do jogador
-getHighestStackHeight(Board, Player, Height):-
-    getHighestStackHeight(Board,Player,Height,0,6).
-getHighestStackHeight(_,_,Height,Height,0).
-getHighestStackHeight(Board,Player,N,Height,Row):-
+getHighestStackHeight(Board, Player, Height, Size):-
+    getHighestStackHeight(Board,Player,Height,0,Size).
+getHighestStackHeight(_,_,Height,Height,0,_).
+getHighestStackHeight(Board,Player,N,Height,Row,Size):-
     Row > 0,
     Row1 is Row - 1,
     nth0(Row1,Board,RowList),
     getHighestStackHeightRow(Player,RowList,Height0),
     Height1 is max(Height,Height0),
-    getHighestStackHeight(Board,Player,N,Height1,Row1).
+    getHighestStackHeight(Board,Player,N,Height1,Row1,Size).
 
 % dá-nos a altura da pirâmide mais alta do jogador, numa certa linha
 getHighestStackHeightRow(Player,RowList,Height):-
@@ -155,9 +155,9 @@ getHighestStackHeightRow(Player,[[H|T0]|T],N,Height):-
     getHighestStackHeightRow(Player,T,N,Height1).
 
 % verifica e imprime no ecrã quem foi o jogador vencedor
-checkWinner(Board):-
-	value(Board, 0, WhitePoints),
-	value(Board, 1, BlackPoints),
+checkWinner(Board, Size):-
+	value(Board, 0, WhitePoints, Size),
+	value(Board, 1, BlackPoints, Size),
 	write('========================================'),nl,nl,
 	nl,nl,write('--> Final Score:'),nl,nl,
 	write('Black Player: '), write(BlackPoints), write(' points.'),nl,nl,
@@ -207,14 +207,14 @@ describeBotMove(RStart, CStart, REnd, CEnd,BotLevel):-
 
 % ciclo do jogo; o terceiro argumento, Succession, é 0 se a jogada anterior não teve que ser passada à frente (pass turn),
 % ou 1 caso contrário; quando for 2, o jogo termina, porque os jogadores tiveram que passar as suas jogadas sucessivamente.
-game_loop(GameState, Player, GameMode, SleepTime):-
-    game_loop(GameState, Player, 0, GameMode, SleepTime).
-game_loop(GameState, Player, Sucession, GameMode, SleepTime):-
-    game_over(GameState, Sucession) -> !;
+game_loop(GameState, Player, GameMode, SleepTime, Size):-
+    game_loop(GameState, Player, 0, GameMode, SleepTime, Size).
+game_loop(GameState, Player, Sucession, GameMode, SleepTime, Size):-
+    game_over(GameState, Sucession, Size) -> !;
     (   
-        display_game(GameState, Player),
+        display_game(GameState, Player, Size),
         (
-            playerPassTheTurn(GameState, Player) -> (
+            playerPassTheTurn(GameState, Player,Size) -> (
                 write('\nYou need to pass your turn!'),nl,sleep(1),
                 nl,write('========================================'),nl,nl,
                 NewBoard = GameState,
@@ -225,25 +225,25 @@ game_loop(GameState, Player, Sucession, GameMode, SleepTime):-
                 ( % computer vs computer mode
                     (
                         GameMode = 'BotEasyVsBotEasy' -> (
-                            choose_move(GameState, Player, 'Easy', RowStart, ColumnStart, RowEnd, ColumnEnd), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd, 'Easy'), sleepBot(SleepTime)
+                            choose_move(GameState, Player, 'Easy', RowStart, ColumnStart, RowEnd, ColumnEnd, Size), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd, 'Easy'), sleepBot(SleepTime)
                         );
                         GameMode = 'BotEasyVsBotHard' -> (
-                            Player = 1 -> getMoveEasy(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd, 'Easy'), sleepBot(SleepTime);
-                            choose_move(GameState, Player, 'Hard', RowStart, ColumnStart, RowEnd, ColumnEnd), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd, 'Hard'), sleepBot(SleepTime)
+                            Player = 1 -> getMoveEasy(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd, Size), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd, 'Easy'), sleepBot(SleepTime);
+                            choose_move(GameState, Player, 'Hard', RowStart, ColumnStart, RowEnd, ColumnEnd, Size), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd, 'Hard'), sleepBot(SleepTime)
                         );
                         GameMode = 'BotEasyVsBotDumb' -> (
-                            Player = 1 -> getMoveEasy(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd, 'Easy'), sleepBot(SleepTime);
-                            choose_move(GameState, Player, 'Dumb', RowStart, ColumnStart, RowEnd, ColumnEnd), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd, 'Dumb'), sleepBot(SleepTime)
+                            Player = 1 -> getMoveEasy(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd, Size), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd, 'Easy'), sleepBot(SleepTime);
+                            choose_move(GameState, Player, 'Dumb', RowStart, ColumnStart, RowEnd, ColumnEnd, Size), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd, 'Dumb'), sleepBot(SleepTime)
                         );
                         GameMode = 'BotHardVsBotHard' -> (
-                            choose_move(GameState, Player, 'Hard', RowStart, ColumnStart, RowEnd, ColumnEnd), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd, 'Hard'), sleepBot(SleepTime)
+                            choose_move(GameState, Player, 'Hard', RowStart, ColumnStart, RowEnd, ColumnEnd, Size), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd, 'Hard'), sleepBot(SleepTime)
                         );
                         GameMode = 'BotHardVsBotDumb' -> (
-                            Player = 1 -> choose_move(GameState, Player, 'Hard', RowStart, ColumnStart, RowEnd, ColumnEnd), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd, 'Hard'), sleepBot(SleepTime);
-                            choose_move(GameState, Player, 'Dumb', RowStart, ColumnStart, RowEnd, ColumnEnd), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd, 'Dumb'), sleepBot(SleepTime)
+                            Player = 1 -> choose_move(GameState, Player, 'Hard', RowStart, ColumnStart, RowEnd, ColumnEnd, Size), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd, 'Hard'), sleepBot(SleepTime);
+                            choose_move(GameState, Player, 'Dumb', RowStart, ColumnStart, RowEnd, ColumnEnd, Size), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd, 'Dumb'), sleepBot(SleepTime)
                         );
                         GameMode = 'BotDumbVsBotDumb' -> (
-                            choose_move(GameState, Player, 'Dumb', RowStart, ColumnStart, RowEnd, ColumnEnd), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd, 'Dumb'), sleepBot(SleepTime)
+                            choose_move(GameState, Player, 'Dumb', RowStart, ColumnStart, RowEnd, ColumnEnd, Size), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd, 'Dumb'), sleepBot(SleepTime)
                         )
                     ),
                     move(GameState, NewBoard, RowStart, ColumnStart, RowEnd, ColumnEnd),
@@ -252,13 +252,13 @@ game_loop(GameState, Player, Sucession, GameMode, SleepTime):-
                 ( % player vs player ou player vs computer modes
                     (
                         Player = 0 -> (
-                        GameMode = 'PlayerVsPlayer' -> askMove(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd);
-                        GameMode = 'PlayerVsBotEasy' -> choose_move(GameState, Player, 'Easy', RowStart, ColumnStart, RowEnd, ColumnEnd), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd,'Easy'), sleepBot(SleepTime);
-                        GameMode = 'PlayerVsBotHard' -> choose_move(GameState, Player, 'Hard', RowStart, ColumnStart, RowEnd, ColumnEnd), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd,'Hard'), sleepBot(SleepTime);
-                        GameMode = 'PlayerVsBotDumb' -> choose_move(GameState, Player, 'Dumb', RowStart, ColumnStart, RowEnd, ColumnEnd), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd,'Dumb'), sleepBot(SleepTime);
+                        GameMode = 'PlayerVsPlayer' -> askMove(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd, Size);
+                        GameMode = 'PlayerVsBotEasy' -> choose_move(GameState, Player, 'Easy', RowStart, ColumnStart, RowEnd, ColumnEnd, Size), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd,'Easy'), sleepBot(SleepTime);
+                        GameMode = 'PlayerVsBotHard' -> choose_move(GameState, Player, 'Hard', RowStart, ColumnStart, RowEnd, ColumnEnd, Size), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd,'Hard'), sleepBot(SleepTime);
+                        GameMode = 'PlayerVsBotDumb' -> choose_move(GameState, Player, 'Dumb', RowStart, ColumnStart, RowEnd, ColumnEnd, Size), describeBotMove(RowStart, ColumnStart, RowEnd, ColumnEnd,'Dumb'), sleepBot(SleepTime);
                         nl,nl,nl,write('Invalid Game Mode!!!'),nl,nl,nl,fail
                         );
-                        askMove(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd)
+                        askMove(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd, Size)
                     ),
                     move(GameState, NewBoard, RowStart, ColumnStart, RowEnd, ColumnEnd),
                     Sucession1 is 0   
@@ -266,6 +266,6 @@ game_loop(GameState, Player, Sucession, GameMode, SleepTime):-
             )
         ),
         next_player(Player, NextPlayer),
-        game_loop(NewBoard, NextPlayer, Sucession1, GameMode, SleepTime)
+        game_loop(NewBoard, NextPlayer, Sucession1, GameMode, SleepTime, Size)
     ).
     
