@@ -109,6 +109,40 @@ printComputerVsComputerMenu:-
 	write('================================='), nl,
 	write('Choose an option:'), nl.
 
+printBotTimeMenu:-
+	clearScreen,
+	write('================================='), nl,
+	write('=    ::::   Bots Time   ::::    ='), nl,
+	write('================================='), nl,
+	write('=                               ='), nl,
+	write('=   1. 0 seconds                ='), nl,
+	write('=   2. 0.1 seconds              ='), nl,
+	write('=   3. 0.5 seconds              ='), nl,
+	write('=   4. 1 second                 ='), nl,
+	write('=   5. 2 seconds                ='), nl,
+	write('=   6. 5 seconds                ='), nl,
+	write('=                               ='), nl,
+	write('================================='), nl,
+	write('Choose an option:'), nl.
+
+botTimeMenu(Time):-
+	printBotTimeMenu,
+	getChar(Input),
+	(
+		Input = '1' -> Time is 0;
+		Input = '2' -> Time is 0.1;
+		Input = '3' -> Time is 0.5;
+		Input = '4' -> Time is 1;
+		Input = '5' -> Time is 2;
+		Input = '6' -> Time is 5;
+		Input = '7';
+
+		nl,
+		nl,write('Invalid input!'),nl,
+		pressEnterToContinue, nl,
+		botTimeMenu(Time)
+	).
+
 % menu de computador contra computador
 computerVsComputerMenu:-
 	printComputerVsComputerMenu,
@@ -130,73 +164,82 @@ computerVsComputerMenu:-
 
 % iniciar o jogo bot easy contra bot easy
 botEasyVsBotEasy:-
+	botTimeMenu(Time),
 	clearScreen,
 	printHeader,nl,nl,nl,
 	initial(GameState),
-	game_loop(GameState, 1, 'BotEasyVsBotEasy').
+	game_loop(GameState, 1, 'BotEasyVsBotEasy', Time).
 
 % iniciar o jogo bot easy contra bot hard
 botEasyVsBotHard:-
+	botTimeMenu(Time),
 	clearScreen,
 	printHeader,nl,nl,nl,
 	initial(GameState),
-	game_loop(GameState, 1, 'BotEasyVsBotHard').
+	game_loop(GameState, 1, 'BotEasyVsBotHard', Time).
 
 % iniciar o jogo bot easy contra bot dumb
 botEasyVsBotDumb:-
+	botTimeMenu(Time),
 	clearScreen,
 	printHeader,nl,nl,nl,
 	initial(GameState),
-	game_loop(GameState, 1, 'BotEasyVsBotDumb').
+	game_loop(GameState, 1, 'BotEasyVsBotDumb', Time).
 
 % iniciar o jogo bot hard contra bot hard
 botHardVsBotHard:-
+	botTimeMenu(Time),
 	clearScreen,
 	printHeader,nl,nl,nl,
 	initial(GameState),
-	game_loop(GameState, 1, 'BotHardVsBotHard').
+	game_loop(GameState, 1, 'BotHardVsBotHard', Time).
 
 % iniciar o jogo bot hard contra bot dumb
 botHardVsBotDumb:-
+	botTimeMenu(Time),
 	clearScreen,
 	printHeader,nl,nl,nl,
 	initial(GameState),
-	game_loop(GameState, 1, 'BotHardVsBotDumb').
+	game_loop(GameState, 1, 'BotHardVsBotDumb', Time).
 
 % iniciar o jogo bot dumb contra bot dumb
 botDumbVsBotDumb:-
+	botTimeMenu(Time),
 	clearScreen,
 	printHeader,nl,nl,nl,
 	initial(GameState),
-	game_loop(GameState, 1, 'BotDumbVsBotDumb').
+	game_loop(GameState, 1, 'BotDumbVsBotDumb', Time).
 
 % iniciar o jogo jogador contra jogador
 playerVsPlayer:-
 	clearScreen,
 	printHeader,nl,nl,nl,
 	initial(GameState),
-	game_loop(GameState, 1, 'PlayerVsPlayer').
+	game_loop(GameState, 1, 'PlayerVsPlayer', 0).
 
 % iniciar o jogo jogador contra bot easy
 playerVsBotEasy:-
+	botTimeMenu(Time),
 	clearScreen,
 	printHeader,nl,nl,nl,
 	initial(GameState),
-	game_loop(GameState, 1, 'PlayerVsBotEasy').
+	game_loop(GameState, 1, 'PlayerVsBotEasy', Time).
 
 % iniciar o jogo jogador contra bot hard
 playerVsBotHard:-
+	botTimeMenu(Time),
 	clearScreen,
 	printHeader,nl,nl,nl,
 	initial(GameState),
-	game_loop(GameState, 1, 'PlayerVsBotHard').
+	game_loop(GameState, 1, 'PlayerVsBotHard', Time).
 
 % iniciar o jogo jogador contra bot dumb
 playerVsBotDumb:-
+	botTimeMenu(Time),
 	clearScreen,
 	printHeader,nl,nl,nl,
 	initial(GameState),
-	game_loop(GameState, 1, 'PlayerVsBotDumb').
+	game_loop(GameState, 1, 'PlayerVsBotDumb', Time).
 
 % menu do jogar novamente
 playAgain:-
