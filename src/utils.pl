@@ -91,15 +91,11 @@ translate_column('h', 7).
 translate_column('i', 8).
 
 % translates the numbers of the rows that are visible to the players to the real indexes
-translate_row(9, 0).
-translate_row(8, 1).
-translate_row(7, 2).
-translate_row(6, 3).
-translate_row(5, 4).
-translate_row(4, 5).
-translate_row(3, 6).
-translate_row(2, 7).
-translate_row(1, 8).
+translate_row(Visible,Real,Size):-
+    (
+        number(Real) -> Visible is Size - Real; % caso em que sabemos o Visible e queremos calcular o Real
+        Real is Size - Visible % caso em que sabemos o Real e queremos calcular o Visible
+    ).
 
 % verifica se o movimento é feito ortogonalmente
 checkOrthogonality(RowFrom, ColumnFrom, RowTo, ColumnTo):-
