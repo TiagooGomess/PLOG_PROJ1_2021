@@ -68,7 +68,7 @@ boardSizeMenu(Size):-
 		Input = '3';
 
 		nl,write('Invalid input!'),nl,
-		boardSizeMenu,nl,
+		pressEnterToContinue,nl,
 		gameModeMenu
 	).
 

@@ -89,7 +89,7 @@ getStackByRowAndColumn(Board, Row, Column, Stack):-
 
 % pergunta ao jogador uma posição do tabuleiro
 askForPosition(Row, Column, Question, Size):-
-	repeat,
+	%repeat,
 	(
 		(	
 			nl,nl,
@@ -104,8 +104,8 @@ askForPosition(Row, Column, Question, Size):-
 			translate_row(Input2, Row),!
 		);
 		(
-			Size = 6 -> nl,nl,write('This position is not a valid one!\nThe number of the rows are between 1 and 6 and the columns are between A and F!'),nl,nl,fail;
-			Size = 9 -> nl,nl,write('This position is not a valid one!\nThe number of the rows are between 1 and 9 and the columns are between A and I!'),nl,nl,fail;
+			Size = 6 -> nl,nl,write('This position is not a valid one!\nThe number of the rows are between 1 and 6 and the columns are between A and F!'),nl,nl,!,fail;
+			Size = 9 -> nl,nl,write('This position is not a valid one!\nThe number of the rows are between 1 and 9 and the columns are between A and I!'),nl,nl,!,fail;
 			nl,nl,write('Invalid Size!'),nl,nl,!
 		)
 	).
@@ -118,6 +118,7 @@ askForPiecePosFrom(Board, Player, Row, Column, Size):-
 	(
 		(
 			Piece = Player, % verifica se a stack que o jogador quer mover lhe pertence
+			nl,nl,write(Piece),write(Player),nl,nl,
 			\+ checkIfStackCannotCapture(Board, Row, Column),!
 		);
 		nl,nl,write('You cannot move that stack!\nPlease choose another one!'),nl,nl,fail
