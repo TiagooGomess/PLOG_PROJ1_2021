@@ -9,10 +9,12 @@ This implementation is made by the group Greener_5 that consists of
 ## Game Rules
 
 **Definitions:**
+
 - A stack is either  one pyramid or several pyramids stacked on top of each other.
 - A stack is controlled by the colour of the topmost pyramid. So a ‘Black’ stack is a stack of any height with a black pyramid on top, and so on...
 
 **Rules:**
+
 - The game is made for 2 players (Black and White players)
 - The board size is 6x6
 - There are 9 Black Pyramids, 9 White and 18 Green
@@ -69,16 +71,15 @@ We print a board on screen with letters and numbers to indicate position, and in
 
 #### Initial State:
 
-![Initial State](https://raw.githubusercontent.com/TiagooGomess/PLOG_PROJ1_2021/main/images/initial_board.png?token=AL7CLJM6EPVJKQSRVOB3LUK7UBY4O)
+![Initial State](images/initial_board.png)
 
 #### Intermediate State:
 
-![Intermediate State](https://raw.githubusercontent.com/TiagooGomess/PLOG_PROJ1_2021/main/images/intermediate_board.png?token=AL7CLJKGV7BOO6LZQRF6MJK7UBYQW)
+![Intermediate State](/images/intermediate_board.png)
 
 #### Final State:
 
-![Final State](https://raw.githubusercontent.com/TiagooGomess/PLOG_PROJ1_2021/main/images/final_board.png?token=AL7CLJJAGW2OCIX5OXRTYPK7UFNEU)
-
+![Final State](images/final_board.png)
 
 ## How to run the game
 
