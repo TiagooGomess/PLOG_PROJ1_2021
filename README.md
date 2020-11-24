@@ -129,6 +129,7 @@ The game **ends after both players pass the turn successively**, which we check 
 ### Board Evaluation
 
 To evaluate the state of the game, how many points each player has, so we can display this information to the players we use the **value** predicate that receives the board and the player and for each row counts the points that player has adding them, in other words, counts the occurrences of green pieces in stacks controlled by the player.
+In case of tie, we go check the heigth of the stacks, the player with the highest stack wins or they tie the game if they have the same size.
 
 ### Bots Moves
 
@@ -139,7 +140,8 @@ And finally the Dumb bot makes the same process but reverses the scored moves so
 
 ## Conclusion
 
-
+The development of this game was very interesting for us. At first, it was a very bumpy ride, where we had doubts about pretty much every single feature we tried to add because we are both new to Logic Programming paradigm, but eventually we actually started to enjoy it, and we got to learn a lot of different things as well as getting a introduction to Artificial intelligence, another very interesting subject.
+Overall it was a very fun experience with a lot of learning involved!
 
 ## Known Issues
 
