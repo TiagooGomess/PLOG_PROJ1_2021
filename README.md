@@ -6,6 +6,11 @@ This implementation is made by the group Greener_5 that consists of
 - João Renato da Costa Pinto (up201705547)
 - Tiago Gonçalves Gomes (up201806658)
 
+## How to run the game
+
+1. In SICStus Prolog, consult the file 'play.pl' in the src directory(File -> Consult... -> src/play.pl; or in the sicstus terminal: `[play].`)
+2. Enter the command `play.`
+
 ## Game Rules
 
 **Definitions:**
@@ -29,7 +34,15 @@ This implementation is made by the group Greener_5 that consists of
 
 [**Rule Book**](https://nestorgames.com/rulebooks/GREENGREENERGREENEST_EN.pdf)
 
-## Game Implementation
+## Game Modes
+
+Our implementation of Greener currently has PvP, PvCPU and CPUvsCPU, where the bots have 3 levels of difficulty, the easy mode, where the bot makes moves randomly, a hard mode where the bot makes the greedy choice, and the dumb mode, where the bot makes the worst move available.
+
+[Game Modes](images/game_modes.png) [Difficulty](images/bots_difficulty.png)
+
+
+
+## Game Logic Implementation
 
 ### Game State Representation
 
@@ -67,7 +80,7 @@ The board is represented by a list of lists of lists, where the latest is the re
         
 ### Game State Visualization
 
-We print a board on screen with letters and numbers to indicate position, and in each cell we represent the color of the head of the list (piece on top of the stack ['W','B','G'], or no piece ['-']) and next to it a number that represents the score associated with the stack ( number of green pieces in the stack)
+We print a board on screen with letters and numbers to indicate position, and in each cell we represent the color of the head of the list (piece on top of the stack ['W','B','G'], or no piece [  ]) and next to it a number that represents the score associated with the stack ( number of green pieces in the stack)
 
 #### Initial State:
 
@@ -81,7 +94,16 @@ We print a board on screen with letters and numbers to indicate position, and in
 
 ![Final State](images/final_board.png)
 
-## How to run the game
+### Valid Moves List
 
-1. In SICStus Prolog, consult the file 'play.pl' (File -> Consult... -> play.pl; or in the sicstus terminal: `[play].`)
-2. Enter the command `play.`
+When a bot is playing we get all the possible moves, with our **valid_moves** predicate that uses the [findall/3](https://www.swi-prolog.org/pldoc/man?predicate=findall%2f3) predicate of Prolog with a template of  [RowFrom, ColumnFrom, RowTo, ColumnTo] and getting a random move that is a valid move,in other words, where the cell selected has a stack controlled by the current player, if that stack can capture other stacks, if the move is orthogonal and there are no other stacks in between the selected stack and the destination, and if the destinatio is not a empty cell.
+
+(print de codigo necessario??)
+
+### Move Validation
+
+After checking if the current player has any move available, if not, the **turn automatically passes**, if available, we ask the player to select a Piece to move, after that we check if that stack is controlled by the current player and if it has any available moves, if so, we require a destination stack to the player where again we check if the move is valid( if that stack can capture other stacks, if the move is orthogonal and there are no other stacks in between the selected stack and the destination, and if the destinatio is not a empty cell).
+
+### Move Execution
+
+To move a piece to another cell of the board, after its validation, done  we use our **move** predicate, that moves the stack of the origin cell to the destination cell and appends to it the stack that was previously there, clearing the origin cell.
