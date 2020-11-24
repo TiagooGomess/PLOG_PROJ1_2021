@@ -40,14 +40,14 @@ Our Main Menu is composed by the Play option which leads to Game Mode Menu, the 
 
 ### Game Modes
 
-Our implementation of Greener currently has PvP, PvCPU and CPUvsCPU, where the bots have 3 levels of difficulty, the easy mode, where the bot makes moves randomly, a hard mode where the bot makes the greedy choice, and the dumb mode, where the bot makes the worst move available.
+Our implementation of Greener currently has PvP, PvCPU and CPUvsCPU, where the bots have 3 levels of difficulty, the easy mode, a hard mode and the dumb mode.
 If Computer vs Computer, the player can select all different combinations of bots difficulty, (easy Vs easy, Hard vs Hard, Hard vs Dumb, etc...)
 After player type selection, we go to the board Size Menu Where we can choose between 6x6 or 9x9 boards.
 For demonstration porposes, or fast game experiences, we also implemented different sleep times for the bots,the player can choose between 0, 0.1 , 0.5, 1, 2 or 5 seconds of sleep.
 
 ![Game Modes](images/game_modes.png) ![Difficulty](images/bots_difficulty.png)
 
-![Bot Levels](images/bot_levels.png)
+![Bot Levels][images/bot_levels.png]
 
 ## Game Logic Implementation
 
@@ -88,6 +88,8 @@ The board is represented by a list of lists of lists, where the latest is the re
 
 We print a board on screen with letters and numbers to indicate position, and in each cell we represent the color of the head of the list (piece on top of the stack ['W','B','G'], or no piece [  ]) and next to it a number that represents the score associated with the stack ( number of green pieces in the stack)
 
+Examples for 6x6 boards:
+
 #### Initial State
 
 ![Initial State](images/initial_board.png)
@@ -104,7 +106,7 @@ We print a board on screen with letters and numbers to indicate position, and in
 
 When a bot is playing we get all the possible moves, with our **valid_moves** predicate that uses the findall/3 predicate of Prolog with a template of  [RowFrom, ColumnFrom, RowTo, ColumnTo] and getting a random move that is a valid move,in other words, where the cell selected has a stack controlled by the current player, if that stack can capture other stacks, if the move is orthogonal and there are no other stacks in between the selected stack and the destination, and if the destinatio is not a empty cell.
 
-(print de codigo necessario??)
+
 
 ### Move Validation
 
@@ -120,11 +122,14 @@ The game **ends after both players pass the turn successively**, which we check 
 
 ### Board Evaluation
 
-
+To evaluate the state of the game, how many points each player has, so we can display this information to the players we use the **value** predicate that receives the board and the player and for each row counts the points that player has adding them, in other words, counts the occurrences of green pieces in stacks controlled by the player.
 
 ### Bots Moves
 
-
+When bots are at play their plays obviosly depend on their difficulty. so we have choose_move that leads receives the mode and behaves accordingly.
+The Easy bot, gets all the valid moves available with the valid_moves predicate and simply chooses one at random.
+The Hard bot after getting all the valid moves, scores all of them, and chooses the one that gives him the bigger score increase (greedy).
+And finally the Dumb bot makes the same process but reverses the scored moves so he chooses the one that gives him the smallest ammount of points possible.
 
 ## Conclusion
 
@@ -132,7 +137,7 @@ The game **ends after both players pass the turn successively**, which we check 
 
 ## Known Issues
 
-
+There are **no known issues** for the game at this time!
 
 ## RoadMap
 
