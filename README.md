@@ -40,8 +40,6 @@ Our implementation of Greener currently has PvP, PvCPU and CPUvsCPU, where the b
 
 ![Game Modes](images/game_modes.png) ![Difficulty](images/bots_difficulty.png)
 
-
-
 ## Game Logic Implementation
 
 ### Game State Representation
@@ -51,7 +49,6 @@ The board is represented by a list of lists of lists, where the latest is the re
  Examples of game states in Prolog :
 
 - Initial State
-
 
 	[	[[2],[0],[2],[1],[0],[2]],</br>
 		[[0],[0],[2],[1],[2],[0]],</br>
@@ -68,7 +65,7 @@ The board is represented by a list of lists of lists, where the latest is the re
 		[[1,2,2,2],[3],[3],[3],[0],[2]],</br>
 		[[2],[0],[2],[1],[2],[2]],</br>
 		[[1],[0],[2],[2],[0],[2]]	] , 0
-        
+
 - Final State
 
 	[	[[1,1,0,2,0,2],[3],[3],[3],[3],[3]],</br>
@@ -77,26 +74,26 @@ The board is represented by a list of lists of lists, where the latest is the re
 		[[3],[3], [1,2,2,2,2,0,2],[3],[3],[3]],</br>
 		[[3],[3],[3],[3],[3],[1,2,2,2,0]],</br>
 		[[3],[3],[3],[3],[0,2,2,2,0,1],[3]]	] , 0
-        
+
 ### Game State Visualization
 
 We print a board on screen with letters and numbers to indicate position, and in each cell we represent the color of the head of the list (piece on top of the stack ['W','B','G'], or no piece [  ]) and next to it a number that represents the score associated with the stack ( number of green pieces in the stack)
 
-#### Initial State:
+#### Initial State
 
 ![Initial State](images/initial_board.png)
 
-#### Intermediate State:
+#### Intermediate State
 
 ![Intermediate State](/images/intermediate_board.png)
 
-#### Final State:
+#### Final State
 
 ![Final State](images/final_board.png)
 
 ### Valid Moves List
 
-When a bot is playing we get all the possible moves, with our **valid_moves** predicate that uses the [findall/3](https://www.swi-prolog.org/pldoc/man?predicate=findall%2f3) predicate of Prolog with a template of  [RowFrom, ColumnFrom, RowTo, ColumnTo] and getting a random move that is a valid move,in other words, where the cell selected has a stack controlled by the current player, if that stack can capture other stacks, if the move is orthogonal and there are no other stacks in between the selected stack and the destination, and if the destinatio is not a empty cell.
+When a bot is playing we get all the possible moves, with our **valid_moves** predicate that uses the findall/3 predicate of Prolog with a template of  [RowFrom, ColumnFrom, RowTo, ColumnTo] and getting a random move that is a valid move,in other words, where the cell selected has a stack controlled by the current player, if that stack can capture other stacks, if the move is orthogonal and there are no other stacks in between the selected stack and the destination, and if the destinatio is not a empty cell.
 
 (print de codigo necessario??)
 
@@ -107,3 +104,29 @@ After checking if the current player has any move available, if not, the **turn 
 ### Move Execution
 
 To move a piece to another cell of the board, after its validation, done  we use our **move** predicate, that moves the stack of the origin cell to the destination cell and appends to it the stack that was previously there, clearing the origin cell.
+
+### Game Ending
+
+The game **ends after both players pass the turn successively**, which we check every game loop, then the **game_over** predicate is called where we display the game over message and check the winner of the game, adding the ammount of green pieces on the stacks controlled by each player, using the highest stack if the game was tied, we display the points and ask if the player wants to play another round.
+
+### Board Evaluation
+
+
+
+### Bots Moves
+
+
+
+## Conclusion
+
+
+
+## Known Issues
+
+
+
+## RoadMap
+
+
+
+## Bibliography
