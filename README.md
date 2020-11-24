@@ -21,8 +21,8 @@ This implementation is made by the group Greener_5 that consists of
 **Rules:**
 
 - The game is made for 2 players (Black and White players)
-- The board size is 6x6
-- There are 9 Black Pyramids, 9 White and 18 Green
+- The board size is 6x6 or 9x9
+- There are 9 Black Pyramids, 9 White and 18 Green for 6x6 or 20,20,41 for 9x9
 - Randomly place all the pyramids in the board (1 per cell)
 - Each player has an allocated colour (Black or White), while green is neutral
 - Black always starts and players alternate turns during the game until both players pass in succession
@@ -34,11 +34,20 @@ This implementation is made by the group Greener_5 that consists of
 
 [**Rule Book**](https://nestorgames.com/rulebooks/GREENGREENERGREENEST_EN.pdf)
 
-## Game Modes
+## Menus
+
+Our Main Menu is composed by the Play option which leads to Game Mode Menu, the How to Play option which gives the Rules to the player and a EXIT option.
+
+### Game Modes
 
 Our implementation of Greener currently has PvP, PvCPU and CPUvsCPU, where the bots have 3 levels of difficulty, the easy mode, where the bot makes moves randomly, a hard mode where the bot makes the greedy choice, and the dumb mode, where the bot makes the worst move available.
+If Computer vs Computer, the player can select all different combinations of bots difficulty, (easy Vs easy, Hard vs Hard, Hard vs Dumb, etc...)
+After player type selection, we go to the board Size Menu Where we can choose between 6x6 or 9x9 boards.
+For demonstration porposes, or fast game experiences, we also implemented different sleep times for the bots,the player can choose between 0, 0.1 , 0.5, 1, 2 or 5 seconds of sleep.
 
 ![Game Modes](images/game_modes.png) ![Difficulty](images/bots_difficulty.png)
+
+![Bot Levels](images/bot_levels.png)
 
 ## Game Logic Implementation
 
@@ -46,7 +55,7 @@ Our implementation of Greener currently has PvP, PvCPU and CPUvsCPU, where the b
 
 The board is represented by a list of lists of lists, where the latest is the representation of a stack of pieces. Each piece colour has and associated number(0 for white, 1 for black and 2 for green; 3 for no piece in the cell). The player turn is also represented by a number, similar to the pieces, 0 for white and 1 for black.
  Since the pieces are always in the board there is no more information to be kept.
- Examples of game states in Prolog :
+ Examples of game states in Prolog for 6x6 :
 
 - Initial State
 
