@@ -47,7 +47,7 @@ For demonstration porposes, or fast game experiences, we also implemented differ
 
 ![Game Modes](images/game_modes.png) ![Difficulty](images/bots_difficulty.png)
 
-![Bot Levels][images/bot_levels.png]
+![Bot Levels](images/bot_levels.png)
 
 ## Game Logic Implementation
 
