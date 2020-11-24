@@ -102,6 +102,12 @@ Examples for 6x6 boards:
 
 ![Final State](images/final_board.png)
 
+Example for 9x9:
+
+#### Final State 9x9
+
+![Final State 9x9](images/final_9x9.png)
+
 ### Valid Moves List
 
 When a bot is playing we get all the possible moves, with our **valid_moves** predicate that uses the findall/3 predicate of Prolog with a template of  [RowFrom, ColumnFrom, RowTo, ColumnTo] and getting a random move that is a valid move,in other words, where the cell selected has a stack controlled by the current player, if that stack can capture other stacks, if the move is orthogonal and there are no other stacks in between the selected stack and the destination, and if the destinatio is not a empty cell.
