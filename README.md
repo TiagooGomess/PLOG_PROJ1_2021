@@ -38,7 +38,7 @@ This implementation is made by the group Greener_5 that consists of
 
 Our implementation of Greener currently has PvP, PvCPU and CPUvsCPU, where the bots have 3 levels of difficulty, the easy mode, where the bot makes moves randomly, a hard mode where the bot makes the greedy choice, and the dumb mode, where the bot makes the worst move available.
 
-[Game Modes](images/game_modes.png) [Difficulty](images/bots_difficulty.png)
+![Game Modes](images/game_modes.png) ![Difficulty](images/bots_difficulty.png)
 
 
 
