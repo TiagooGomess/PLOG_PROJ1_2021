@@ -49,6 +49,12 @@ For demonstration porposes, or fast game experiences, we also implemented differ
 
 ![Bot Levels](images/bot_levels.png)
 
+### Play Again
+
+After agame ends we show a menu where we invite the player to play again or to exit
+
+![Play Again](images/play_again.png)
+
 ## Game Logic Implementation
 
 ### Game State Representation
