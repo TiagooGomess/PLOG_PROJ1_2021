@@ -157,6 +157,9 @@ There are **no known issues** for the game at this time!
 
 ## RoadMap
 
-
+For future improvements of the game, enhancing the AI of the bots is the way, trying to look for the subsequent plays and scoring them, searching for the most efficient plays rather than only analyzing the immediate play.
 
 ## Bibliography
+
+* StackOverflow
+p 
