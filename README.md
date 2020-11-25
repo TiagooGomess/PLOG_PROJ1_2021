@@ -38,6 +38,8 @@ This implementation is made by the group Greener_5 that consists of
 
 Our Main Menu is composed by the Play option which leads to Game Mode Menu, the How to Play option which gives the Rules to the player and a EXIT option.
 
+![Main Menu](images/main_menu.png)
+
 ### Game Modes
 
 Our implementation of Greener currently has PvP, PvCPU and CPUvsCPU, where the bots have 3 levels of difficulty, the easy mode, a hard mode and the dumb mode.
