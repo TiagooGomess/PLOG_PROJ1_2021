@@ -161,5 +161,5 @@ For future improvements of the game, enhancing the AI of the bots is the way, tr
 
 ## Bibliography
 
+* [Sicstus Manual](https://sicstus.sics.se/sicstus/docs/latest4/html/sicstus.html/)
 * StackOverflow
-p 
