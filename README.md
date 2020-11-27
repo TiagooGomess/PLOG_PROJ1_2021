@@ -96,6 +96,13 @@ The board is represented by a list of lists of lists, where the latest is the re
 
 We print a board on screen with letters and numbers to indicate position, and in each cell we represent the color of the head of the list (piece on top of the stack ['W','B','G'], or no piece [  ]) and next to it a number that represents the score associated with the stack ( number of green pieces in the stack)
 
+```prolog
+translate(0, ' W '). % white pyramid
+translate(1, ' B '). % black pyramid
+translate(2, ' G '). % green pyramid
+translate(3, '   '). % no piece
+```
+
 Examples for 6x6 boards:
 
 #### Initial State
@@ -120,7 +127,22 @@ Example for 9x9:
 
 When a bot is playing we get all the possible moves, with our **valid_moves** predicate that uses the findall/3 predicate of Prolog with a template of  [RowFrom, ColumnFrom, RowTo, ColumnTo] and getting a random move that is a valid move,in other words, where the cell selected has a stack controlled by the current player, if that stack can capture other stacks, if the move is orthogonal and there are no other stacks in between the selected stack and the destination, and if the destinatio is not a empty cell.
 
-
+```prolog
+valid_moves(Board,Player,AllMoves,Size):-
+	findall(
+        [RowFrom, ColumnFrom, RowTo, ColumnTo],
+        (
+            getRandomMove(RowFrom, ColumnFrom, RowTo, ColumnTo,Size),
+			getPieceByRowAndColumn(Board, RowFrom, ColumnFrom, Piece),
+   	 		Piece = Player, % verifica se a stack pertence ao jogador atual
+			\+ checkIfStackCannotCapture(Board, RowFrom, ColumnFrom), % verifica se a stack pode capturar outras stacks
+			checkOrthogonality(RowFrom, ColumnFrom, RowTo, ColumnTo), % verifica se o movimento é feito ortogonalmente
+			checkStacksBetween(Board, RowFrom, ColumnFrom, RowTo, ColumnTo), % verifica se existem stacks entre a posição inicial e final
+			\+ checkEmptyCell(Board, RowTo, ColumnTo) % verifica se a posição final tem alguma peça para ser capturada
+		),
+    	AllMoves
+	).
+```
 
 ### Move Validation
 
@@ -130,14 +152,42 @@ After checking if the current player has any move available, if not, the **turn 
 
 To move a piece to another cell of the board, after its validation, done  we use our **move** predicate, that moves the stack of the origin cell to the destination cell and appends to it the stack that was previously there, clearing the origin cell.
 
+```prolog
+move(Board, NewBoad, RowStart, ColumnStart, RowEnd, ColumnEnd):-
+	getStackByRowAndColumn(Board, RowStart, ColumnStart, StackStart),
+	append_stack(Board, RowEnd, ColumnEnd, StackStart, NewBoad0),
+	clear_cell(NewBoad0, RowStart, ColumnStart, NewBoad).
+```
+
 ### Game Ending
 
 The game **ends after both players pass the turn successively**, which we check every game loop, then the **game_over** predicate is called where we display the game over message and check the winner of the game, adding the ammount of green pieces on the stacks controlled by each player, using the highest stack if the game was tied, we display the points and ask if the player wants to play another round.
+
+```prolog
+game_over(GameState, Sucession, Size):- 
+	Sucession = 2,
+    display_game(GameState, 2, Size), % Player é 2, para não fazer display do player atual, já que ninguém é a jogar
+    nl,nl,nl,write('Game Over!'),nl,nl,nl,
+    checkWinner(GameState,Size).
+```
 
 ### Board Evaluation
 
 To evaluate the state of the game, how many points each player has, so we can display this information to the players we use the **value** predicate that receives the board and the player and for each row counts the points that player has adding them, in other words, counts the occurrences of green pieces in stacks controlled by the player.
 In case of tie, we go check the heigth of the stacks, the player with the highest stack wins or they tie the game if they have the same size.
+
+```prolog
+value(Board, Player, Points,Size):-
+	value(Board, Player, Points, 0, Size).
+value(_, _, Points, Points, 0).
+value(Board, Player, N, Points, Row):-
+	Row > 0,
+	Row1 is Row - 1,
+	nth0(Row1, Board, RowList),
+	countRowPoints(Player, RowList, Counter),
+	Points1 is Points + Counter,
+	value(Board, Player, N, Points1, Row1).
+```
 
 ### Bots Moves
 
