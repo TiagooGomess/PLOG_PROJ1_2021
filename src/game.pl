@@ -55,8 +55,8 @@ move(Board, NewBoad, RowStart, ColumnStart, RowEnd, ColumnEnd):-
 	clear_cell(NewBoad0, RowStart, ColumnStart, NewBoad).
 
 % sucede quando os dois jogadores passam a jogada sucessivamente (Succession = 2)
-game_over(GameState, Sucession, Size):- 
-	Sucession = 2,
+game_over(GameState, Succession, Size):- 
+	Succession = 2,
     display_game(GameState, 2, Size), % Player é 2, para não fazer display do player atual, já que ninguém é a jogar
     nl,nl,nl,write('Game Over!'),nl,nl,nl,
     checkWinner(GameState,Size).
@@ -209,8 +209,8 @@ describeBotMove(RStart, CStart, REnd, CEnd,BotLevel, Size):-
 % ou 1 caso contrário; quando for 2, o jogo termina, porque os jogadores tiveram que passar as suas jogadas sucessivamente.
 game_loop(GameState, Player, GameMode, SleepTime, Size):-
     game_loop(GameState, Player, 0, GameMode, SleepTime, Size).
-game_loop(GameState, Player, Sucession, GameMode, SleepTime, Size):-
-    game_over(GameState, Sucession, Size) -> !;
+game_loop(GameState, Player, Succession, GameMode, SleepTime, Size):-
+    game_over(GameState, Succession, Size) -> !;
     (   
         display_game(GameState, Player, Size),
         (
@@ -218,7 +218,7 @@ game_loop(GameState, Player, Sucession, GameMode, SleepTime, Size):-
                 write('\nYou need to pass your turn!'),nl,sleep(1),
                 nl,write('========================================'),nl,nl,
                 NewBoard = GameState,
-                Sucession1 is Sucession + 1
+                Succession1 is Succession + 1
             );
             (
 
@@ -247,7 +247,7 @@ game_loop(GameState, Player, Sucession, GameMode, SleepTime, Size):-
                         )
                     ),
                     move(GameState, NewBoard, RowStart, ColumnStart, RowEnd, ColumnEnd),
-                    Sucession1 is 0
+                    Succession1 is 0
                 );
                 ( % player vs player ou player vs computer modes
                     (
@@ -261,11 +261,11 @@ game_loop(GameState, Player, Sucession, GameMode, SleepTime, Size):-
                         askMove(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd, Size)
                     ),
                     move(GameState, NewBoard, RowStart, ColumnStart, RowEnd, ColumnEnd),
-                    Sucession1 is 0   
+                    Succession1 is 0   
                 )
             )
         ),
         next_player(Player, NextPlayer),
-        game_loop(NewBoard, NextPlayer, Sucession1, GameMode, SleepTime, Size)
+        game_loop(NewBoard, NextPlayer, Succession1, GameMode, SleepTime, Size)
     ).
     
