@@ -47,7 +47,7 @@ In the Computer vs Computer mode, the player can select all different combinatio
 
 ![Game Modes](images/game_modes.png) ![Difficulty](images/bots_difficulty.png)
 
-![Bot Levels](images/bot_levels.png)
+![Bot Levels](images/bots_levels.png)
 
 ### Board Size Menu
 
