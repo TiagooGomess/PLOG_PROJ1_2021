@@ -228,6 +228,40 @@ game_over(GameState, Succession, Size):-
     checkWinner(GameState,Size).
 ```
 
+The player who has the highest number of green pyramids in the stacks controlled by him/she wins the game. If both players have the same score, wins the player with the highest stack. If the tie persists, nobody wins, and the players need to play again to find a winner.
+
+```prolog
+checkWinner(Board, Size):-
+	value(Board, 0, WhitePoints, Size),
+	value(Board, 1, BlackPoints, Size),
+	write('========================================'),nl,nl,
+	nl,nl,write('--> Final Score:'),nl,nl,
+	write('Black Player: '), write(BlackPoints), write(' points.'),nl,nl,
+	write('White Player: '), write(WhitePoints), write(' points.'),nl,nl,
+	(
+		WhitePoints > BlackPoints -> nl,nl,write('White Player won!'),nl,nl,nl;
+		(
+			BlackPoints > WhitePoints -> nl,nl,write('Black Player won!'),nl,nl,nl;
+            getHighestStackHeight(GameState, 0, HeightWhite),
+            getHighestStackHeight(GameState, 1, HeightBlack),
+            (
+                HeightWhite > HeightBlack -> (
+                    nl,nl,write('White Player won, because he has de highest stack!'),nl,nl,nl
+                );
+                (
+                    HeightBlack > HeightWhite -> (
+                        nl,nl,write('Black Player won, because he has de highest stack!'),nl,nl,nl
+                    );
+                    (
+                        nl,nl,write('It was a tie! You have the same number of points and the same highest stack height! Please play again!'),nl,nl,nl
+                    )
+                    
+                )
+            )
+		)
+	).
+```
+
 ### Board Evaluation
 
 To evaluate the state of the game, how many points each player has, so we can display this information to the players we use the **value** predicate that receives the board and the player and for each row counts the points that player has adding them, in other words, counts the occurrences of green pieces in stacks controlled by the player.
