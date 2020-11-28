@@ -264,8 +264,7 @@ checkWinner(Board, Size):-
 
 ### Board Evaluation
 
-To evaluate the state of the game, how many points each player has, so we can display this information to the players we use the **value** predicate that receives the board and the player and for each row counts the points that player has adding them, in other words, counts the occurrences of green pieces in stacks controlled by the player.
-In case of tie, we go check the heigth of the stacks, the player with the highest stack wins or they tie the game if they have the same size.
+To evaluate the state of the game, this is, to find how many points each player has, we use the `value/4` predicate, which receives the board state and size, and the player, and gives the number of green pyramids in the stacks controlled by the player. Besides counting the final scores of the players, this predicate is fundamental for the hard and dumb bots, since these bots are checking which are the best or worst moves, as we will explain later in this report.
 
 ```prolog
 value(Board, Player, Points,Size):-
@@ -275,9 +274,22 @@ value(Board, Player, N, Points, Row):-
 	Row > 0,
 	Row1 is Row - 1,
 	nth0(Row1, Board, RowList),
-	countRowPoints(Player, RowList, Counter),
+	countRowPoints(Player, RowList, Counter), % conta o número de pontos de um dado jogador, numa linha
 	Points1 is Points + Counter,
 	value(Board, Player, N, Points1, Row1).
+
+countRowPoints(Player, RowList, Counter):-
+	countRowPoints(Player, RowList, Counter, 0).
+countRowPoints(_, [], Counter, Counter).
+countRowPoints(Player, [[H|T0]|T], C, Counter):-
+	(
+		H = Player -> (
+            occurrences_of([H|T0],2,Counter0), % conta o número de peças verdes que a stack tem
+            Counter1 is Counter + Counter0
+        );
+		Counter1 is Counter
+	),
+	countRowPoints(Player, T, C, Counter1).
 ```
 
 ### Bots Moves
