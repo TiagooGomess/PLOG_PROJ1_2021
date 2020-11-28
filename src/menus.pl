@@ -39,7 +39,7 @@ gameModeMenu:-
 		Input = '1' -> clearScreen, playerVsPlayer;
 		Input = '2' -> clearScreen, playerVsBotMenu;
 		Input = '3' -> clearScreen, computerVsComputerMenu;
-		Input = '4';
+		Input = '4' -> mainMenu,!;
 
 		nl,write('Invalid input!'),nl,
 		pressEnterToContinue,nl,
@@ -65,11 +65,11 @@ boardSizeMenu(Size):-
 	(
 		Input = '1' -> Size is 6;
 		Input = '2' -> Size is 9;
-		Input = '3';
+		Input = '3' -> gameModeMenu,!;
 
 		nl,write('Invalid input!'),nl,
 		pressEnterToContinue,nl,
-		gameModeMenu
+		boardSizeMenu(Size)
 	).
 
 % imprime o menu do modo de jogo
@@ -95,7 +95,7 @@ playerVsBotMenu:-
 		Input = '1' -> clearScreen, playerVsBotEasy;
 		Input = '2' -> clearScreen, playerVsBotHard;
 		Input = '3' -> clearScreen, playerVsBotDumb;
-		Input = '4';
+		Input = '4' -> gameModeMenu,!;
 
 		nl,
 		nl,write('Invalid input!'),nl,
@@ -131,6 +131,7 @@ printComputerVsComputerMenu:-
 	write('=   4. Hard vs Hard             ='), nl,
 	write('=   5. Hard vs Dumb             ='), nl,
 	write('=   6. Dumb vs Dumb             ='), nl,
+	write('=   7. Back                     ='), nl,
 	write('=                               ='), nl,
 	write('================================='), nl,
 	write('Choose an option:'), nl.
@@ -147,6 +148,7 @@ printBotTimeMenu:-
 	write('=   4. 1 second                 ='), nl,
 	write('=   5. 2 seconds                ='), nl,
 	write('=   6. 5 seconds                ='), nl,
+	write('=   7. Back                     ='), nl,
 	write('=                               ='), nl,
 	write('================================='), nl,
 	write('Choose an option:'), nl.
@@ -161,7 +163,7 @@ botTimeMenu(Time):-
 		Input = '4' -> Time is 1;
 		Input = '5' -> Time is 2;
 		Input = '6' -> Time is 5;
-		Input = '7';
+		Input = '7' -> gameModeMenu,!;
 
 		nl,
 		nl,write('Invalid input!'),nl,
@@ -180,7 +182,7 @@ computerVsComputerMenu:-
 		Input = '4' -> clearScreen, botHardVsBotHard;
 		Input = '5' -> clearScreen, botHardVsBotDumb;
 		Input = '6' -> clearScreen, botDumbVsBotDumb;
-		Input = '7';
+		Input = '7' -> gameModeMenu,!;
 
 		nl,
 		nl,write('Invalid input!'),nl,

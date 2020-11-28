@@ -19,7 +19,7 @@ getInt(Input):-
     get_code(_),
 	Input is Aux - 48.
 
-% https://stackoverflow.com/questions/16908764/clearing-screen-in-swipl-prolog-in-windows#:~:text=Plain%20clear%20screen%3A,%5Ce%5B2J').
+% limpa o ecrã
 clearScreen:-write('\e[2J').
 
 % espera que o user clique numa tecla para continuar
@@ -47,14 +47,12 @@ remove_elements(Pieces, [HLine|TLine], RemainingPieces):-
     remove_elements(RemainingPieces0,TLine,RemainingPieces).
 	
 % Converte uma lista de listas numa única lista. 
-%(https://stackoverflow.com/questions/9059572/flatten-a-list-in-prolog)
-flatten2([], []) :- !.
-flatten2([L|Ls], FlatL) :-
-    !,
-    flatten2(L, NewL),
-    flatten2(Ls, NewLs),
-    append(NewL, NewLs, FlatL).
-flatten2(L, [L]).
+achata_lista([],[]).
+achata_lista(X,[X]):- atomic(X).
+achata_lista([Cab|Rest],L):-
+    achata_lista(Cab,L1),
+    achata_lista(Rest,L2),
+    append(L1,L2,L).
 
 % Mapeamento da representação interna das pirâmides para a visualização do tabuleiro
 translate(0, ' W '). % white pyramid

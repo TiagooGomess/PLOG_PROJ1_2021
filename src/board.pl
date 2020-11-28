@@ -12,7 +12,7 @@ createBoard(B, Board, Size, Pieces, S):-
 	Size > 0,
 	Size1 is Size - 1,
 	createLine(S, Pieces, Line),
-	flatten2(Line,Line1), % se Line = [[0],[1],[2]], então Line1 = [0,1,2]
+	achata_lista(Line,Line1), % se Line = [[0],[1],[2]], então Line1 = [0,1,2]
 	remove_elements(Pieces, Line1, RemainingPieces),
 	createBoard(B, [Line|Board], Size1, RemainingPieces, S).
 	
