@@ -41,11 +41,15 @@ Our Main Menu is composed by the Play option which leads to Game Mode Menu, the 
 
 ### Game Modes
 
-Our implementation of Greener currently has 3 main modes: PvP (Player vs Player), PvCPU (Player vs Computer) and CPUvsCPU (Computer vs Computer). The bots have 3 levels of difficulty: an Easy mode, a Hard mode and a Dumb one.
+Our implementation of Greener currently has 3 main modes: PvP (Player vs Player), PvCPU (Player vs Computer) and CPUvsCPU (Computer vs Computer). 
+
+![Game Modes](images/game_modes.png)
+
+The bots have 3 levels of difficulty: an Easy mode, a Hard mode and a Dumb one.
+
+ ![Difficulty](images/bots_difficulty.png)
 
 In the Computer vs Computer mode, the player can select all different combinations of bots difficulty: Easy vs Easy, Easy vs Hard, Easy vs Dumb, Hard vs Hard, Hard vs Dumb and Dumb vs Dumb.
-
-![Game Modes](images/game_modes.png) ![Difficulty](images/bots_difficulty.png)
 
 ![Bot Levels](images/bots_levels.png)
 
