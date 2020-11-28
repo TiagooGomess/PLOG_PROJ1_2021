@@ -53,13 +53,13 @@ In the Computer vs Computer mode, the player can select all different combinatio
 
 After the game mode selection, we go to the Board Size Menu, where we can choose between 6x6 or 9x9 boards.
 
-meter imagem do menu
+![Board Size](images/board_size.png)
 
 ### Bot Time Menu
 
 For demonstration proposes, or fast game experiences, we also implemented different sleep times for the bots. The player can choose between 0, 0.1, 0.5, 1, 2 or 5 seconds of sleep.
 
-meter imagem do menu
+![Bots Time](images/bots_time.png)
 
 ### Play Again
 
