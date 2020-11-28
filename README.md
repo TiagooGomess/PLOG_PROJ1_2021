@@ -41,18 +41,29 @@ Our Main Menu is composed by the Play option which leads to Game Mode Menu, the 
 
 ### Game Modes
 
-Our implementation of Greener currently has PvP, PvCPU and CPUvsCPU, where the bots have 3 levels of difficulty, the easy mode, a hard mode and the dumb mode.
-If Computer vs Computer, the player can select all different combinations of bots difficulty, (easy Vs easy, Hard vs Hard, Hard vs Dumb, etc...)
-After player type selection, we go to the board Size Menu Where we can choose between 6x6 or 9x9 boards.
-For demonstration proposes, or fast game experiences, we also implemented different sleep times for the bots,the player can choose between 0, 0.1 , 0.5, 1, 2 or 5 seconds of sleep.
+Our implementation of Greener currently has 3 main modes: PvP (Player vs Player), PvCPU (Player vs Computer) and CPUvsCPU (Computer vs Computer). The bots have 3 levels of difficulty: an Easy mode, a Hard mode and a Dumb one.
+
+In the Computer vs Computer mode, the player can select all different combinations of bots difficulty: Easy vs Easy, Easy vs Hard, Easy vs Dumb, Hard vs Hard, Hard vs Dumb and Dumb vs Dumb.
 
 ![Game Modes](images/game_modes.png) ![Difficulty](images/bots_difficulty.png)
 
 ![Bot Levels](images/bot_levels.png)
 
+### Board Size Menu
+
+After the game mode selection, we go to the Board Size Menu, where we can choose between 6x6 or 9x9 boards.
+
+meter imagem do menu
+
+### Bot Time Menu
+
+For demonstration proposes, or fast game experiences, we also implemented different sleep times for the bots. The player can choose between 0, 0.1, 0.5, 1, 2 or 5 seconds of sleep.
+
+meter imagem do menu
+
 ### Play Again
 
-After agame ends we show a menu where we invite the player to play again or to exit
+After a game ends, we show a menu where we invite the player to play again or to exit.
 
 ![Play Again](images/play_again.png)
 
@@ -60,7 +71,7 @@ After agame ends we show a menu where we invite the player to play again or to e
 
 ### Game State Representation
 
-The board is represented by a list of lists of lists, where the latest is the representation of a stack of pieces. Each piece colour has and associated number(0 for white, 1 for black and 2 for green; 3 for no piece in the cell). The player turn is also represented by a number, similar to the pieces, 0 for white and 1 for black.
+The board is represented by a list of lists of lists, where the latest is the representation of a stack of pieces. Each piece colour has an associated number(0 for white, 1 for black and 2 for green; 3 for no piece in the cell). The player turn is also represented by a number, similar to the pieces, 0 for white and 1 for black.
  Since the pieces are always in the board there is no more information to be kept.
  Examples of game states in Prolog for 6x6 :
 
@@ -91,9 +102,12 @@ The board is represented by a list of lists of lists, where the latest is the re
 		[[3],[3],[3],[3],[3],[1,2,2,2,0]],</br>
 		[[3],[3],[3],[3],[0,2,2,2,0,1],[3]]	] , 0
 
+
 ### Game State Visualization
 
-We print a board on screen with letters and numbers to indicate position, and in each cell we represent the color of the head of the list (piece on top of the stack ['W','B','G'], or no piece [  ]) and next to it a number that represents the score associated with the stack ( number of green pieces in the stack)
+We print a board on screen with letters and numbers to indicate position, and in each cell we represent the color of the head of the list (piece on top of the stack ['W','B','G'], or no piece [  ]) and next to it a number that represents the score associated with the stack (number of green pieces in the stack).
+
+For making the translation between the letters and numbers that are shown to the user and their real implementation, we make use of the `translate/2` predicate:
 
 ```prolog
 translate(0, ' W '). % white pyramid
@@ -102,7 +116,11 @@ translate(2, ' G '). % green pyramid
 translate(3, '   '). % no piece
 ```
 
-Examples for 6x6 boards:
+Note: we represent an empty cell with [3] rather than an empty list, because that way it's easier for us to use the `translate/2` predicate.
+
+</br>
+
+**Examples for 6x6 boards:**
 
 #### Initial State
 
