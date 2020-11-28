@@ -45,7 +45,7 @@ Our Main Menu is composed by the Play option which leads to Game Mode Menu, the 
 Our implementation of Greener currently has PvP, PvCPU and CPUvsCPU, where the bots have 3 levels of difficulty, the easy mode, a hard mode and the dumb mode.
 If Computer vs Computer, the player can select all different combinations of bots difficulty, (easy Vs easy, Hard vs Hard, Hard vs Dumb, etc...)
 After player type selection, we go to the board Size Menu Where we can choose between 6x6 or 9x9 boards.
-For demonstration porposes, or fast game experiences, we also implemented different sleep times for the bots,the player can choose between 0, 0.1 , 0.5, 1, 2 or 5 seconds of sleep.
+For demonstration proposes, or fast game experiences, we also implemented different sleep times for the bots,the player can choose between 0, 0.1 , 0.5, 1, 2 or 5 seconds of sleep.
 
 ![Game Modes](images/game_modes.png) ![Difficulty](images/bots_difficulty.png)
 
@@ -125,7 +125,7 @@ Example for 9x9:
 
 ### Valid Moves List
 
-When a bot is playing we get all the possible moves, with our **valid_moves** predicate that uses the findall/3 predicate of Prolog with a template of  [RowFrom, ColumnFrom, RowTo, ColumnTo] and getting a random move that is a valid move,in other words, where the cell selected has a stack controlled by the current player, if that stack can capture other stacks, if the move is orthogonal and there are no other stacks in between the selected stack and the destination, and if the destinatio is not a empty cell.
+When a bot is playing we get all the possible moves, with our **valid_moves** predicate that uses the findall/3 predicate of Prolog with a template of  [RowFrom, ColumnFrom, RowTo, ColumnTo] and getting a random move that is a valid move,in other words, where the cell selected has a stack controlled by the current player, if that stack can capture other stacks, if the move is orthogonal and there are no other stacks in between the selected stack and the destination, and if the destination is not a empty cell.
 
 ```prolog
 valid_moves(Board,Player,AllMoves,Size):-
@@ -146,7 +146,7 @@ valid_moves(Board,Player,AllMoves,Size):-
 
 ### Move Validation
 
-After checking if the current player has any move available, if not, the **turn automatically passes**, if available, we ask the player to select a Piece to move, after that we check if that stack is controlled by the current player and if it has any available moves, if so, we require a destination stack to the player where again we check if the move is valid( if that stack can capture other stacks, if the move is orthogonal and there are no other stacks in between the selected stack and the destination, and if the destinatio is not a empty cell).
+After checking if the current player has any move available, if not, the **turn automatically passes**, if available, we ask the player to select a Piece to move, after that we check if that stack is controlled by the current player and if it has any available moves, if so, we require a destination stack to the player where again we check if the move is valid( if that stack can capture other stacks, if the move is orthogonal and there are no other stacks in between the selected stack and the destination, and if the destination is not a empty cell).
 
 ### Move Execution
 
@@ -161,11 +161,11 @@ move(Board, NewBoad, RowStart, ColumnStart, RowEnd, ColumnEnd):-
 
 ### Game Ending
 
-The game **ends after both players pass the turn successively**, which we check every game loop, then the **game_over** predicate is called where we display the game over message and check the winner of the game, adding the ammount of green pieces on the stacks controlled by each player, using the highest stack if the game was tied, we display the points and ask if the player wants to play another round.
+The game **ends after both players pass the turn successively**, which we check every game loop, then the **game_over** predicate is called where we display the game over message and check the winner of the game, adding the amount of green pieces on the stacks controlled by each player, using the highest stack if the game was tied, we display the points and ask if the player wants to play another round.
 
 ```prolog
-game_over(GameState, Sucession, Size):- 
-	Sucession = 2,
+game_over(GameState, Succession, Size):- 
+	Succession = 2,
     display_game(GameState, 2, Size), % Player é 2, para não fazer display do player atual, já que ninguém é a jogar
     nl,nl,nl,write('Game Over!'),nl,nl,nl,
     checkWinner(GameState,Size).
@@ -191,10 +191,10 @@ value(Board, Player, N, Points, Row):-
 
 ### Bots Moves
 
-When bots are at play their plays obviosly depend on their difficulty. so we have choose_move that leads receives the mode and behaves accordingly.
+When bots are at play their plays obviously depend on their difficulty. so we have choose_move that leads receives the mode and behaves accordingly.
 The Easy bot, gets all the valid moves available with the valid_moves predicate and simply chooses one at random.
 The Hard bot after getting all the valid moves, scores all of them, and chooses the one that gives him the bigger score increase (greedy).
-And finally the Dumb bot makes the same process but reverses the scored moves so he chooses the one that gives him the smallest ammount of points possible.
+And finally the Dumb bot makes the same process but reverses the scored moves so he chooses the one that gives him the smallest amount of points possible.
 
 ## Conclusion
 
