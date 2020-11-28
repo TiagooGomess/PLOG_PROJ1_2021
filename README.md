@@ -218,7 +218,7 @@ move(Board, NewBoad, RowStart, ColumnStart, RowEnd, ColumnEnd):-
 
 ### Game Ending
 
-The game **ends after both players pass the turn successively**, which we check every game loop, then the **game_over** predicate is called where we display the game over message and check the winner of the game, adding the amount of green pieces on the stacks controlled by each player, using the highest stack if the game was tied, we display the points and ask if the player wants to play another round.
+The game **ends after both players pass the turn successively**, which we check in every game loop. For that, the ``game_over/3`` predicate is called in every game loop, and succeeds if the succession number is 2. The succession number is set to 0 in the game loop every time a player makes a move (don't pass the turn). If the player needs to pass the turn, the succession number is increased by 1. So, when the two players pass in succession, the succession number is 2, and the game ends. After the game ends, we find who is the winner of the game, and print it on the screen.
 
 ```prolog
 game_over(GameState, Succession, Size):- 
