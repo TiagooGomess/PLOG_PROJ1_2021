@@ -134,7 +134,7 @@ Note: we represent an empty cell with [3] rather than an empty list, because tha
 
 ![Final State](images/final_board.png)
 
-Example for 9x9:
+**Example for 9x9:**
 
 #### Final State 9x9
 
@@ -142,7 +142,8 @@ Example for 9x9:
 
 ### Valid Moves List
 
-When a bot is playing we get all the possible moves, with our **valid_moves** predicate that uses the findall/3 predicate of Prolog with a template of  [RowFrom, ColumnFrom, RowTo, ColumnTo] and getting a random move that is a valid move,in other words, where the cell selected has a stack controlled by the current player, if that stack can capture other stacks, if the move is orthogonal and there are no other stacks in between the selected stack and the destination, and if the destination is not a empty cell.
+To find all valid moves, we use our ``valid_moves/4`` predicate which, given the board state and size, and the current player, give us a list ``AllMoves`` with all possible moves (each move has the template [RowFrom, ColumnFrom, RowTo, ColumnTo]). For that, we use ``findall/3`` with all the conditions that validate a move: the player is moving one if his/hers stacks, the chosen stack can capture others, the move is made orthogonally,
+there are no stacks in between the start and the end positions and the final position has a stack to be captured (is not empty).
 
 ```prolog
 valid_moves(Board,Player,AllMoves,Size):-
@@ -161,13 +162,52 @@ valid_moves(Board,Player,AllMoves,Size):-
 	).
 ```
 
-### Move Validation
+### Move Validation and Execution
 
-After checking if the current player has any move available, if not, the **turn automatically passes**, if available, we ask the player to select a Piece to move, after that we check if that stack is controlled by the current player and if it has any available moves, if so, we require a destination stack to the player where again we check if the move is valid( if that stack can capture other stacks, if the move is orthogonal and there are no other stacks in between the selected stack and the destination, and if the destination is not a empty cell).
+When it's not a bot to make a move, we first ask the player for a start and end positions,
+until the player enters valid ones.
 
-### Move Execution
+```prolog
+askMove(Board, Player, RowStart, ColumnStart, RowEnd, ColumnEnd, Size):-
+	nl,write('========================================'),nl,
+	askForPiecePosFrom(Board, Player, RowStart, ColumnStart, Size),nl,
+	askForPiecePosTo(Board, RowStart, ColumnStart, RowEnd, ColumnEnd, Size),
+	nl,nl,write('========================================'),nl,nl.
+```
 
-To move a piece to another cell of the board, after its validation, done  we use our **move** predicate, that moves the stack of the origin cell to the destination cell and appends to it the stack that was previously there, clearing the origin cell.
+First, we ask a start position, and check if the corresponding cell has a stack controlled by the player and if that stack can capture other stacks. If some condition fails, we ask for other position, until all the conditions are met.
+
+```prolog
+askForPiecePosFrom(Board, Player, Row, Column, Size):-
+	repeat,
+	(
+		askForPosition(Row, Column, 'Which stack do you want to move?', Size),
+		getPieceByRowAndColumn(Board, Row, Column, Piece),
+		(
+			Piece = Player, % verifica se a stack que o jogador quer mover lhe pertence
+			\+ checkIfStackCannotCapture(Board, Row, Column),!
+		);
+		nl,nl,write('You cannot move that stack!\nPlease choose another one!'),nl,nl,fail
+	).
+```
+
+Then, we ask for the final position, and check the following conditions: the move is made orthogonally, there are no stacks in between the start and the end positions and the final position has a stack to be captured (is not empty).
+
+```prolog	
+askForPiecePosTo(Board, RowFrom, ColumnFrom, RowTo, ColumnTo, Size):-
+	repeat,
+	askForPosition(RowTo, ColumnTo, 'For which position do you want to move it?', Size),
+	(
+		(
+			checkOrthogonality(RowFrom, ColumnFrom, RowTo, ColumnTo), % verifica se o movimento é feito ortogonalmente
+			checkStacksBetween(Board, RowFrom, ColumnFrom, RowTo, ColumnTo), % verifica se existem stacks entre a posição inicial e final
+			\+ checkEmptyCell(Board, RowTo, ColumnTo),! % verifica se a posição final tem alguma peça para ser capturada
+		);
+		nl,nl,write('This movement is not a valid one!\nPlease choose another final position!'),nl,nl,fail
+	).
+```
+
+To move a piece to another cell of the board, after its validation is done, we use our ``move/6`` predicate, that moves the stack of the origin cell to the destination cell and appends to it the stack that was previously there, clearing the origin cell.
 
 ```prolog
 move(Board, NewBoad, RowStart, ColumnStart, RowEnd, ColumnEnd):-
