@@ -8,8 +8,7 @@ This implementation is made by the group Greener_5 that consists of
 
 ## How to run the game
 
-1. In SICStus Prolog, consult the file 'play.pl' in the src directory(File -> Consult... -> src/play.pl; or in the sicstus terminal: `[play].`)
-2. Enter the command `play.`
+1. In SICStus Prolog, consult the file 'play.pl' in the src directory(File -> Consult... -> src/play.pl; or in the sicstus terminal: `[play].`), and the game will start automatically.
 
 ## Game Rules
 
@@ -21,16 +20,16 @@ This implementation is made by the group Greener_5 that consists of
 **Rules:**
 
 - The game is made for 2 players (Black and White players)
-- The board size is 6x6 or 9x9
-- There are 9 Black Pyramids, 9 White and 18 Green for 6x6 or 20,20,41 for 9x9
-- Randomly place all the pyramids in the board (1 per cell)
+- The board size is **6x6** or **9x9**
+- There are **9 Black Pyramids, 9 White and 18 Green for the 6x6 board** or **20 Black,20 White and 41 Green for the 9x9 one**
+- The pyramids are randomly placed in the board (1 per cell)
 - Each player has an allocated colour (Black or White), while green is neutral
 - Black always starts and players alternate turns during the game until both players pass in succession
 - On your turn you **must** make one capture if possible, otherwise you **pass** the turn
 - Stacks capture other stacks that are on the same row or column and with no other stacks in between them; stacks cannot be split
-- You can capture stacks of any colour (even your own)
+- The player can capture stacks of any colour (even his own pieces)
 - The game ends when both players pass in succession and wins the player with the most green pyramids captured (being part of stacks they control)
-- In case of a tie, the player with the highest stack wins, if the tie persists, play again
+- In case of a tie, the player with the highest stack wins, if the tie persists, the players need to play again
 
 [**Rule Book**](https://nestorgames.com/rulebooks/GREENGREENERGREENEST_EN.pdf)
 
@@ -212,4 +211,3 @@ For future improvements of the game, enhancing the AI of the bots is the way, tr
 ## Bibliography
 
 * [Sicstus Manual](https://sicstus.sics.se/sicstus/docs/latest4/html/sicstus.html/)
-* StackOverflow
