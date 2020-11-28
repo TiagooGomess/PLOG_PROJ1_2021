@@ -142,8 +142,14 @@ Note: we represent an empty cell with [3] rather than an empty list, because tha
 
 ### Valid Moves List
 
-To find all valid moves, we use our ``valid_moves/4`` predicate which, given the board state and size, and the current player, give us a list ``AllMoves`` with all possible moves (each move has the template [RowFrom, ColumnFrom, RowTo, ColumnTo]). For that, we use ``findall/3`` with all the conditions that validate a move: the player is moving one if his/hers stacks, the chosen stack can capture others, the move is made orthogonally,
-there are no stacks in between the start and the end positions and the final position has a stack to be captured (is not empty).
+To find all valid moves, we use our ``valid_moves/4`` predicate which, given the board state and size, and the current player, give us a list ``AllMoves`` with all possible moves (each move has the template [RowFrom, ColumnFrom, RowTo, ColumnTo]).
+
+For that, we use ``findall/3`` with all the conditions that validate a move:
+- the player is moving one if his/hers stacks
+- the chosen stack can capture others
+- the move is made orthogonally
+- there are no stacks in between the start and the end positions
+- the final position has a stack to be captured (is not empty)
 
 ```prolog
 valid_moves(Board,Player,AllMoves,Size):-
@@ -264,7 +270,7 @@ checkWinner(Board, Size):-
 
 ### Board Evaluation
 
-To evaluate the state of the game, this is, to find how many points each player has, we use the `value/4` predicate, which receives the board state and size, and the player, and gives the number of green pyramids in the stacks controlled by the player. Besides counting the final scores of the players, this predicate is fundamental for the hard and dumb bots, since these bots are checking which are the best or worst moves, as we will explain later in this report.
+To evaluate the state of the game, this is, to find how many points each player has, we use the `value/4` predicate, which receives the board state and size, and the player, and gives the number of green pyramids in the stacks controlled by the player. Besides counting the final scores of the players, this predicate is fundamental for the hard and dumb bots, since these bots are checking which are the best or worst moves, as we will explain in the next section.
 
 ```prolog
 value(Board, Player, Points,Size):-
@@ -294,14 +300,89 @@ countRowPoints(Player, [[H|T0]|T], C, Counter):-
 
 ### Bots Moves
 
-When bots are at play their plays obviously depend on their difficulty. so we have choose_move that leads receives the mode and behaves accordingly.
-The Easy bot, gets all the valid moves available with the valid_moves predicate and simply chooses one at random.
-The Hard bot after getting all the valid moves, scores all of them, and chooses the one that gives him the bigger score increase (greedy).
-And finally the Dumb bot makes the same process but reverses the scored moves so he chooses the one that gives him the smallest amount of points possible.
+To choose the difficulty of the bots, to be as the player have chosen, we use the ``choose_move/8`` predicate.
+
+```prolog
+choose_move(GameState,Player,Level,RowStart, ColumnStart, RowEnd, ColumnEnd, Size):-
+	(
+		Level = 'Easy' -> getMoveEasy(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd, Size);
+		Level = 'Hard' -> getMoveHard(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd, Size);
+		Level = 'Dumb' -> getMoveDumb(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd, Size)
+	).
+```
+
+For the Easy bot, we use the ``getMoveEasy/7`` predicate, which finds all the valid moves at the moment and picks a random one.
+
+```prolog
+getMoveEasy(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd, Size):-
+	valid_moves(GameState, Player, AllMoves,Size),
+	random_member(Move,AllMoves),
+	nth0(0,Move,RowStart),
+	nth0(1,Move,ColumnStart),
+	nth0(2,Move,RowEnd),
+	nth0(3,Move,ColumnEnd).
+```
+
+For the Hard bot, we use the ``getMoveHard/7`` predicate, which finds all the valid moves at the moment and picks the move that will provide the highest score increase. 
+
+```prolog
+getMoveHard(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd,Size):-
+	valid_moves(GameState, Player, AllMoves, Size),
+	addScoreToMoves(GameState, Player, AllMoves, AllMovesWithScore,Size),
+	sort(AllMovesWithScore,AllMovesWithScoreSorted0),
+	reverse(AllMovesWithScoreSorted0,AllMovesWithScoreSorted),
+	nth0(0,AllMovesWithScoreSorted,MoveWithScore),
+	nth0(1,MoveWithScore,Move),
+	nth0(0,Move,RowStart),
+	nth0(1,Move,ColumnStart),
+	nth0(2,Move,RowEnd),
+	nth0(3,Move,ColumnEnd).
+```
+
+For that, we add the corresponding score to each movement, as follows:
+
+```prolog
+addMoveScore(GameState, Player, Move, MoveWithScore, Size):-
+	value(GameState, Player, PointsBefore, Size),
+	nth0(0,Move,RowStart),
+	nth0(1,Move,ColumnStart),
+	nth0(2,Move,RowEnd),
+	nth0(3,Move,ColumnEnd),
+	move(GameState, NewGameState, RowStart, ColumnStart, RowEnd, ColumnEnd),
+	value(NewGameState, Player, PointsAfter, Size),
+	MoveScore is PointsAfter - PointsBefore,
+	MoveWithScore = [MoveScore,Move].
+
+addScoreToMoves(GameState,Player,AllMoves,AllMovesWithScore,Size):-
+	addScoreToMoves(GameState,Player,AllMoves,AllMovesWithScore,[],Size).
+addScoreToMoves(_,_,[],AllMovesWithScore,AllMovesWithScore,_).
+addScoreToMoves(GameState,Player,[Move|T],M,AllMovesWithScore,Size):-
+	addMoveScore(GameState,Player,Move,MoveWithScore,Size),
+	addScoreToMoves(GameState,Player,T,M,[MoveWithScore|AllMovesWithScore],Size).
+```
+
+Then, we sort the list of pairs by score in descending order (``sort/2`` + ``reverse/2``), and the best move is in the first position of that list.
+
+</br>
+
+For the Dumb bot, we use the ``getMoveDumb/7`` predicate, which finds all the valid moves at the moment and picks the move that will provide the smallest score increase. The only difference to the Hard bot is that the Dumb sorts the list of pairs Score-Move in ascending order.
+
+```prolog
+getMoveDumb(GameState, Player, RowStart, ColumnStart, RowEnd, ColumnEnd,Size):-
+	valid_moves(GameState, Player, AllMoves, Size),
+	addScoreToMoves(GameState, Player, AllMoves, AllMovesWithScore,Size),
+	sort(AllMovesWithScore,AllMovesWithScoreSorted),
+	nth0(0,AllMovesWithScoreSorted,MoveWithScore),
+	nth0(1,MoveWithScore,Move),
+	nth0(0,Move,RowStart),
+	nth0(1,Move,ColumnStart),
+	nth0(2,Move,RowEnd),
+	nth0(3,Move,ColumnEnd).
+```
 
 ## Conclusion
 
-The development of this game was very interesting for us. At first, it was a very bumpy ride, where we had doubts about pretty much every single feature we tried to add because we are both new to Logic Programming paradigm, but eventually we actually started to enjoy it, and we got to learn a lot of different things as well as getting a introduction to Artificial intelligence, another very interesting subject.
+The development of this game was very interesting for us. At first, it was a very bumpy ride, where we had doubts about pretty much every single feature we tried to add, because we are both new to Logic Programming paradigm. However, we actually started to enjoy it, and we got to learn a lot of different things, as well as getting an introduction to Artificial intelligence, another very interesting subject.
 Overall it was a very fun experience with a lot of learning involved!
 
 ## Known Issues
@@ -311,6 +392,10 @@ There are **no known issues** for the game at this time!
 ## RoadMap
 
 For future improvements of the game, enhancing the AI of the bots is the way, trying to look for the subsequent plays and scoring them, searching for the most efficient plays rather than only analyzing the immediate play.
+
+## Work Distribution:
+- João Renato da Costa Pinto: 35%
+- Tiago Gonçalves Gomes: 65%
 
 ## Bibliography
 
